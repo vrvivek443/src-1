@@ -1,0 +1,1998 @@
+<div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
+    <div class="breadcrumb-title pe-3">Home</div>
+    <div class="ps-3">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0 p-0">
+                <li class="breadcrumb-item"><a href="javascript:;"><i class="bx bx-home-alt"></i>Case Management</a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">New Complaint</li>
+            </ol>
+
+        </nav>
+    </div>
+
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="row align-items-center">
+                    <div class="col-lg-5 col-xl-5">
+                        <figure>
+                            <blockquote class="blockquote">
+                                <p>New Complaint</p>
+                            </blockquote>
+                            <figcaption class="blockquote-footer"><cite title="Source Title"></cite>
+                                Register new complaint againts the property or add complaint/violance to the existing
+                                complaint.
+                            </figcaption>
+                        </figure>
+                    </div>
+                    <div class="col-lg-7">
+                        <form class="float-lg-end">
+                            <div class="row row-cols-lg-2 row-cols-xl-auto g-2">
+                                <div class="col">
+                                    <div class="position-relative mt-2 d-none" id="autoSave">
+                                        <input class="form-check-input  me-2" type="checkbox" id="input12">
+                                        <label class="form-check-label" for="input12"> Enable auto save</label>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <a class="btn btn-primary d-none mb-3 mb-lg-0" (click)="addNew()" id="btnSaveAll"><i
+                                            class="fa fa-save"></i>Save</a>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="stepper1" class="bs-stepper linear">
+    <div class="card">
+        <div class="card-header">
+            <div class="d-flex flex-row align-items-center justify-content-between" role="tablist">
+                <div class="step active" data-target="#test-l-1">
+                    <div class="step-trigger" role="tab" id="stepper1trigger1" aria-controls="test-l-1"
+                        aria-selected="true">
+                        <div class="bs-stepper-circle">1</div>
+                        <div class="">
+                            <h5 class="mb-0 steper-title">Property Info</h5>
+                            <!-- <p class="mb-0 steper-sub-title">Property details of the complaint.</p> -->
+                        </div>
+                    </div>
+                </div>
+                <div class="bs-stepper-line"></div>
+                <div class="step" data-target="#test-l-2">
+                    <div class="step-trigger" role="tab" id="stepper1trigger2" aria-controls="test-l-2"
+                        aria-selected="false" disabled="disabled">
+                        <div class="bs-stepper-circle">2</div>
+                        <div class="">
+                            <h5 class="mb-0 steper-title">Case History</h5>
+                            <!-- <p class="mb-0 steper-sub-title">List of all previous and current case details.</p> -->
+                        </div>
+                    </div>
+                </div>
+                <div class="bs-stepper-line"></div>
+                <div class="step" data-target="#test-l-3">
+                    <div class="step-trigger" role="tab" id="stepper1trigger3" aria-controls="test-l-3"
+                        aria-selected="false" disabled="disabled">
+                        <div class="bs-stepper-circle">3</div>
+                        <div class="">
+                            <h5 class="mb-0 steper-title">People Info</h5>
+                            <!-- <p class="mb-0 steper-sub-title">Personal information of the reporting person</p> -->
+                        </div>
+                    </div>
+                </div>
+                <div class="bs-stepper-line"></div>
+                <div class="step" data-target="#test-l-4">
+                    <div class="step-trigger" role="tab" id="stepper1trigger4" aria-controls="test-l-4"
+                        aria-selected="false" disabled="disabled">
+                        <div class="bs-stepper-circle">4</div>
+                        <div class="">
+                            <h5 class="mb-0 steper-title">Case Details</h5>
+                            <!-- <p class="mb-0 steper-sub-title">Case Details</p> -->
+                        </div>
+                    </div>
+                </div>
+                <div class="bs-stepper-line"></div>
+                <div class="step" data-target="#test-l-5">
+                    <div class="step-trigger" role="tab" id="stepper1trigger5" aria-controls="test-l-4"
+                        aria-selected="false" disabled="disabled">
+                        <div class="bs-stepper-circle">5</div>
+                        <div class="">
+                            <h5 class="mb-0 steper-title">Violations</h5>
+                            <!-- <p class="mb-0 steper-sub-title">List of Violation </p> -->
+                        </div>
+                    </div>
+                </div>
+                <div class="bs-stepper-line"></div>
+                <div class="step" data-target="#test-l-6">
+                    <div class="step-trigger" role="tab" id="stepper1trigger6" aria-controls="test-l-4"
+                        aria-selected="false" disabled="disabled">
+                        <div class="bs-stepper-circle">6</div>
+                        <div class="">
+                            <h5 class="mb-0 steper-title">Action Log</h5>
+                            <!-- <p class="mb-0 steper-sub-title">List of actions</p> -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12 text-center" id="addressInfo">
+                <p class="mb-4"><b>Owner Name: </b> SAN JOSE, <b>Number:</b> 200, <b>Direction:</b> East,
+                    <b>Street:</b> Santa Clara,
+                    <b>Apt/Suite #: </b>201, <b>City: </b> San Jose, <b>State:</b> CA,<b>Zipcode:</b>
+                    215874.
+                </p>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="bs-stepper-content">
+                <form onsubmit="return false">
+                    <div id="test-l-1" role="tabpanel" class="bs-stepper-pane active dstepper-block"
+                        aria-labelledby="stepper1trigger1">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h5 class="mb-1">Property Information</h5>
+                                <p class="mb-4"></p>
+                            </div>
+                            <div class="col-md-6">
+                                <button class="btn btn-primary px-4 float-end btn-sm ms-1" id="btnMap"
+                                    (click)="viewMap()">View
+                                    Map</button>
+
+                            </div>
+                        </div>
+
+                        <!-- Property Info Content Starts Here -->
+                        <div>
+                            <div class="row">
+                                <div class="col-md-12 col-lg-12 d-none col-xl-12 mb-4 " id="googleMap">
+                                    <h6 class="mb-0 text-uppercase">Map</h6>
+                                    <hr />
+                                    <google-map height="400px" width="100%" [center]="center" [zoom]="zoom"
+                                        (mapClick)="moveMap($event)" (mapMousemove)="move($event)">
+                                    </google-map>
+                                </div>
+                                <div class="col-md-12 col-lg-12 col-xl-12">
+                                    <h6 class="mb-0 text-uppercase">Address Details</h6>
+                                    <hr />
+                                    <form class="row g-3">
+                                        <div class="col-lg-3 col-md-6 col-sm-12">
+                                            <label for="input1" class="form-label">Number</label>
+                                            <input type="text" class="form-control" id="input1" placeholder="Number"
+                                                (focus)="resetReport()" (focusout)="loadInfo()">
+                                        </div>
+                                        <div class="col-lg-3  col-md-6  col-sm-12">
+                                            <label for="input2" class="form-label">Direction</label>
+                                            <select id="input7" class="form-select">
+                                                <option selected="">Choose...</option>
+                                                <option>North</option>
+                                                <option>East</option>
+                                                <option>South</option>
+                                                <option>West</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-lg-3  col-md-12  col-sm-12">
+                                            <label for="input3" class="form-label">Street</label>
+                                            <input type="text" class="form-control" id="input1" placeholder="Street">
+                                        </div>
+                                        <div class="col-lg-3  col-sm-12">
+                                            <label for="input1" class="form-label">Type</label>
+
+                                            <select id="input7" class="form-select">
+                                                <option selected="">Choose...</option>
+                                                <option *ngFor="let _st of _streetTypeDataList" value="{{_st?.id}}">
+                                                    {{_st?.value}}</option>
+
+                                            </select>
+                                        </div>
+                                        <div class="col-lg-3  col-md-6  col-sm-12">
+                                            <label for="input2" class="form-label">Apt/Suite #</label>
+                                            <input type="text" class="form-control" id="input2"
+                                                placeholder="Apt/Suite #">
+                                        </div>
+                                        <div class="col-lg-3  col-md-6  col-sm-12">
+                                            <label for="input3" class="form-label">City</label>
+                                            <input type="text" class="form-control" id="input3" placeholder="City">
+                                        </div>
+                                        <div class="col-lg-2  col-md-6  col-sm-12">
+                                            <label for="input3" class="form-label">State</label>
+                                            <input type="text" class="form-control" id="input3" placeholder="State">
+                                        </div>
+                                        <div class="col-lg-2  col-md-6  col-sm-12">
+                                            <label for="input3" class="form-label">Zipcode</label>
+                                            <input type="text" class="form-control" id="input3" placeholder="Zipcode">
+                                        </div>
+                                    </form>
+
+
+
+                                </div>
+                            </div>
+
+                            <div class="row mt-3" id="propertyAndCaseHistory">
+                                <div class="col-md-12 col-lg-12  col-xl-12 ">
+
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <h6 class="mb-0 text-uppercase">Property Information</h6>
+
+                                        </div>
+                                        <div class="col-md-6">
+                                            <button class="btn btn-primary px-4 float-end btn-sm  ms-1"
+                                                id="btnCaseHistory" (click)="showCaseHistory()">View Case
+                                                History</button>
+                                        </div>
+                                    </div>
+                                    <hr />
+
+
+
+
+                                    <form class="row g-3">
+                                        <div class="col-lg-6 col-md-6 col-sm-12">
+                                            <label for="input1" class="form-label">APN</label>
+                                            <input type="text" class="form-control" id="input1" placeholder="Number">
+                                        </div>
+                                        <div class="col-lg-6 col-md-6 col-sm-12">
+                                            <label for="input1" class="form-label">Tax Rate Area</label>
+                                            <input type="text" class="form-control" id="input1" placeholder="Number">
+                                        </div>
+                                        <div class="col-lg-6 col-md-6 col-sm-12">
+                                            <label for="input1" class="form-label">Housing Permit #</label>
+                                            <input type="text" class="form-control" id="input1" placeholder="Number">
+                                        </div>
+                                        <div class="col-lg-6 col-md-6 col-sm-12">
+                                            <label for="input1" class="form-label">Census Tract</label>
+                                            <input type="text" class="form-control" id="input1" placeholder="Number">
+                                        </div>
+                                        <div class="col-lg-6 col-md-6 col-sm-12">
+                                            <label for="input1" class="form-label">Trash Pick-up Day</label>
+                                            <input type="text" class="form-control" id="input1" placeholder="Day">
+                                        </div>
+                                        <div class="col-lg-6 col-md-6 col-sm-12">
+                                            <label for="input1" class="form-label">Building Permit #</label>
+                                            <input type="text" class="form-control" id="input1" placeholder="Number">
+                                        </div>
+                                        <div class="col-lg-6 col-md-6 col-sm-12">
+                                            <label for="input1" class="form-label">District</label>
+                                            <input type="text" class="form-control" id="input1" placeholder="Number">
+                                        </div>
+                                        <div class="col-lg-6 col-md-6 col-sm-12">
+                                            <label for="input1" class="form-label">Trash Putout Day</label>
+                                            <input type="text" class="form-control" id="input1" placeholder="Day">
+                                        </div>
+                                        <div class="col-lg-6 col-md-6 col-sm-12">
+                                            <label for="input1" class="form-label">Planning Permit #</label>
+                                            <input type="text" class="form-control" id="input1" placeholder="Number">
+                                        </div>
+                                        <div class="col-lg-6 col-md-6 col-sm-12">
+                                            <label for="input1" class="form-label"># of Units</label>
+                                            <input type="text" class="form-control" id="input1" placeholder="Number">
+                                        </div>
+                                        <div class="col-lg-6 col-md-6 col-sm-12">
+                                            <label for="input1" class="form-label">Police Beat</label>
+                                            <input type="text" class="form-control" id="input1" placeholder="">
+                                        </div>
+                                        <div class="col-lg-6 col-md-6 col-sm-12">
+                                            <label for="input1" class="form-label">Police District</label>
+                                            <input type="text" class="form-control" id="input1" placeholder="Number">
+                                        </div>
+                                        <div class="col-lg-3  col-md-6  col-sm-12">
+                                            <label for="input2" class="form-label">Property Type</label>
+                                            <select id="input7" class="form-select">
+                                                <option selected="">Choose...</option>
+                                                <option>Single Family</option>
+                                                <option>Multi Family</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="col-lg-3  col-md-12  col-sm-12">
+                                            <label for="input3" class="form-label">Last Insp-RTN Date</label>
+                                            <input type="text" class="form-control" id="input1" placeholder="">
+                                        </div>
+                                        <div class="col-lg-12  col-md-12  col-sm-12">
+                                            <label for="input2" class="form-label">Property Comments</label>
+                                            <textarea type="text" class="form-control" id="propertyComments"
+                                                placeholder=""> </textarea>
+                                        </div>
+                                        <div class="col-lg-12  col-md-12  col-sm-12">
+                                            <label for="input2" class="form-label">Zoning Research</label>
+                                            <textarea type="text" class="form-control" id="propertyComments"
+                                                placeholder=""> </textarea>
+                                        </div>
+                                        <div class="col-lg-3  col-md-6  col-sm-12">
+                                            <label for="input3" class="form-label">Created By</label>
+                                            <input class="form-control mb-3" type="text" placeholder="Maria"
+                                                aria-label="Disabled input example" disabled="">
+                                        </div>
+                                        <div class="col-lg-3  col-md-6  col-sm-12">
+                                            <label for="input3" class="form-label">Created Date</label>
+                                            <input class="form-control mb-3" type="text"
+                                                placeholder="19/DEC/2005 15:36:58" aria-label="Disabled input example"
+                                                disabled="">
+                                        </div>
+                                        <div class="col-lg-3  col-md-6  col-sm-12">
+                                            <label for="input3" class="form-label">Last Modified By</label>
+                                            <input class="form-control mb-3" type="text" placeholder="John"
+                                                aria-label="Disabled input example" disabled="">
+                                        </div>
+                                        <div class="col-lg-3  col-md-6  col-sm-12">
+                                            <label for="input3" class="form-label">Last Modified Date</label>
+                                            <input class="form-control mb-3" type="text"
+                                                placeholder="20/FEB/2006 11:16:18" aria-label="Disabled input example"
+                                                disabled="">
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="col-md-12 col-lg-12  col-xl-12 d-none" id="caseHistoryList">
+
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <h6 class="mb-0 text-uppercase">Case History</h6>
+
+                                        </div>
+                                        <div class="col-md-6">
+                                            <button class="btn btn-primary px-4 float-end btn-sm  ms-1"
+                                                id="btnCaseHistory" (click)="showCaseHistory()">Hide
+                                                Case
+                                                History</button>
+                                        </div>
+                                    </div>
+                                    <hr />
+                                    <div class="row row-cols-1 row-cols-md-3 row-cols-xl-3 row-cols-xxl-3 mt-2"
+                                        id="caseHistoryReport">
+                                        <div class="col">
+                                            <div class="card radius-10 bg-gradient-blues ">
+                                                <div class="card-body">
+                                                    <div class="d-flex align-items-center">
+                                                        <div class="me-auto">
+                                                            <p class="mb-0 text-white">Total Cases</p>
+                                                            <h6 class="my-1 text-white">16</h6>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <div class="card radius-10 bg-gradient-ohhappiness ">
+                                                <div class="card-body">
+                                                    <div class="d-flex align-items-center">
+                                                        <div class="me-auto">
+                                                            <p class="mb-0 text-white">Closed Cases</p>
+                                                            <h6 class="my-1 text-white">15</h6>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <div class="card radius-10 bg-gradient-burning ">
+                                                <div class="card-body">
+                                                    <div class="d-flex align-items-center">
+                                                        <div class="me-auto">
+                                                            <p class="mb-0 text-white">Open Case</p>
+                                                            <h6 class="my-1 text-white">01</h6>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <div class="card radius-10 bg-gradient-moonlit">
+                                                <div class="card-body">
+                                                    <div class="d-flex align-items-center" style="color:white">
+                                                        <div class="me-auto">
+                                                            <p class="mb-0"># of Violations</p>
+                                                            <h6 class="my-1 text-white">18</h6>
+
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <div class="card radius-10 bg-gradient-moonlit">
+                                                <div class="card-body">
+                                                    <div class="d-flex align-items-center">
+                                                        <div class="me-auto">
+                                                            <p class="mb-0 text-white">Last complaint(Open)</p>
+                                                            <h6 class="my-1 text-white "
+                                                                title="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer ac accumsan dui. Curabitur a mattis est. Donec nec elit non urna ultricies dignissim et eu ipsum. Etiam in sem ac neque sagittis aliquam consectetur in lectus. Sed hendrerit, lectus sit amet semper volutpat, ">
+                                                                Peter - 12/DEC/2023 08:20PM
+                                                            </h6>
+
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <div class="card radius-10 bg-gradient-moonlit">
+                                                <div class="card-body">
+                                                    <div class="d-flex align-items-center">
+                                                        <div class="me-auto">
+                                                            <p class="mb-0 text-white">Last inspector visit - Maria
+                                                                Miller </p>
+                                                            <h6 class="my-1 text-white">On - 02/JAN/2024
+                                                                10:35AM</h6>
+
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <table class="table mb-0 table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">#</th>
+                                                <th scope="col">Program</th>
+                                                <th scope="col">Status</th>
+                                                <th scope="col">Open Date</th>
+                                                <th scope="col">Close Date</th>
+                                                <th scope="col">Inspector</th>
+                                                <th scope="col">Last Inspector Visit</th>
+
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td><a href="" title="Add complaint">717261</a></td>
+                                                <td>General</td>
+                                                <td>Open</td>
+                                                <td>15/Jan/2024 8:00</td>
+                                                <td></td>
+                                                <td>James</td>
+                                                <td>18/Jan/2024 14:00</td>
+                                            </tr>
+                                            <tr>
+                                                <td>216088</td>
+                                                <td>General</td>
+                                                <td>Closed</td>
+                                                <td>6/Jan/2005 9:15</td>
+                                                <td>15/Feb/2005 8:00</td>
+                                                <td>John</td>
+                                                <td>14/Feb/2005 14:00</td>
+                                            </tr>
+                                            <tr>
+                                                <td>17618</td>
+                                                <td>General</td>
+                                                <td>Closed</td>
+                                                <td>18/Jan/2006 8:10</td>
+                                                <td>14/Mar/2006 8:00</td>
+                                                <td>Young</td>
+                                                <td>13/Mar/2006 14:00</td>
+                                            </tr>
+                                            <tr>
+                                                <td>955008</td>
+                                                <td>General</td>
+                                                <td>Closed</td>
+                                                <td>9/Feb/2008 11:15</td>
+                                                <td>12/Mar/2008 8:00</td>
+                                                <td>Maria</td>
+                                                <td>11/Mar/2008 14:00</td>
+                                            </tr>
+                                            <tr>
+                                                <td>115954</td>
+                                                <td>General</td>
+                                                <td>Closed</td>
+                                                <td>22/Dec/2010 11:00</td>
+                                                <td>22/Feb/2011 8:00</td>
+                                                <td>Carolina</td>
+                                                <td>21/Feb/2011 14:00</td>
+                                            </tr>
+                                            <tr>
+                                                <td>791547</td>
+                                                <td>Multiple Family</td>
+                                                <td>Closed</td>
+                                                <td>12/Oct/2011 9:00</td>
+                                                <td>11/Nov/2011 8:00</td>
+                                                <td>Edward</td>
+                                                <td>10/Nov/2011 14:00</td>
+                                            </tr>
+                                            <tr>
+                                                <td>623919</td>
+                                                <td>General</td>
+                                                <td>Closed</td>
+                                                <td>12/May/2012 14:00</td>
+                                                <td>10/Jun/2012 8:00</td>
+                                                <td>Tracy</td>
+                                                <td>9/Jun/2012 14:00</td>
+                                            </tr>
+                                            <tr>
+                                                <td>853433</td>
+                                                <td>Multiple Family</td>
+                                                <td>Closed</td>
+                                                <td>26/Aug/2016 15:00</td>
+                                                <td>18/Oct/2016 8:00</td>
+                                                <td>Joseph</td>
+                                                <td>17/Oct/2016 14:00</td>
+                                            </tr>
+                                            <tr>
+                                                <td>712675</td>
+                                                <td>General</td>
+                                                <td>Closed</td>
+                                                <td>30/Apr/2022 9:17</td>
+                                                <td>14/May/2022 8:00</td>
+                                                <td>Steven</td>
+                                                <td>13/May/2022 14:00</td>
+                                            </tr>
+                                            <tr>
+                                                <td>847876</td>
+                                                <td>General</td>
+                                                <td>Closed</td>
+                                                <td>13/Sep/2023 10:00</td>
+                                                <td>1/Oct/2023 8:00</td>
+                                                <td>Oscar</td>
+                                                <td>21/Sep/2023 14:00</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                        </div>
+
+
+                        <!-- Property Info Content Ends Here -->
+                        <div class="col-12 mt-3">
+                            <div class="float-end">
+                                <button class="btn btn-primary px-4" (click)="nextTab()">Next<i
+                                        class="bx bx-right-arrow-alt ms-2"></i></button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="test-l-2" role="tabpanel" class="bs-stepper-pane" aria-labelledby="stepper1trigger2">
+
+
+
+                        <div class="row g-3">
+
+                            <div class="col-md-12 col-lg-12  col-xl-12">
+                                <h6 class="mb-0 text-uppercase">List of Cases</h6>
+                                <hr />
+                                <table class="table mb-0 table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">#</th>
+                                            <th scope="col">Program</th>
+                                            <th scope="col">Status</th>
+                                            <th scope="col">Open Date</th>
+                                            <th scope="col">Close Date</th>
+                                            <th scope="col">Inspector</th>
+                                            <th scope="col">Last Inspector Visit</th>
+
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td><a href="" title="Add complaint">717261</a></td>
+                                            <td>General</td>
+                                            <td>Open</td>
+                                            <td>15/Jan/2024 8:00</td>
+                                            <td></td>
+                                            <td>James</td>
+                                            <td>18/Jan/2024 14:00</td>
+                                        </tr>
+                                        <tr>
+                                            <td>216088</td>
+                                            <td>General</td>
+                                            <td>Closed</td>
+                                            <td>6/Jan/2005 9:15</td>
+                                            <td>15/Feb/2005 8:00</td>
+                                            <td>John</td>
+                                            <td>14/Feb/2005 14:00</td>
+                                        </tr>
+                                        <tr>
+                                            <td>17618</td>
+                                            <td>General</td>
+                                            <td>Closed</td>
+                                            <td>18/Jan/2006 8:10</td>
+                                            <td>14/Mar/2006 8:00</td>
+                                            <td>Young</td>
+                                            <td>13/Mar/2006 14:00</td>
+                                        </tr>
+                                        <tr>
+                                            <td>955008</td>
+                                            <td>General</td>
+                                            <td>Closed</td>
+                                            <td>9/Feb/2008 11:15</td>
+                                            <td>12/Mar/2008 8:00</td>
+                                            <td>Maria</td>
+                                            <td>11/Mar/2008 14:00</td>
+                                        </tr>
+                                        <tr>
+                                            <td>115954</td>
+                                            <td>General</td>
+                                            <td>Closed</td>
+                                            <td>22/Dec/2010 11:00</td>
+                                            <td>22/Feb/2011 8:00</td>
+                                            <td>Carolina</td>
+                                            <td>21/Feb/2011 14:00</td>
+                                        </tr>
+                                        <tr>
+                                            <td>791547</td>
+                                            <td>Multiple Family</td>
+                                            <td>Closed</td>
+                                            <td>12/Oct/2011 9:00</td>
+                                            <td>11/Nov/2011 8:00</td>
+                                            <td>Edward</td>
+                                            <td>10/Nov/2011 14:00</td>
+                                        </tr>
+                                        <tr>
+                                            <td>623919</td>
+                                            <td>General</td>
+                                            <td>Closed</td>
+                                            <td>12/May/2012 14:00</td>
+                                            <td>10/Jun/2012 8:00</td>
+                                            <td>Tracy</td>
+                                            <td>9/Jun/2012 14:00</td>
+                                        </tr>
+                                        <tr>
+                                            <td>853433</td>
+                                            <td>Multiple Family</td>
+                                            <td>Closed</td>
+                                            <td>26/Aug/2016 15:00</td>
+                                            <td>18/Oct/2016 8:00</td>
+                                            <td>Joseph</td>
+                                            <td>17/Oct/2016 14:00</td>
+                                        </tr>
+                                        <tr>
+                                            <td>712675</td>
+                                            <td>General</td>
+                                            <td>Closed</td>
+                                            <td>30/Apr/2022 9:17</td>
+                                            <td>14/May/2022 8:00</td>
+                                            <td>Steven</td>
+                                            <td>13/May/2022 14:00</td>
+                                        </tr>
+                                        <tr>
+                                            <td>847876</td>
+                                            <td>General</td>
+                                            <td>Closed</td>
+                                            <td>13/Sep/2023 10:00</td>
+                                            <td>1/Oct/2023 8:00</td>
+                                            <td>Oscar</td>
+                                            <td>21/Sep/2023 14:00</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <h5 class="mb-3">Reports</h5>
+                            <div class="row row-cols-1 row-cols-md-3 row-cols-xl-3 row-cols-xxl-3 mt-2"
+                                id="caseHistoryReport">
+
+                                <div class="col">
+                                    <div class="card radius-10 bg-gradient-blues ">
+                                        <div class="card-body">
+                                            <div class="d-flex align-items-center">
+                                                <div class="me-auto">
+                                                    <p class="mb-0 text-white">Total Cases</p>
+                                                    <h6 class="my-1 text-white">16</h6>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="card radius-10 bg-gradient-ohhappiness ">
+                                        <div class="card-body">
+                                            <div class="d-flex align-items-center">
+                                                <div class="me-auto">
+                                                    <p class="mb-0 text-white">Closed Cases</p>
+                                                    <h6 class="my-1 text-white">15</h6>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="card radius-10 bg-gradient-burning ">
+                                        <div class="card-body">
+                                            <div class="d-flex align-items-center">
+                                                <div class="me-auto">
+                                                    <p class="mb-0 text-white">Open Case</p>
+                                                    <h6 class="my-1 text-white">01</h6>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="card radius-10 bg-gradient-moonlit">
+                                        <div class="card-body">
+                                            <div class="d-flex align-items-center" style="color:white">
+                                                <div class="me-auto">
+                                                    <p class="mb-0"># of Violations</p>
+                                                    <h6 class="my-1 text-white">18</h6>
+
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="card radius-10 bg-gradient-moonlit">
+                                        <div class="card-body">
+                                            <div class="d-flex align-items-center">
+                                                <div class="me-auto">
+                                                    <p class="mb-0 text-white">Last complaint(Open)</p>
+                                                    <h6 class="my-1 text-white "
+                                                        title="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer ac accumsan dui. Curabitur a mattis est. Donec nec elit non urna ultricies dignissim et eu ipsum. Etiam in sem ac neque sagittis aliquam consectetur in lectus. Sed hendrerit, lectus sit amet semper volutpat, ">
+                                                        Peter - 12/DEC/2023 08:20PM
+                                                    </h6>
+
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="card radius-10 bg-gradient-moonlit">
+                                        <div class="card-body">
+                                            <div class="d-flex align-items-center">
+                                                <div class="me-auto">
+                                                    <p class="mb-0 text-white">Last inspector visit - Maria
+                                                        Miller </p>
+                                                    <h6 class="my-1 text-white">On - 02/JAN/2024
+                                                        10:35AM</h6>
+
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="d-flex justify-content-between gap-3">
+                                    <button class="btn btn-outline-secondary px-4" onclick="stepper1.previous()"><i
+                                            class="bx bx-left-arrow-alt me-2"></i>Previous</button>
+                                    <button class="btn btn-primary px-4" (click)="nextPeople()">Next<i
+                                            class="bx bx-right-arrow-alt ms-2"></i></button>
+                                </div>
+                            </div>
+                        </div><!---end row-->
+
+                    </div>
+
+                    <div id="test-l-3" role="tabpanel" class="bs-stepper-pane" aria-labelledby="stepper1trigger3">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h5 class="mb-1">People Info</h5>
+                                <p class="mb-4">Information of the complainer</p>
+                            </div>
+                            <div class="col-md-6">
+                                <form class="float-lg-end">
+                                    <div class="row row-cols-lg-4 row-cols-xl-auto g-2">
+                                        <div class="col">
+                                            <div class="position-relative">
+                                                <input type="text" class="form-control ps-5"
+                                                    (focus)="hideRegisteredCases()" (focusout)="getRegisteredCases()"
+                                                    placeholder="Search Person..."> <span
+                                                    class="position-absolute top-50 product-show translate-middle-y"><i
+                                                        class="bx bx-search"></i></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+
+
+
+                        <div class="row g-3">
+                            <form class="row g-3">
+                                <div class="row">
+                                    <h6 class="mb-0 text-uppercase">Personal Details</h6>
+                                    <hr />
+                                    <div class="col-lg-3 col-md-6 col-sm-12">
+                                        <label for="input1" class="form-label">Salutation
+                                        </label>
+                                        <select id="salutation" name="salutation" class="form-select"
+                                            [(ngModel)]="salutation">
+                                            <option selected="">Choose...</option>
+                                            <option *ngFor="let _st of _salutationTypeDataList" value="{{_st?.id}}">
+                                                {{_st?.value}}</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-lg-3  col-md-12  col-sm-12">
+                                        <label for="input3" class="form-label">Full Name</label>
+                                        <input type="text" class="form-control" id="input1" placeholder="Full Name">
+                                    </div>
+                                    <div class="col-lg-3  col-md-6  col-sm-12">
+                                        <label for="input2" class="form-label">Relationship</label>
+                                        <select id="input7" class="form-select">
+                                            <option selected="">Choose...</option>
+                                            <option *ngFor="let _st of _relationshipTypeDataList" value="{{_st.id}}">
+                                                {{_st?.value}}</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-lg-3  col-sm-12">
+                                        <label for="input1" class="form-label">Address Line 1</label>
+                                        <input type="text" class="form-control" id="input1"
+                                            placeholder="Address Line 1">
+                                    </div>
+                                    <div class="col-lg-3  col-sm-12">
+                                        <label for="input1" class="form-label">Address Line 2</label>
+                                        <input type="text" class="form-control" id="input1"
+                                            placeholder="Address Line 2">
+                                    </div>
+                                    <div class="col-lg-3  col-sm-12">
+                                        <label for="input1" class="form-label">Street</label>
+                                        <input type="text" class="form-control" id="input1" placeholder="Street">
+                                    </div>
+                                    <div class="col-lg-3  col-sm-12">
+                                        <label for="input1" class="form-label">City</label>
+                                        <input type="text" class="form-control" id="input1" placeholder="City">
+                                    </div>
+                                    <div class="col-lg-3  col-sm-12">
+                                        <label for="input1" class="form-label">State</label>
+                                        <input type="text" class="form-control" id="input1" placeholder="State">
+                                    </div>
+                                    <div class="col-lg-3  col-sm-12">
+                                        <label for="input1" class="form-label">Zipcode</label>
+                                        <input type="text" class="form-control" id="input1" placeholder="Zipcode">
+                                    </div>
+                                    <div class="col-lg-3  col-sm-12">
+                                        <label for="input1" class="form-label">Email Address</label>
+                                        <input type="text" class="form-control" id="input1" placeholder="Email Address">
+                                    </div>
+                                    <div class="col-lg-3  col-sm-12">
+                                        <label for="input1" class="form-label">Mobile</label>
+                                        <input type="text" class="form-control" id="input1" placeholder="Mobile Number">
+                                    </div>
+                                    <div class="col-lg-3  col-md-6  col-sm-12">
+                                        <label for="input2" class="form-label">Type</label>
+                                        <select id="input7" class="form-select">
+                                            <option selected="">Choose...</option>
+                                            <option *ngFor="let _pt of _phoneTypeDataList" value="{{_pt.id}}">
+                                                {{_pt?.value}}</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-lg-3  col-sm-12">
+                                        <label for="input1" class="form-label">Telephone</label>
+                                        <input type="text" class="form-control" id="input1"
+                                            placeholder="Telephone Number">
+                                    </div>
+                                    <div class="col-lg-3  col-md-6  col-sm-12">
+                                        <label for="input2" class="form-label">Type</label>
+                                        <select id="input7" class="form-select">
+                                            <option selected="">Choose...</option>
+                                            <option *ngFor="let _pt of _phoneTypeDataList" value="{{_pt.id}}">
+                                                {{_pt?.value}}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-12  col-sm-12">
+                                        <label for="input1" class="form-label">Comments</label>
+                                        <textarea id="comments" name="comments" class="form-control"></textarea>
+                                    </div>
+                                </div>
+                                <div class="row mt-5" id="registeredCases">
+                                    <div class="col-md-6">
+                                        <h6 class="mb-0 text-uppercase">Registered Cases</h6>
+                                        <hr />
+                                        <table class="table mb-0 table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col">#</th>
+                                                    <th>Address</th>
+                                                    <th scope="col">Program</th>
+                                                    <th scope="col">Status</th>
+                                                    <th scope="col">Open Date</th>
+                                                    <th scope="col">Close Date</th>
+                                                    <th scope="col">Inspector</th>
+                                                    <th scope="col">Last Inspector Visit</th>
+
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td><a href="" title="Add complaint">717261</a></td>
+                                                    <td>906 Hummingbird Dr.San Jose, California(CA), 95125</td>
+                                                    <td>General</td>
+                                                    <td>Open</td>
+                                                    <td>15/Jan/2024 8:00</td>
+                                                    <td></td>
+                                                    <td>James</td>
+                                                    <td>18/Jan/2024 14:00</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>216088</td>
+                                                    <td>954 Walglen Ct, San Jose, California(CA), 95136</td>
+                                                    <td>General</td>
+                                                    <td>Closed</td>
+                                                    <td>6/Jan/2005 9:15</td>
+                                                    <td>15/Feb/2005 8:00</td>
+                                                    <td>John</td>
+                                                    <td>14/Feb/2005 14:00</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>17618</td>
+                                                    <td>972 Lakeshire Ct, San Jose, California(CA), 95126</td>
+                                                    <td>General</td>
+                                                    <td>Closed</td>
+                                                    <td>18/Jan/2006 8:10</td>
+                                                    <td>14/Mar/2006 8:00</td>
+                                                    <td>Young</td>
+                                                    <td>13/Mar/2006 14:00</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>955008</td>
+                                                    <td>98 Cashew Blossom Dr San Jose, California(CA), 95123</td>
+                                                    <td>General</td>
+                                                    <td>Closed</td>
+                                                    <td>9/Feb/2008 11:15</td>
+                                                    <td>12/Mar/2008 8:00</td>
+                                                    <td>Maria</td>
+                                                    <td>11/Mar/2008 14:00</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>115954</td>
+                                                    <td>985 Carola Ave San Jose, California(CA), 95130</td>
+                                                    <td>General</td>
+                                                    <td>Closed</td>
+                                                    <td>22/Dec/2010 11:00</td>
+                                                    <td>22/Feb/2011 8:00</td>
+                                                    <td>Carolina</td>
+                                                    <td>21/Feb/2011 14:00</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>791547</td>
+                                                    <td>7510 Tierra Sombra Ct, San Jose, California(CA), 95120</td>
+                                                    <td>Multiple Family</td>
+                                                    <td>Closed</td>
+                                                    <td>12/Oct/2011 9:00</td>
+                                                    <td>11/Nov/2011 8:00</td>
+                                                    <td>Edward</td>
+                                                    <td>10/Nov/2011 14:00</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <h6 class="mb-0 text-uppercase">List of case on reporting person</h6>
+                                        <hr />
+                                        <table class="table mb-0 table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col">#</th>
+                                                    <th>Address</th>
+                                                    <th scope="col">Program</th>
+                                                    <th scope="col">Status</th>
+                                                    <th scope="col">Open Date</th>
+                                                    <th scope="col">Close Date</th>
+                                                    <th scope="col">Inspector</th>
+                                                    <th scope="col">Last Inspector Visit</th>
+
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>71722</td>
+                                                    <td>748 Hummingbird Dr.San Jose, California(CA), 95125</td>
+                                                    <td>General</td>
+                                                    <td>Open</td>
+                                                    <td>15/Jan/2024 8:00</td>
+                                                    <td>Closed</td>
+                                                    <td>James</td>
+                                                    <td>18/Jan/2024 14:00</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>21688</td>
+                                                    <td>662 Walglen Ct, San Jose, California(CA), 95136</td>
+                                                    <td>General</td>
+                                                    <td>Closed</td>
+                                                    <td>6/Jan/2005 9:15</td>
+                                                    <td>15/Feb/2005 8:00</td>
+                                                    <td>John</td>
+                                                    <td>14/Feb/2005 14:00</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>1618</td>
+                                                    <td>784 Lakeshire Ct, San Jose, California(CA), 95126</td>
+                                                    <td>General</td>
+                                                    <td>Closed</td>
+                                                    <td>18/Jan/2006 8:10</td>
+                                                    <td>14/Mar/2006 8:00</td>
+                                                    <td>Young</td>
+                                                    <td>13/Mar/2006 14:00</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                                <hr />
+                                <div class="row">
+                                    <div class="col-lg-6  col-sm-12">
+                                        <label for="input1" class="form-label">Responsible Case Parties</label>
+                                        <input type="text" class="form-control" id="input1">
+                                    </div>
+                                    <div class="col-lg-6  col-sm-12">
+                                        <label for="input1" class="form-label">SITUS Owner</label>
+                                        <input type="text" class="form-control" id="input1">
+                                    </div>
+                                </div>
+
+                            </form>
+
+                            <div class="col-12">
+                                <div class="d-flex justify-content-between gap-3">
+                                    <button class="btn btn-outline-secondary px-4" onclick="stepper1.previous()"><i
+                                            class="bx bx-left-arrow-alt me-2"></i>Previous</button>
+                                    <button class="btn btn-primary px-4" onclick="stepper1.next()">Next<i
+                                            class="bx bx-right-arrow-alt ms-2"></i></button>
+                                </div>
+                            </div>
+                        </div><!---end row-->
+
+                    </div>
+
+                    <div id="test-l-4" role="tabpanel" class="bs-stepper-pane" aria-labelledby="stepper1trigger4">
+                        <h5 class="mb-1">Case Details</h5>
+                        <p class="mb-4">Case Details, Program and Inspector assignment</p>
+                        <div class="row g-3">
+                            <div class="row">
+                                <div class="col-lg-12  col-sm-12">
+                                    <label for="input1" class="form-label">Complaint Description</label>
+                                    <textarea id="complaintdescription" name="complaintdescription"
+                                        class="form-control"></textarea>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-6 col-sm-12">
+                                <label for="input1" class="form-label">Source</label>
+                                <select id="input7" class="form-select">
+                                    <option selected="">Choose...</option>
+                                    <option>Call Center</option>
+                                    <option>Inspector</option>
+                                    <option>Public</option>
+                                </select>
+                            </div>
+                            <div class="col-12 col-lg-3 col-md-6 col-sm-12">
+                                <label for="Experience1" class="form-label">Received Date</label>
+                                <input type="date" class="form-control" id="Experience1" placeholder="Received Date">
+                            </div>
+                            <div class="col-12 col-lg-3  col-md-6  ">
+                                <label for="Position1" class="form-label">Case Type</label>
+                                <select id="input7" class="form-select">
+                                    <option selected="">Choose...</option>
+                                    <option *ngFor="let _ct of _complaintTypeDataList" value="{{_ct.id}}">
+                                        {{_ct?.value}}</option>
+                                </select>
+                            </div>
+                            <div class="col-lg-3 col-md-6 col-sm-12">
+                                <label for="input1" class="form-label">Program</label>
+                                <select id="input7" class="form-select">
+                                    <option selected="">Choose...</option>
+                                    <option *ngFor="let _pt of _programTypeDataList" value="{{_pt.id}}">
+                                        {{_pt?.value}}</option>
+                                </select>
+                            </div>
+                            <div class="col-lg-3 col-md-6 col-sm-12">
+                                <label for="input1" class="form-label">Violation Type</label>
+                                <select id="input7" class="form-select">
+                                    <option selected="">Choose...</option>
+                                    <option>Blight</option>
+                                </select>
+                            </div>
+                            <div class="col-lg-3 col-md-6 col-sm-12">
+                                <label for="input1" class="form-label">Primary
+                                    Inspector<span style="color:red">{{_primaryInspectorAssignment}}</span></label>
+                                <select id="input7" class="form-select" (change)="onPrimaryInspectorChange($event)">
+                                    <option value="0" selected="">Choose...</option>
+                                    <option value="1">Maria</option>
+                                    <option value="2">John</option>
+                                    <option value="3">Peter</option>
+                                    <option value="4">Shaun Bruckner</option>
+                                </select>
+                            </div>
+                            <div class="col-lg-3 col-md-6 col-sm-12">
+                                <label for="input1" class="form-label">Secondary Inspector<span
+                                        style="color:red">{{_secondaryInspectorAssignment}}</span></label>
+                                <select id="input7" class="form-select" (change)="onSecondaryInspectorChange($event)">
+                                    <option selected="">Choose...</option>
+                                    <option value="1">Maria</option>
+                                    <option value="2">John</option>
+                                    <option value="3">Peter</option>
+                                    <option value="4">Shaun Bruckner</option>
+                                </select>
+                            </div>
+                            <div class="col-lg-3 col-md-6 col-sm-12">
+                                <label for="input1" class="form-label">Disposition</label>
+                                <select id="input7" class="form-select">
+                                    <option selected="">Choose...</option>
+                                    <option *ngFor="let _st of _dispositionTypeDataList" value="{{_st.id}}">
+                                        {{_st?.value}}</option>
+                                </select>
+                            </div>
+
+                            <div class="col-lg-3  col-md-6  col-sm-12">
+                                <label for="input2" class="form-label">Priority</label>
+                                <select id="input7" class="form-select">
+                                    <option selected="">Choose...</option>
+                                    <option *ngFor="let _st of _priorityTypeDataList" value="{{_st.id}}">
+                                        {{_st?.value}}</option>
+                                </select>
+                            </div>
+                            <div class="col-lg-3   col-md-6   col-sm-12">
+                                <label for="input1" class="form-label">TPID</label>
+                                <input type="text" class="form-control" id="input1" placeholder="TPID">
+                            </div>
+
+                            <div class="col-12   col-md-6  col-lg-3">
+                                <label for="Position1" class="form-label">License Number</label>
+                                <input type="text" class="form-control" id="LicenseNumber" placeholder="License Number">
+                            </div>
+                            <div class="col-12 col-lg-3   col-md-6  ">
+                                <label for="Position1" class="form-label">CDBG</label>
+                                <input type="check" class="form-control" id="CDBG" placeholder="CDBG">
+                            </div>
+
+                            <div class="col-lg-3   col-md-6   col-sm-12">
+                                <label for="input1" class="form-label">Cost</label>
+                                <input type="text" class="form-control" id="input1" placeholder="Cost">
+                            </div>
+                            <div class="col-12 col-lg-3   col-md-6  ">
+                                <label for="CUDate" class="form-label">C/U Date</label>
+                                <input type="text" class="form-control" id="CUDate" placeholder="C/U Date">
+                            </div>
+                            <div class="col-12 col-lg-3  col-md-6  ">
+                                <label for="CoreServices" class="form-label">Core Services Type</label>
+                                <select id="CoreServices" name="CoreServices" class="form-select">
+                                    <option selected="">Choose...</option>
+                                    <option *ngFor="let _cst of _coreServiceTypeDataList" value="{{_cst.id}}">
+                                        {{_cst?.value}}</option>
+                                </select>
+                            </div>
+                            <div class="col-lg-3  col-md-12  col-sm-12">
+                                <label for="input3" class="form-label">Status</label>
+                                <select id="input7" class="form-select">
+                                    <option selected="">Choose...</option>
+                                    <option>Open</option>
+                                    <option>On-Hold</option>
+                                    <option>Closed</option>
+                                    <option>In Progress</option>
+                                </select>
+                            </div>
+                            <div class="col-12">
+                                <div class="d-flex justify-content-between gap-3">
+                                    <button class="btn btn-outline-secondary px-4" onclick="stepper1.previous()"><i
+                                            class="bx bx-left-arrow-alt me-2"></i>Previous</button>
+                                    <button class="btn btn-primary px-4" onclick="stepper1.next()">Next<i
+                                            class="bx bx-right-arrow-alt ms-2"></i></button>
+                                </div>
+                            </div>
+                        </div><!---end row-->
+
+                    </div>
+
+
+                    <div id="test-l-5" role="tabpanel" class="bs-stepper-pane" aria-labelledby="stepper1trigger5">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h5 class="mb-1">Violation Assignment</h5>
+                                <p class="mb-4">Assigning Violation to the Case</p>
+                            </div>
+                            <div class="col-md-6 ">
+                                <button class="btn btn-primary px-4 float-end  ms-1" (click)="view(2)">View 2</button>
+                                <button class="btn btn-primary px-4 float-end" (click)="view(1)">View 1</button>
+                            </div>
+                        </div>
+
+
+                        <div class="row g-3">
+                            <div id="v1" class="col-md-12 col-lg-12 col-xl-12">
+                                <h6 class="mb-0 text-uppercase">Violation Details</h6>
+                                <hr />
+                                <form class="row g-3">
+                                    <div class="col-lg-3  col-md-6  col-sm-12">
+                                        <label for="single-select-optgroup-field" class="form-label">Violations</label>
+                                        <select class="form-select select2-hidden-accessible"
+                                            id="single-select-optgroup-field" data-placeholder="Choose one thing"
+                                            data-select2-id="select2-data-single-select-optgroup-field" tabindex="-1"
+                                            aria-hidden="true">
+                                            <option data-select2-id="select2-data-4-74ir"></option>
+                                            <optgroup label="Housing" data-select2-id="select2-data-80-nhrt">
+                                                <option data-select2-id='select2-data-83-gwm5'>17.20.900 A2, D -
+                                                    Inadequate Sanitation/Ventilation/Space Requirements
+                                                </option>
+                                                <option data-select2-id='select2-data-83-gwm5'>17.20.900 A10, H,J 2 -
+                                                    Substandard Housing</option>
+                                                <option data-select2-id='select2-data-83-gwm5'>17.20.900 A10, H, J2 -
+                                                    Substandard Housing</option>
+                                                <option data-select2-id='select2-data-83-gwm5'>17.20.900 A10,H,J2 -
+                                                    Inadequate
+                                                    Maintenance</option>
+                                                <option data-select2-id='select2-data-83-gwm5'>17.20.900 A1, H, J2 -
+                                                    Inadequate
+                                                    Sanitation</option>
+                                                <option data-select2-id='select2-data-83-gwm5'>17.20.900 A1,D -
+                                                    Inadequate
+                                                    Sanitation/Hazardous Plumbing</option>
+                                                <option data-select2-id='select2-data-83-gwm5'>17.20.900 G2 - Fire
+                                                    Hazard/Inadequate Fire Protection</option>
+                                                <option data-select2-id='select2-data-83-gwm5'>17.20.900 G1 - Fire
+                                                    Hazard/Inadequate Fire Protection</option>
+                                                <option data-select2-id='select2-data-83-gwm5'>17.20.900 F2 - Faulty
+                                                    Weather
+                                                    Protection</option>
+                                                <option data-select2-id='select2-data-83-gwm5'>17.20.900 E - Hazardous
+                                                    Mechanical Equipment</option>
+                                                <option data-select2-id='select2-data-83-gwm5'>17.20.900 - Substandard
+                                                    housing -
+                                                    Defined</option>
+                                                <option data-select2-id='select2-data-83-gwm5'>17.20.900 D, E -
+                                                    Hazardous
+                                                    Plumbing</option>
+                                                <option data-select2-id='select2-data-83-gwm5'>17.20.900 D - Hazardous
+                                                    Plumbing
+                                                </option>
+                                                <option data-select2-id='select2-data-83-gwm5'>17.20.900 B2, H, J2 -
+                                                    Structural
+                                                    Hazard/Faulty Materials of
+                                                    Construction/Inadequate Maintenance</option>
+                                                <option data-select2-id='select2-data-83-gwm5'>17.20.900 B2, 6H, J2 -
+                                                    Structural
+                                                    Hazard/Faulty Materials of
+                                                    Construction/Inadequate Maintenance</option>
+                                                <option data-select2-id='select2-data-83-gwm5'>17.20.900 B2,6, D, H -
+                                                    Structural
+                                                    Hazard</option>
+                                                <option data-select2-id='select2-data-83-gwm5'>17.20.900 B, D, H,J2 -
+                                                    Structural
+                                                    Hazard/Hazardous Plumbing/Inadequate
+                                                    Maintenance</option>
+                                                <option data-select2-id='select2-data-83-gwm5'>17.20.900 A5, E, H -
+                                                    Inadequate
+                                                    Sanitation/Ventilation/Space Requirement
+                                                    - Hazardous Mechanical Equipment</option>
+                                                <option data-select2-id='select2-data-83-gwm5'>17.20.900 A5, E, H -
+                                                    Inadequate
+                                                    Sanitation/Ventilation/Space
+                                                    Requirement-Hazardous Mechanical Equipme</option>
+                                                <option data-select2-id='select2-data-83-gwm5'>17.20.920 A - Substandard
+                                                    Housing
+                                                </option>
+                                                <option data-select2-id='select2-data-83-gwm5'>17.20.900 M - Improper
+                                                    Occupancy
+                                                </option>
+                                                <option data-select2-id='select2-data-83-gwm5'>17.20.520 - Residential
+                                                    Occupancy
+                                                    Permit Required</option>
+                                                <option data-select2-id='select2-data-83-gwm5'>17.20.900 A1, D -
+                                                    Inadequate
+                                                    Sanitation/Ventilation/Space
+                                                    Requirement-Hazardous Plumbing</option>
+                                                <option data-select2-id='select2-data-83-gwm5'>17.20.900 A10 -
+                                                    Inadequate
+                                                    Sanitation</option>
+                                                <option data-select2-id='select2-data-83-gwm5'>17.20.900 A 10 -
+                                                    Inadequate
+                                                    Sanitation/Ventilation/Space Requirements
+                                                </option>
+                                                <option data-select2-id='select2-data-83-gwm5'>17.20.900 A10, H,J2 -
+                                                    Inadequate
+                                                    Maintenance</option>
+                                                <option data-select2-id='select2-data-83-gwm5'>17.20.900 A12 -
+                                                    Overflowing
+                                                    bins
+                                                </option>
+                                                <option data-select2-id='select2-data-83-gwm5'>17.20.900 J2 - Inadequate
+                                                    Maintenance</option>
+                                                <option data-select2-id='select2-data-83-gwm5'>17.20.900 A1, D -
+                                                    Inadequate
+                                                    Sanitation/Ventilation/Space
+                                                    Requirements/Hazardous Plumbing</option>
+                                                <option data-select2-id='select2-data-83-gwm5'>17.20.900 H, J2 -
+                                                    Inadequate
+                                                    Maintenance</option>
+                                                <option data-select2-id='select2-data-83-gwm5'>17.20.900 A5, E -
+                                                    Inadequate
+                                                    Sanitation/Ventilation/Space Requirements -
+                                                    Hazardous Mechanical Equipment</option>
+                                                <option data-select2-id='select2-data-83-gwm5'>17.20.900 A2, H, J2 -
+                                                    Inadequate
+                                                    Sanitation</option>
+                                                <option data-select2-id='select2-data-83-gwm5'>17.20.900 C - Hazardous
+                                                    Wiring
+                                                </option>
+                                                <option data-select2-id='select2-data-83-gwm5'>17.20.900 B6,H,J2 -
+                                                    Structural
+                                                    Hazards/Faulty Materials of
+                                                    Construction/Inadequate Maintenance</option>
+                                                <option data-select2-id='select2-data-83-gwm5'>17.20.900 B2,H,J2 -
+                                                    Structural
+                                                    Hazard/Faulty Materials of
+                                                    Construction/Inadequate Maintenance</option>
+                                                <option data-select2-id='select2-data-83-gwm5'>17.20.900 A-9 UHC -
+                                                    Inadequate
+                                                    Maintenance/Mildew </option>
+                                                <option data-select2-id='select2-data-83-gwm5'>17.20.900 A3 -
+                                                    Substandard
+                                                    Housing</option>
+                                                <option data-select2-id='select2-data-83-gwm5'>17.20.900 A5 - Inadequate
+                                                    Sanitation/Ventilation/Space Requirements
+                                                </option>
+                                                <option data-select2-id='select2-data-83-gwm5'>17.20.900 A8 - Inadequate
+                                                    Lighting</option>
+                                                <option data-select2-id='select2-data-83-gwm5'>17.20.550 - Routine
+                                                    Inspections
+                                                </option>
+                                                <option data-select2-id='select2-data-83-gwm5'>17.20.900 F3 - Faulty
+                                                    Weather
+                                                    Protection</option>
+                                                <option data-select2-id='select2-data-83-gwm5'>17.20.900 I - Hazardous
+                                                    or
+                                                    Unsanitary Premises</option>
+                                                <option data-select2-id='select2-data-83-gwm5'>17.20.050 - Violations of
+                                                    Chapter
+                                                    Provisions Prohibited - Responsibility
+                                                </option>
+                                                <option data-select2-id='select2-data-83-gwm5'>17.20.290 E, G - Water
+                                                    Closet
+                                                    Compartments</option>
+                                                <option data-select2-id='select2-data-83-gwm5'>17.20.360 B - Electrical
+                                                    Equipment</option>
+                                                <option data-select2-id='select2-data-83-gwm5'>17.20.290 A1, H, J2 -
+                                                    Inadequate
+                                                    Sanitation</option>
+                                                <option data-select2-id='select2-data-83-gwm5'>17.20.280 D - Light and
+                                                    Ventilation</option>
+                                                <option data-select2-id='select2-data-83-gwm5'>17.20.350 - Heating
+                                                </option>
+                                                <option data-select2-id='select2-data-83-gwm5'>17.20.900 C, G -
+                                                    Sanitation
+                                                </option>
+                                                <option data-select2-id='select2-data-83-gwm5'>17.20.900 D, E -
+                                                    Hazardous
+                                                    Plumbing/Hazardous Mechanical Equipment
+                                                </option>
+                                                <option data-select2-id='select2-data-83-gwm5'>17.20.290 C, G -
+                                                </option>
+                                                <option data-select2-id='select2-data-83-gwm5'>17.20.900 G - </option>
+                                                <option data-select2-id='select2-data-83-gwm5'>17.20.900 H, J-2 -
+                                                    Inadequate
+                                                    Maintenance</option>
+                                                <option data-select2-id='select2-data-83-gwm5'>17.20.290 E - Water
+                                                    Closet
+                                                    Compartments</option>
+                                                <option data-select2-id='select2-data-83-gwm5'>17.20.450 - </option>
+                                                <option data-select2-id='select2-data-83-gwm5'>17.20.450 A - Fire
+                                                    detection
+                                                    systems required-Residential buildings
+                                                </option>
+                                                <option data-select2-id='select2-data-83-gwm5'>17.20.900 A-10,H,J-2 -
+                                                </option>
+                                                <option data-select2-id='select2-data-83-gwm5'>17.20.900 A1, 4 -
+                                                    Substandard
+                                                    Housing</option>
+                                                <option data-select2-id='select2-data-83-gwm5'>17.20.900 C, D, E -
+                                                    Substandard
+                                                    Housing-Hazardous Wiring, Plumbing, &
+                                                    Mechanical Equipment</option>
+                                                <option data-select2-id='select2-data-83-gwm5'>17.20.900 D, E, I -
+                                                    Hazardous
+                                                    Plumbing/Mechanical Equipment/Hazardous or
+                                                    Unsanitary Premises</option>
+                                                <option data-select2-id='select2-data-83-gwm5'>17.20.900 F2, H - Faulty
+                                                    Weather
+                                                    Protection/Faulty Materials Construction
+                                                </option>
+                                                <option data-select2-id='select2-data-83-gwm5'>17.20.900 H, J2, L -
+                                                    Faulty
+                                                    Construction Materials/Inadequate Maintenance
+                                                </option>
+                                                <option data-select2-id='select2-data-83-gwm5'>17.20.900 H, L - Faulty
+                                                    Materials
+                                                    of Construction/Inadequate Exits
+                                                </option>
+                                                <option data-select2-id='select2-data-83-gwm5'>7.04.160 - Sanitary
+                                                    Enclosures
+                                                    Required</option>
+                                                <option data-select2-id='select2-data-83-gwm5'>17.52.040 - Failure to
+                                                    obtain
+                                                    electrical permits</option>
+                                                <option data-select2-id='select2-data-83-gwm5'>17.20.900 L - Inadequate
+                                                    Exits
+                                                </option>
+                                                <option data-select2-id='select2-data-83-gwm5'>17.20.900 K - Unhealthy
+                                                    Conditions</option>
+                                                <option data-select2-id='select2-data-83-gwm5'>17.20.450 B - Fire
+                                                    detection
+                                                    system required</option>
+                                                <option data-select2-id='select2-data-83-gwm5'>17.20.400 B - Exit
+                                                    Requirements
+                                                    Designated-Locks/Bars</option>
+                                                <option data-select2-id='select2-data-83-gwm5'>17.20.400 A - Exit
+                                                    Requirements
+                                                    Designated</option>
+                                                <option data-select2-id='select2-data-83-gwm5'>17.12.020 - Uniform Fire
+                                                    Code
+                                                </option>
+                                                <option data-select2-id='select2-data-83-gwm5'>14.16.2200 C -
+                                                    Maintenance
+                                                    and
+                                                    Repair of Sidewalks</option>
+                                                <option data-select2-id='select2-data-83-gwm5'>17.20.900 D, K, I -
+                                                    Sewage
+                                                    Discharge</option>
+                                                <option data-select2-id='select2-data-83-gwm5'>17.20.900 D, J2 -
+                                                    Hazardous
+                                                    Plumbing</option>
+                                                <option data-select2-id='select2-data-83-gwm5'>17.28.040 - </option>
+                                                <option data-select2-id='select2-data-83-gwm5'>24.01.540 - Stop Work
+                                                    Order
+                                                </option>
+                                                <option data-select2-id='select2-data-83-gwm5'>17.20.900 D, H -
+                                                    Hazardous
+                                                    Plumbing</option>
+                                                <option data-select2-id='select2-data-83-gwm5'>17.20.900 E, J2 -
+                                                    Hazardous
+                                                    Mechanical Equipment/Inadequate Maintenance
+                                                </option>
+                                                <option data-select2-id='select2-data-83-gwm5'>17.20.900 B6, F,H,J2 -
+                                                    Inadequate
+                                                    Maintenance</option>
+                                                <option data-select2-id='select2-data-83-gwm5'>9.60.330 B - Inventory of
+                                                    Carts
+                                                </option>
+                                                <option data-select2-id='select2-data-83-gwm5'>17.20.900L - </option>
+                                                <option data-select2-id='select2-data-83-gwm5'>17.20.900 G1, G2 - Fire
+                                                    Hazard/Inadequate Fire Protection</option>
+                                                <option data-select2-id='select2-data-83-gwm5'>17.20.900 F2, H, J2 -
+                                                    Faulty
+                                                    Weather Protection/Faulty Materials of
+                                                    Construction</option>
+                                                <option data-select2-id='select2-data-83-gwm5'>17.20.900 J2, K -
+                                                    Unhealthy
+                                                    Conditions/Inadequate Maintenance</option>
+                                                <option data-select2-id='select2-data-83-gwm5'>17.20.900 F2, I, J2 -
+                                                    Faulty
+                                                    Materials of Construction/Hazardous or
+                                                    Unsanitary Premises/Inadequate Maintenance/Light and Ventilation
+                                                </option>
+                                                <option data-select2-id='select2-data-83-gwm5'>17.20.900 F2, J2 - Faulty
+                                                    Weather
+                                                    Protection/Inadequate Maintenance
+                                                </option>
+                                                <option data-select2-id='select2-data-83-gwm5'>17.20.900 J-2 -
+                                                    Inadequate
+                                                    Maintenance</option>
+                                                <option data-select2-id='select2-data-83-gwm5'>17.20.900 L, J2 -
+                                                    Inadequate
+                                                    Exists/Inadequate Maintenance</option>
+                                                <option data-select2-id='select2-data-83-gwm5'>17.20.900 A-6 - </option>
+                                                <option data-select2-id='select2-data-83-gwm5'>17.20.900 A5, J2 -
+                                                </option>
+                                                <option data-select2-id='select2-data-83-gwm5'>17.20.900J-2 - Inadequate
+                                                    Maintenance</option>
+                                                <option data-select2-id='select2-data-83-gwm5'>17.20.900 A2, D, J2 -
+                                                    Inadequate
+                                                    Sanitation/Maintenance</option>
+                                                <option data-select2-id='select2-data-83-gwm5'>17.20.290 C, D3 -
+                                                    Sanitation
+                                                </option>
+                                                <option data-select2-id='select2-data-83-gwm5'>17.20.900 H,J2 - Faulty
+                                                    Materials
+                                                    of Construction/Inadequate Maintenance
+                                                </option>
+                                                <option data-select2-id='select2-data-83-gwm5'>17.20.900D - Hazardous
+                                                    Plumbing
+                                                </option>
+                                                <option data-select2-id='select2-data-83-gwm5'>17.20.900 B6,D,H,J2 -
+                                                    Structural
+                                                    Hazards/Inadequate Maintenance</option>
+                                                <option data-select2-id='select2-data-83-gwm5'>17.20.900 G-2 - Fire
+                                                    Hazard/Inadequate Fire Protection</option>
+                                                <option data-select2-id='select2-data-83-gwm5'>17.20.900 A5,E,H,J2 -
+                                                    Inadequate
+                                                    Ventilation/Inadequate Maintenance
+                                                </option>
+                                                <option data-select2-id='select2-data-83-gwm5'>17.20.290 E, D3 - Water
+                                                    Closet
+                                                    Compartments</option>
+                                                <option data-select2-id='select2-data-83-gwm5'>17.20.900 A1, J2 -
+                                                    Inadequate
+                                                    Maintenance</option>
+                                                <option data-select2-id='select2-data-83-gwm5'>17.20.900 M2 - Improper
+                                                    Occupancy
+                                                </option>
+                                                <option data-select2-id='select2-data-83-gwm5'>17.20.900 M1 - Improper
+                                                    Occupancy
+                                                </option>
+                                                <option data-select2-id='select2-data-83-gwm5'>17.20.920 B2 - </option>
+                                                <option data-select2-id='select2-data-83-gwm5'>17.20.900G-2 - Inadequate
+                                                    Fire
+                                                    Protection</option>
+                                                <option data-select2-id='select2-data-83-gwm5'>17.20.900 C, E, J2 -
+                                                    Hazardous
+                                                    Wiring</option>
+                                                <option data-select2-id='select2-data-83-gwm5'>17.20.900 A-5, E -
+                                                    Inadequate
+                                                    Ventilation</option>
+                                                <option data-select2-id='select2-data-83-gwm5'>17.20.900 C, D -
+                                                    Hazardous
+                                                    Plumbing</option>
+                                                <option data-select2-id='select2-data-83-gwm5'>17.20.900 D - Hazardous
+                                                    Plumbing
+                                                </option>
+                                                <option data-select2-id='select2-data-83-gwm5'>17.20.900 F, H, J2 -
+                                                    Inadequate
+                                                    Maintenance</option>
+                                                <option data-select2-id='select2-data-83-gwm5'>17.20.900 D, J-2 -
+                                                    Hazardous
+                                                    Plumbing</option>
+                                                <option data-select2-id='select2-data-83-gwm5'>17.20.900 A10, D, J2 -
+                                                    Inadequate
+                                                    Maintenance</option>
+                                                <option data-select2-id='select2-data-83-gwm5'>17.20.290 D3, E -
+                                                    Sanitation
+                                                </option>
+                                                <option data-select2-id='select2-data-83-gwm5'>17.20.900 A-10,D,J-2 -
+                                                    Inadequate
+                                                    Maintenance</option>
+                                                <option data-select2-id='select2-data-83-gwm5'>17.20.920 C1 - General
+                                                    obligation.</option>
+                                                <option data-select2-id='select2-data-83-gwm5'>17.20.920 C5 - General
+                                                    Obligation
+                                                </option>
+                                                <option data-select2-id='select2-data-83-gwm5'>17.20.920 C2 - General
+                                                    Obligation.</option>
+                                                <option data-select2-id='select2-data-83-gwm5'>17.20.270 B-1 - Space and
+                                                    Occupancy Standards</option>
+                                                <option data-select2-id='select2-data-83-gwm5'>17.20.900 A2 - </option>
+                                                <option data-select2-id='select2-data-83-gwm5'>17.72.535 A, D -
+                                                    Multifamily
+                                                    Dwelling Landscaping Requirements</option>
+                                                <option data-select2-id='select2-data-83-gwm5'>17.72.535 B, C, D -
+                                                    Multifamily
+                                                    Dwelling Landscaping Requirements
+                                                </option>
+                                                <option data-select2-id='select2-data-83-gwm5'>17.20.900 B4, H, J2 -
+                                                    Structural
+                                                    Hazards/Faulty Materials of
+                                                    Construction/Inadequate Maintenance</option>
+                                                <option data-select2-id='select2-data-83-gwm5'>17.20.590 - Annual
+                                                    renewal of
+                                                    permit.</option>
+                                                <option data-select2-id='select2-data-83-gwm5'>17.20.540 - Compliance
+                                                    State
+                                                    Housing Law</option>
+
+
+                                            </optgroup>
+                                            <optgroup label="Health & Safety" data-select2-id="select2-data-84-w7r7">
+                                                <option data-select2-id="select2-data-83-gwm5">17.38.140 - Vacant houses
+                                                    -Debris
+                                                    Removal</option>
+                                                <option data-select2-id="select2-data-83-gwm5">17.38.150 - Vacant houses
+                                                    -
+                                                    appearance</option>
+                                            </optgroup>
+                                            <optgroup label="Nuisance" data-select2-id="select2-data-84-w7r7">
+                                                <option data-select2-id="select2-data-83-gwm5">17.24.030 - Conditions
+                                                    for
+                                                    permitted fences.</option>
+                                                <option data-select2-id="select2-data-83-gwm5">17.24.030 B1-3 -
+                                                    Permitted
+                                                    fences
+                                                    - corner lots</option>
+                                                <option data-select2-id="select2-data-83-gwm5">17.24.030 C - Permitted
+                                                    fences -
+                                                    Intersections</option>
+                                                <option data-select2-id="select2-data-83-gwm5">17.24.040 A - Prohibited
+                                                    fences
+                                                </option>
+                                                <option data-select2-id="select2-data-83-gwm5">17.24.040 B - Prohibited
+                                                    fences
+                                                </option>
+                                                <option data-select2-id="select2-data-83-gwm5">17.24.030 A1-4 -
+                                                    Permitted
+                                                    fences
+                                                    - interior lots</option>
+                                                <option data-select2-id="select2-data-83-gwm5">13.18.045 B - Newsracks -
+                                                    specifications, standards, placement</option>
+                                                <option data-select2-id="select2-data-83-gwm5">13.18.045 C - Newsracks -
+                                                    specifications, standards, placement</option>
+                                                <option data-select2-id="select2-data-83-gwm5">13.18.045 D - Newsracks -
+                                                    specifications, standards, placement</option>
+                                                <option data-select2-id="select2-data-83-gwm5">13.18.045 E - Newsracks -
+                                                    specifications, standards, placement</option>
+                                                <option data-select2-id="select2-data-83-gwm5">13.18.040 O - Newsracks -
+                                                    unlawful obstructions</option>
+                                                <option data-select2-id="select2-data-83-gwm5">13.18.040 P - Newsracks -
+                                                    Unlawful Obstructions</option>
+                                                <option data-select2-id="select2-data-83-gwm5">13.18.040 Q - Newsracks -
+                                                    Unlawful Obstructions</option>
+                                                <option data-select2-id="select2-data-83-gwm5">13.18.040 L - Newsracks -
+                                                    unlawful obstructions</option>
+                                                <option data-select2-id="select2-data-83-gwm5">13.18.040 M - Newsracks -
+                                                    unlawful obstructions</option>
+                                                <option data-select2-id="select2-data-83-gwm5">13.18.040 N - Newsracks -
+                                                    unlawful obstructions</option>
+                                                <option data-select2-id="select2-data-83-gwm5">13.18.020 - Newsrack
+                                                    identification</option>
+                                                <option data-select2-id="select2-data-83-gwm5">13.18.030 - Prohibition
+                                                    of
+                                                    newsracks </option>
+                                                <option data-select2-id="select2-data-83-gwm5">13.18.040 A - Newsracks -
+                                                    unlawful obstructions</option>
+                                                <option data-select2-id="select2-data-83-gwm5">13.18.040 B - Newsracks -
+                                                    unlawful obstructions</option>
+                                                <option data-select2-id="select2-data-83-gwm5">13.18.040 C - Newsracks -
+                                                    Unlawful Obstructions</option>
+                                                <option data-select2-id="select2-data-83-gwm5">13.18.040 D - Newsracks -
+                                                    unlawful obstructions</option>
+                                                <option data-select2-id="select2-data-83-gwm5">13.18.040 E - Newsracks -
+                                                    unlawful obstructions</option>
+                                                <option data-select2-id="select2-data-83-gwm5">13.18.040 F - Newsracks -
+                                                    Unlawful Obstructions</option>
+                                                <option data-select2-id="select2-data-83-gwm5">13.18.040 G - Newsracks -
+                                                    unlawful obstructions</option>
+                                                <option data-select2-id="select2-data-83-gwm5">13.18.040 H - Newsracks -
+                                                    unlawful obstructions</option>
+                                                <option data-select2-id="select2-data-83-gwm5">13.18.040 I - Newsracks -
+                                                    unlawful obstructions</option>
+                                                <option data-select2-id="select2-data-83-gwm5">13.18.040 J - Newsracks -
+                                                    Unlawful Obstructions</option>
+                                                <option data-select2-id="select2-data-83-gwm5">13.18.040 K - Unlawful
+                                                    obstruction</option>
+                                                <option data-select2-id="select2-data-83-gwm5">20.08.1230 - Home
+                                                    Occupations/Prohibited Uses</option>
+                                                <option data-select2-id="select2-data-83-gwm5">17.20.020 G.1 -
+                                                    Activities
+                                                    Prohibited in Areas Zoned for Residentail Uses
+                                                </option>
+                                                <option data-select2-id="select2-data-83-gwm5">13.18.050 - Display of
+                                                    certain
+                                                    matter prohibited.</option>
+                                                <option data-select2-id="select2-data-83-gwm5">13.20.010 - Display or
+                                                    storage of
+                                                    articles on public ways restricted
+                                                </option>
+                                                <option data-select2-id="select2-data-83-gwm5">13.24.010 - Removal of
+                                                    obstructions.</option>
+                                                <option data-select2-id="select2-data-83-gwm5">13.28.180 - Sight
+                                                    Obstructions,
+                                                    Obstructing or Dangerous Trees or Shrubs
+                                                    on Streets</option>
+                                                <option data-select2-id="select2-data-83-gwm5">13.18.045 - Newsracks -
+                                                    specifications, standards, placement</option>
+                                                <option data-select2-id="select2-data-83-gwm5">13.28.180 B - Trees -
+                                                    property
+                                                    owner maintenance responsibility</option>
+                                                <option data-select2-id="select2-data-83-gwm5">13.32.040 - Removal of
+                                                    dead
+                                                    tree.
+                                                </option>
+                                                <option data-select2-id="select2-data-83-gwm5">13.32.060 - Penalty
+                                                </option>
+                                                <option data-select2-id="select2-data-83-gwm5">13.32.070 - Permit
+                                                    application.
+                                                </option>
+                                                <option data-select2-id="select2-data-83-gwm5">13.32.130 - Safeguarding
+                                                    trees
+                                                    during construction. </option>
+                                                <option data-select2-id="select2-data-83-gwm5">13.32.140 - Heritage
+                                                    trees.
+                                                </option>
+                                            </optgroup>
+                                        </select>
+                                    </div>
+                                    <div class="col-lg-3 col-md-6 col-sm-12">
+                                        <label for="input1" class="form-label">Violation</label>
+                                        <input type="text" class="form-control" id="input1" placeholder="Violation"
+                                            (focus)="resetReport()" (focusout)="loadInfo()">
+                                    </div>
+
+                                    <div class="col-lg-3  col-md-12  col-sm-12">
+                                        <label for="input3" class="form-label">Muni Code</label>
+                                        <input type="text" class="form-control" id="input1" placeholder="Muni Code">
+                                    </div>
+                                    <div class="col-lg-3  col-md-12  col-sm-12">
+                                        <label for="input3" class="form-label">UHC</label>
+                                        <input type="text" class="form-control" id="input1" placeholder="UHC">
+                                    </div>
+                                    <div class="col-lg-3  col-md-12  col-sm-12">
+                                        <label for="input3" class="form-label">Unit Number</label>
+                                        <input type="text" class="form-control" id="input1" placeholder="Unit Number">
+                                    </div>
+                                    <div class="col-lg-3  col-sm-12">
+                                        <label for="input1" class="form-label">Area</label>
+                                        <select id="input7" class="form-select">
+                                            <option selected="">Choose...</option>
+                                            <option *ngFor="let _at of _areaTypeDataList" value="{{_at.id}}">
+                                                {{_at?.value}}-({{_at?.code}})</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-lg-3  col-sm-12">
+                                        <label for="input1" class="form-label">Priority</label>
+                                        <select id="input7" class="form-select">
+                                            <option selected="">Choose...</option>
+                                            <option *ngFor="let _pt of _priorityTypeDataList" value="{{_pt?.id}}">
+                                                {{_pt?.value}}-({{_pt?.code}})</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="col-lg-3  col-md-12  col-sm-12">
+                                        <label for="input3" class="form-label">Open Date</label>
+                                        <input type="text" class="form-control" id="input1" placeholder="Open Date"
+                                            readonly value="01/29/2024">
+                                    </div>
+                                    <div class="col-lg-3  col-md-12  col-sm-12">
+                                        <label for="input3" class="form-label">Due Date</label>
+                                        <input type="text" class="form-control" id="input1" placeholder="Due Date"
+                                            readonly>
+                                    </div>
+                                    <div class="col-lg-3  col-md-12  col-sm-12">
+                                        <label for="input3" class="form-label">Close Date</label>
+                                        <input type="text" class="form-control" id="input1" placeholder="Close Date"
+                                            readonly>
+                                    </div>
+                                    <div class="col-lg-3  col-md-6  col-sm-12">
+                                        <label for="input2" class="form-label">Status</label>
+                                        <select id="input7" class="form-select">
+                                            <option selected="">Choose...</option>
+                                            <option>Open</option>
+                                            <option>In Progress</option>
+                                            <option>Fixed</option>
+                                            <option>Not Applicable</option>
+                                            <option>Cancelled</option>
+                                        </select>
+                                    </div>
+                                </form>
+                                <div class="col-lg-12  col-md-12  col-sm-12">
+                                    <label for="input2" class="form-label">Description</label>
+                                    <textarea type="text" class="form-control" id="propertyComments"
+                                        placeholder=""> </textarea>
+                                </div>
+                                <div class="col-lg-12  col-md-12  col-sm-12">
+                                    <label for="input2" class="form-label">Corrective Actions</label>
+                                    <textarea type="text" class="form-control" id="propertyComments" placeholder=""
+                                        readonly> </textarea>
+                                </div>
+                                <div class="col-12 mt-3 mb-3">
+                                    <div class="d-flex float-end gap-3">
+                                        <button class="btn btn-outline-secondary px-4">Reset</button>
+                                        <button class="btn btn-primary px-4"> Add Violation</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="v2" class="row">
+                                <div class="col-lg-3  col-md-6  col-sm-12">
+                                    <h6 class="mb-0 text-uppercase">Violation List</h6>
+                                    <hr />
+                                    <div class="col-lg-12 col-md-12 col-sm-12 mt-1 mb-1">
+                                        <input type="text" class="form-control" id="input1" name="searchText"
+                                            [(ngModel)]="searchText" (keyup)="search()"
+                                            placeholder="Search Violation . . .">
+                                    </div>
+                                    <div id="violationList" style="height:400px;max-height: 400px;overflow-y: scroll;"
+                                        class="demo">
+                                    </div>
+                                </div>
+                                <div class="col-lg-9  col-md-6  col-sm-12">
+                                    <h6 class="mb-0 text-uppercase">Violation Details</h6>
+                                    <hr />
+                                    <form class="row g-3">
+                                        <div class="col-lg-3 col-md-6 col-sm-12">
+                                            <label for="input1" class="form-label">Violation</label>
+                                            <input type="text" class="form-control" id="input1" placeholder="Violation"
+                                                (focus)="resetReport()" (focusout)="loadInfo()">
+                                        </div>
+
+                                        <div class="col-lg-3  col-md-12  col-sm-12">
+                                            <label for="input3" class="form-label">Muni Code</label>
+                                            <input type="text" class="form-control" id="input1" placeholder="Muni Code">
+                                        </div>
+                                        <div class="col-lg-3  col-md-12  col-sm-12">
+                                            <label for="input3" class="form-label">UHC</label>
+                                            <input type="text" class="form-control" id="input1" placeholder="UHC">
+                                        </div>
+                                        <div class="col-lg-3  col-md-12  col-sm-12">
+                                            <label for="input3" class="form-label">Unit Number</label>
+                                            <input type="text" class="form-control" id="input1"
+                                                placeholder="Unit Number">
+                                        </div>
+                                        <div class="col-lg-3  col-sm-12">
+                                            <label for="input1" class="form-label">Area</label>
+                                            <select id="input7" class="form-select">
+                                                <option selected="">Choose...</option>
+                                                <option>Area 1</option>
+                                                <option>Area 2</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-lg-3  col-sm-12">
+                                            <label for="input1" class="form-label">Priority</label>
+                                            <select id="input7" class="form-select">
+                                                <option selected="">Choose...</option>
+                                                <option>Priority 1</option>
+                                                <option>Priority 2</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="col-lg-3  col-md-12  col-sm-12">
+                                            <label for="input3" class="form-label">Open Date</label>
+                                            <input type="text" class="form-control" id="input1" placeholder="Open Date"
+                                                readonly value="01/29/2024">
+                                        </div>
+                                        <div class="col-lg-3  col-md-12  col-sm-12">
+                                            <label for="input3" class="form-label">Due Date</label>
+                                            <input type="text" class="form-control" id="input1" placeholder="Due Date"
+                                                readonly>
+                                        </div>
+                                        <div class="col-lg-3  col-md-12  col-sm-12">
+                                            <label for="input3" class="form-label">Close Date</label>
+                                            <input type="text" class="form-control" id="input1" placeholder="Close Date"
+                                                readonly>
+                                        </div>
+                                        <div class="col-lg-3  col-md-6  col-sm-12">
+                                            <label for="input2" class="form-label">Status</label>
+                                            <select id="input7" class="form-select">
+                                                <option selected="">Choose...</option>
+                                                <option>Open</option>
+                                                <option>In Progress</option>
+                                                <option>Fixed</option>
+                                                <option>Not Applicable</option>
+                                                <option>Cancelled</option>
+                                            </select>
+                                        </div>
+                                    </form>
+                                    <div class="col-lg-12  col-md-12  col-sm-12">
+                                        <label for="input2" class="form-label">Description</label>
+                                        <textarea type="text" class="form-control" id="propertyComments"
+                                            placeholder=""> </textarea>
+                                    </div>
+                                    <div class="col-lg-12  col-md-12  col-sm-12">
+                                        <label for="input2" class="form-label">Corrective Actions</label>
+                                        <textarea type="text" class="form-control" id="propertyComments" placeholder=""
+                                            readonly> </textarea>
+                                    </div>
+                                    <div class="col-12 mt-3 mb-3">
+                                        <div class="d-flex justify-content-between gap-3">
+                                            <button class="btn btn-outline-secondary px-4">Reset</button>
+                                            <button class="btn btn-primary px-4"> Save</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+                            <div class="row">
+                                <div class="col-lg-12  col-md-12  col-sm-12">
+                                    <h6 class="mb-0 text-uppercase">List of Violations</h6>
+                                    <hr />
+                                    <table class="table mb-0 table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">#</th>
+                                                <th>Violation Category</th>
+                                                <th>Violation Code</th>
+                                                <th>Short Description</th>
+                                                <th scope="col">Corrective Action</th>
+                                                <th scope="col">Status</th>
+                                                <th scope="col">Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td><a href="">1</a></td>
+                                                <td>Housing(HG)</td>
+                                                <td>17.20.900 A2, D</td>
+                                                <td>Inadequate Sanitation/Ventilation/Space Requirements</td>
+                                                <td>Secure the loose kitchen sink basin to the counter.</td>
+                                                <td>Fixed</td>
+                                                <td><button id="btnEdit" class="btn btn-primary btn-sm">Edit</button>
+
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td><a href="">2</a></td>
+                                                <td>Housing(HG)</td>
+                                                <td>17.20.900 A10, H,J 2</td>
+                                                <td>Substandard Housing</td>
+                                                <td>Replace the missing escutcheon on the faucet.</td>
+                                                <td>Fixed</td>
+                                                <td><button id="btnEdit" class="btn btn-primary btn-sm">Edit</button>
+
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td><a href="">3</a></td>
+                                                <td>Housing(HG)</td>
+                                                <td>17.20.900 A1,D</td>
+                                                <td>Inadequate Sanitation/Hazardous Plumbing</td>
+                                                <td>Repair or replace the shower enclosure door.</td>
+                                                <td>In Progress</td>
+                                                <td><button id="btnEdit" class="btn btn-primary btn-sm">Edit</button>
+
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td><a href="">4</a></td>
+                                                <td>Housing(HG)</td>
+                                                <td>17.20.900 G2</td>
+                                                <td>Fire Hazard/Inadequate Fire Protection</td>
+                                                <td>Replace the glass cover on the fire extinguisher compartment with an
+                                                    authorized cover.</td>
+                                                <td>Open</td>
+                                                <td><button id="btnEdit" class="btn btn-primary btn-sm">Edit</button>
+
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td><a href="">5</a></td>
+                                                <td>Health & Safety(HS)</td>
+                                                <td>17.38.150</td>
+                                                <td>Vacant houses - appearance</td>
+                                                <td>Maintain the vacant house in a manner which minimizes the appearance
+                                                    of
+                                                    the vacancy, including prompt removal of graffiti.</td>
+                                                <td>Fixed</td>
+                                                <td><button id="btnEdit" class="btn btn-primary btn-sm">Edit</button>
+
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <div class="col-12">
+                                <div class="d-flex justify-content-between gap-3">
+                                    <button class="btn btn-outline-secondary px-4" onclick="stepper1.previous()"><i
+                                            class="bx bx-left-arrow-alt me-2"></i>Previous</button>
+                                    <button class="btn btn-primary px-4" onclick="stepper1.next()">Next<i
+                                            class="bx bx-right-arrow-alt ms-2"></i></button>
+                                </div>
+                            </div>
+                        </div><!---end row-->
+
+                    </div>
+
+                    <div id="test-l-6" role="tabpanel" class="bs-stepper-pane" aria-labelledby="stepper1trigger6">
+                        <h5 class="mb-1">Action Logs</h5>
+                        <p class="mb-4"></p>
+
+                        <div class="row g-3">
+
+                            <div class="col-12">
+                                <div class="d-flex justify-content-between gap-3">
+                                    <button class="btn btn-primary px-4" onclick="stepper1.previous()"><i
+                                            class="bx bx-left-arrow-alt me-2"></i>Previous</button>
+                                    <button class="btn btn-success px-4" onclick="stepper1.next()">Submit</button>
+                                </div>
+                            </div>
+                        </div><!---end row-->
+
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<div class="row">
+    <a href="#" class="float d-none text-center" style="font-size: 1.5rem;margin-top: 14px;">
+        <i class="fa fa-save my-float"></i>
+    </a>
+</div>

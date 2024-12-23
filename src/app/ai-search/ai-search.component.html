@@ -1,0 +1,42 @@
+<div>
+    <h1>Ai Search</h1>
+</div>
+<div>
+    <form class="row g-3 container" #_aiSearchForm="ngForm">
+        <div>
+            <div class="input-group">
+                <!-- <span class="input-group-text">With textarea</span> -->
+                <textarea id="searchHistory" class="form-control" rows="10" aria-label="With textarea"></textarea>
+            </div>
+        </div>
+        <br />
+        <div class="input-group mb-3">
+            <input id="searchtext" name="searchtext" type="text" class="form-control"
+                placeholder="Put conversation here..." aria-label="conversation"
+                aria-describedby="Put conversation here">
+            <button class="btn custom-btn px-4 btn-sm float-end me-2" (click)="searchai()">Ai Search</button>
+        </div>
+        <div class="table-responsive">
+            <table id="searchResult" class="table table-striped table-bordered display datatable" style="width:100%">
+                <thead>
+                    <tr>
+                        <!-- <th class="select-checkbox"></th> -->
+                        <!-- <th><input id="selectAll" class="select-checkbox" type="checkbox" /></th> -->
+                        <th scope="col">Case No</th>
+                        <th scope="col">Address</th>
+                        <th scope="col">Program</th>
+                        <th scope="col">C//U Date</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Open Date</th>
+                        <th scope="col">Close Date</th>
+                        <th scope="col">Inspector</th>
+                        <th scope="col">Police District</th>
+                        <th scope="col">Case Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    </form>
+</div>

@@ -1,0 +1,26 @@
+[
+	{
+		"label": "Vehicle Fine",
+		"fine_type": "Flat Type",
+		"associated_to": "Municipal Count",
+		"default_amount": "30"
+	},
+	{
+		"label": "Garbage Fine",
+		"fine_type": "Violation Specific",
+		"associated_to": "Work Order",
+		"default_amount": "30"
+	},
+	{
+		"label": "Animal NOV",
+		"fine_type": "Violation Specific",
+		"associated_to": "Work Order",
+		"default_amount": "30"
+	},
+	{
+		"label": "Garbage Fine",
+		"fine_type": "Flat Fine",
+		"associated_to": "Work Order",
+		"default_amount": "30"
+	}
+]

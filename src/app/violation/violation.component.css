@@ -1,0 +1,6 @@
+.requiredoutline {
+    border: 0.125px initial black;
+    outline-style: solid;
+    outline-width: 1px;
+    outline-color: red;
+}

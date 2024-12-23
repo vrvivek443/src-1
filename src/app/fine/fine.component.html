@@ -1,0 +1,133 @@
+<div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
+    <div class="breadcrumb-title pe-3">Home</div>
+    <div class="ps-3">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0 p-0">
+                <li class="breadcrumb-item"><a href="javascript:;"><i class="bx bx-home-alt"></i></a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">Fine Types</li>
+            </ol>
+
+        </nav>
+    </div>
+
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="row align-items-center">
+                    <div class="col-lg-5 col-xl-5">
+                        <figure>
+                            <blockquote class="blockquote">
+                                <p>List of Fine Types</p>
+                            </blockquote>
+                            <figcaption class="blockquote-footer"><cite title="Source Title"></cite>
+                            </figcaption>
+                        </figure>
+                    </div>
+                    <div class="col-lg-7">
+                        <form class="float-lg-end">
+                            <div class="row row-cols-lg-2 row-cols-xl-auto g-2">
+                                <div class="col">
+                                    <div class="position-relative">
+                                        <input type="text" class="form-control ps-5" placeholder="Search Fine Types...">
+                                        <span class="position-absolute top-50 product-show translate-middle-y">
+                                            <i class="bx bx-search"></i></span>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <a class="btn btn-primary mb-3 mb-lg-0" (click)="addNew()"><i
+                                            class="bx bxs-plus-square"></i>Add
+                                        New</a>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <table class="table mb-0 table-striped">
+            <thead>
+                <tr>
+                    <!-- <th scope="col">#</th> -->
+                    <th scope="col">Label</th>
+                    <th scope="col">Fine Type</th>
+                    <th scope="col">Associated To</th>
+                    <th scope="col">Default Amount</th>
+                    <th scope="col" style="text-align: center;">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of fineDataList index as i">
+                    <!-- <td scope="row">{{item?.id}}</td> -->
+                    <td>{{item?.label}}</td>
+                    <td>{{item?.fine_tyoe}}</td>
+                    <td>{{item?.associated_to}}</td>
+                    <td>{{item?.default_amount}}</td>
+                    <td width="10%"><button id="edit" name="edit" (click)="edit(item)" class="btn btn-danger btn-sm ms-1 float-end">Delete</button>
+                        <button id="edit" name="edit" (click)="edit(item)" class="btn btn-secondary btn-sm float-end">Edit</button>
+                        </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+<div class="modal fade" id="itemInfo" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">AddNew / Edit</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+
+                <form class="row g-3">
+                    <div class="col-md-12">
+                        <label for="input2" class="form-label">Label</label>
+                        <input type="text" class="form-control" id="input2" name="label"
+                            [(ngModel)]="_fineViewModel.label" >
+                    </div>
+                    <div class="col-md-12">
+                        <label for="input1" class="form-label">Fine Type</label>
+
+                        <select id="input7" class="form-select" name="status" [(ngModel)]="_fineViewModel.fine_type">
+                            <option selected="">Choose...</option>
+                            <option>Flat Type</option>
+                            <option>Violation Specific</option>
+                        </select>
+                    </div>
+                    <!-- <div class="col-md-12">
+                        <label for="input3" class="form-label">Status</label>
+                        <input type="text" class="form-control" id="input3" name="status"
+                            [(ngModel)]="_violationViewModel.status" >
+                    </div> -->
+                    <div class="col-md-12">
+                        <label for="input4" class="form-label">Associated To</label>
+                        <input type="email" class="form-control" id="input4" name="associated_to"
+                            [(ngModel)]="_fineViewModel.associated_to" >
+                    </div>
+                    <div class="col-md-12">
+                        <label for="input4" class="form-label">Default Amount</label>
+                        <input type="email" class="form-control" id="input4" name="default_amount"
+                            [(ngModel)]="_fineViewModel.default_amount" >
+                            <span class="position-absolute top-50 product-show translate-middle-y">
+                                <i class="bx bx-search"></i></span>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" (click)="Savechanges()">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>

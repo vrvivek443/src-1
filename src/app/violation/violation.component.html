@@ -1,0 +1,165 @@
+<div id="frmViolation" class="row">
+    <div class="col-12 mt-3 mb-3">
+        <div class=" d-flex gap-2 justify-content-end ">
+            <button class="btn btn-outline-secondary btn-sm px-4  me-2" (click)="cancelViolation()">Reset</button>
+            <button class="btn btn-outline-secondary btn-sm px-4  me-2" (click)="newViolation()">New Violation</button>
+            <button class="btn btn-primary px-4" (click)="saveViolation()">Save</button>
+        </div>
+    </div>
+    <div class="col-lg-3  col-md-6  col-sm-12">
+        <h6 class="mb-0 text-uppercase">Add or Edit Violation</h6>
+        <hr />
+        <div class="col-lg-12 col-md-12 col-sm-12 mt-1 mb-1">
+            <input type="text" class="form-control" id="input1" name="searchText" [(ngModel)]="searchText"
+                (keyup)="search()" placeholder="Search Violation . . .">
+        </div>
+        <div id="violationList" style="height:75vh;max-height: 75vh;overflow-y: scroll;" class="demo">
+        </div>
+    </div>
+    <div class="col-lg-9  col-md-6  col-sm-12">
+        <h6 class="mb-0 text-uppercase">Violation Details</h6>
+        <hr />
+        <form class="row g-3">
+            <div class="col-lg-3 col-md-6 col-sm-12">
+                <label for="input1" class="form-label">Violation</label>
+                <input type="text" class="form-control" id="violation" name="violation" maxlength="255"
+                    [(ngModel)]="_caseViolationViewModel.violationtypecode" placeholder="Violation" />
+                <input type="hidden" class="form-control" id="id" name="id" />
+            </div>
+
+            <div class="col-lg-3  col-md-12  col-sm-12">
+                <label for="input3" class="form-label">Muni Code</label>
+                <input type="text" class="form-control" id="municode" name="municode" maxlength="100"
+                    [(ngModel)]="_caseViolationViewModel.municipalcode" placeholder="Muni Code">
+            </div>
+
+
+
+            <div class="col-lg-3  col-md-6  col-sm-12">
+                <label for="input2" class="form-label">Violation Type</label>
+                <select id="violationtypecode" name="violationtypecode" class="form-select selectcontrol"
+                    [(ngModel)]="_caseViolationViewModel.violationtypecode">
+                    <option *ngFor="let _pty of _violationActiveDataList" [value]="_pty?.violationtype">
+                        {{_pty?.violationdescr}}</option>
+                </select>
+            </div>
+            <div class="col-lg-3  col-md-12  col-sm-12">
+                <label for="input3" class="form-label">Status</label>
+                <select id="status" name="status" class="form-select selectcontrol"
+                    [(ngModel)]="_caseViolationViewModel.status">
+                    <option value="true">Active</option>
+                    <option value="false">Inactive</option>
+
+                </select>
+            </div>
+            <div class="col-lg-3  col-md-12  col-sm-12">
+                <label for="input3" class="form-label">Violation code</label>
+                <input type="text" class="form-control" id="violationcode" name="violationcode" maxlength="10"
+                    [(ngModel)]="_caseViolationViewModel.violationcode" placeholder="Violation code">
+            </div>
+            <div class="col-lg-3  col-md-12  col-sm-12">
+                <label for="input3" class="form-label">priority code</label>
+                <input type="text" class="form-control" id="prioritycode" name="prioritycode" maxlength="100"
+                    [(ngModel)]="_caseViolationViewModel.prioritycode" placeholder="Priority code">
+            </div>
+            <div class="col-lg-3  col-md-12  col-sm-12">
+                <label for="input3" class="form-label">search violation code</label>
+                <input type="text" class="form-control" id="searchviolationcode" name="searchviolationcode"
+                    maxlength="500" [(ngModel)]="_caseViolationViewModel.searchviolationcode"
+                    placeholder="Search violation code">
+            </div>
+            <div class="col-lg-3  col-md-12  col-sm-12">
+                <label for="input3" class="form-label">FRC</label>
+                <input type="text" class="form-control" id="frc" name="frc" maxlength="100"
+                    [(ngModel)]="_caseViolationViewModel.frc" placeholder="FRC">
+            </div>
+            <div class="col-lg-3  col-md-12  col-sm-12">
+                <label for="input3" class="form-label">Cost</label>
+                <input type="number" class="form-control" id="cost" name="cost"
+                    [(ngModel)]="_caseViolationViewModel.cost" placeholder="Cost">
+            </div>
+            <div class="col-lg-3  col-md-12  col-sm-12">
+                <label for="input3" class="form-label">Search Municipal Code</label>
+                <input type="text" class="form-control" id="searchmunicipalcode" name="searchmunicipalcode"
+                    maxlength="500" [(ngModel)]="_caseViolationViewModel.searchmunicipalcode"
+                    placeholder="Search municipal code">
+            </div>
+            <div class="col-lg-3  col-md-12  col-sm-12">
+                <label for="input3" class="form-label">search short description</label>
+                <input type="text" class="form-control" id="searchshortdesc" name="searchshortdesc" minlength="3"
+                    maxlength="50" #searchshortdesc="ngModel" [(ngModel)]=" _caseViolationViewModel.searchshortdesc"
+                    required
+                    [ngClass]="{'requiredoutline':(searchshortdesc.touched && searchshortdesc.invalid) || (searchshortdesc.errors?.pattern) || (searchshortdesc.errors?.minlength) || (searchshortdesc.errors?.maxlength) ||(isShortDescriptionHasData)}"
+                    placeholder="Search short description"
+                    (focusout)="focusoutMethod(searchshortdesc.name, searchshortdesc.value)">
+                <div class="error"
+                    *ngIf="(searchshortdesc.touched && searchshortdesc.invalid) || (isShortDescriptionHasData)">
+                    <span class="text-danger" *ngIf="searchshortdesc.errors?.maxlength">
+                        Max Character 50. <br />
+                    </span>
+                    <span class="text-danger" *ngIf="searchshortdesc.errors?.pattern">
+                        Last name should contains only characters.<br />
+                    </span>
+                    <span class="text-danger" *ngIf="searchshortdesc.errors?.minlength">
+                        Minimum Character 2.<br />
+                    </span>
+                    <span class="text-danger" *ngIf="searchshortdesc.errors?.required">
+                        {{isShortDescriptionMessage}}<br />
+                    </span>
+                </div>
+            </div>
+            <div class=" col-lg-3 col-md-12 col-sm-12">
+                <label for="input3" class="form-label">uniform code</label>
+                <input type="text" class="form-control" id="uniformcode" name="uniformcode"
+                    [(ngModel)]="_caseViolationViewModel.uniformcode" placeholder="FRC">
+            </div>
+            <div class="col-lg-12  col-md-12  col-sm-12">
+                <label for="input2" class="form-label">Description</label>
+                <textarea type="text" class="form-control" id="description" name="description" rows="5" required
+                    #description="ngModel" minlength="3" maxlength="50"
+                    [ngClass]="{'requiredoutline':(description.touched && description.invalid) || (description.errors?.pattern) || (description.errors?.minlength) || (description.errors?.maxlength) || (isDescriptionHasData)}"
+                    [(ngModel)]="_caseViolationViewModel.fulldesc" placeholder="Description"
+                    (focusout)="focusoutMethod(description.name, description.value)"> </textarea>
+                <div class="error" *ngIf="(description.touched && description.invalid) || (isDescriptionHasData)">
+                    <span class="text-danger" *ngIf="description.errors?.maxlength">
+                        Max Character 50. <br />
+                    </span>
+                    <span class="text-danger" *ngIf="description.errors?.pattern">
+                        Description should contains only characters.<br />
+                    </span>
+                    <span class="text-danger" *ngIf="description.errors?.minlength">
+                        Minimum Character 2.<br />
+                    </span>
+                    <span class="text-danger" *ngIf="description.errors?.required">
+                        {{isDescriptionMessage}}<br />
+                    </span>
+                </div>
+            </div>
+            <div class=" col-lg-12 col-md-12 col-sm-12">
+                <label for="input2" class="form-label">Corrective
+                    Actions</label>
+                <textarea type="text" class="form-control" id="correctiveaction" name="correctiveaction" rows="5"
+                    minlength="3" maxlength="50" #correctiveaction="ngModel"
+                    [ngClass]="{'requiredoutline':(correctiveaction.touched && correctiveaction.invalid) || (correctiveaction.errors?.pattern) || (correctiveaction.errors?.minlength) || (correctiveaction.errors?.maxlength) || isCorrectiveActionHasData}"
+                    [(ngModel)]="_caseViolationViewModel.correctiveaction" placeholder="Corrective action" required
+                    (focusout)="focusoutMethod(correctiveaction.name, correctiveaction.value)">
+                </textarea>
+                <div class="error"
+                    *ngIf="(correctiveaction.touched && correctiveaction.invalid) || (isCorrectiveActionHasData)">
+                    <span class="text-danger" *ngIf="correctiveaction.errors?.maxlength">
+                        Max Character 50. <br />
+                    </span>
+                    <span class="text-danger" *ngIf="correctiveaction.errors?.pattern">
+                        Corrective action should contains only characters.<br />
+                    </span>
+                    <span class="text-danger" *ngIf="correctiveaction.errors?.minlength">
+                        Minimum Character 2.<br />
+                    </span>
+                    <span class="text-danger" *ngIf="correctiveaction.errors?.required">
+                        {{isCorrectiveActionMessage}}<br />
+                    </span>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,138 @@
+<div class="accordion" id="caseHistorySearchResultAccordion">
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="caseHistorySearchResultheader">
+        <button class="accordion-button " type="button" data-bs-toggle="collapse"
+          data-bs-target="#caseHistorySearchResult" aria-expanded="false" aria-controls="collapseTwo">
+          Inspector Mapping
+        </button>
+      </h2>
+      <div id="caseHistorySearchResult" class="accordion-collapse collapse show"
+        aria-labelledby="caseHistorySearchResultheader" data-bs-parent="#caseHistorySearchResultAccordion">
+        <div class="accordion-body">
+          <div class="card">
+            <div class="card-body">
+              <div class="table-responsive">
+                <!-- Person List Starts Here -->
+                <div class="row">
+                  
+                  <div class="col-md-12  d-flex gap-2 justify-content-end ">
+                        <button class="btn btn-danger btn-sm float-end mb-3 " id="approveBtn"
+                          (click)="importMapping()">Import Mapping </button>
+                        <button class="btn btn-danger btn-sm float-end mb-3 " id="assignBtn"
+                          (click)="replaceInspector()">Replace Inspector </button> 
+                        <button class="btn btn-danger btn-sm float-end mb-3 " id="mappingBtn"
+                          (click)="showMapping()">Mapping </button>
+                  </div>
+              </div>
+
+
+                <table id="inspectorTbl" class="table table-striped table-bordered" style="width:100%">
+                  <thead>
+                    <tr>
+                      <th scope="col">Program</th>
+                      <th scope="col">Census Tract</th>
+                      <th scope="col">Inspector</th>
+                      <th scope="col">Status</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="assignInspectorModel" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Assign Inspector</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+
+          <form class="row g-3">
+            <div class="col-md-12">
+              <label for="selectInspector" class="form-label">From User</label>
+              <select id="fromUser" name="fromUser" data-placeholder="Choose Role.."
+              [(ngModel)]="fromUser"
+                class="form-select">
+                <option selected value="-1">Choose Role...</option>
+                <option *ngFor="let _u of _users" value="{{_u.id}}">
+                  {{_u.name}}</option>
+              </select>
+            </div>
+            <div class="col-md-12">
+                <label for="selectInspector" class="form-label">From User</label>
+                <select id="toUser" name="toUser" data-placeholder="Choose Role.."
+                    [(ngModel)]="toUser"
+                    class="form-select">
+                    <option selected value="-1">Choose Inspector...</option>
+                    <option *ngFor="let _u of _inspector" value="{{_u.id}}">
+                    {{_u.name}}</option>
+                </select>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" (click)="assignInspector()">Save changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  
+  <div class="modal fade" id="mappingModel" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Assign Inspector</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+
+          <form class="row g-3">
+            <div class="col-md-12">
+              <label for="selectInspector" class="form-label">Program</label>
+              <select id="programcode" name="programcode" data-placeholder="Choose Program.."
+              [(ngModel)]="_edit.programcode"
+                class="form-select">
+                <option selected value="-1">All</option>
+                <option *ngFor="let _u of _program" value="{{_u.code}}">
+                  {{_u.value}}</option>
+              </select>
+            </div>
+            <div class="col-md-12">
+                <label for="selectInspector" class="form-label">Census Track</label>
+                <select id="censustract" name="censustract" data-placeholder="Choose census track.."
+                    [(ngModel)]="_edit.censustract"
+                  class="form-select">
+                  <option selected value="-1">All</option>
+                  <option *ngFor="let _u of _census" value="{{_u}}">
+                    {{_u}}</option>
+                </select>
+              </div>
+              <div class="col-md-12">
+                <label for="selectInspector" class="form-label">From User</label>
+                <select id="inspectorid" name="inspectorid" data-placeholder="Choose Role.."
+                    [(ngModel)]="_edit.inspectorid"
+                    class="form-select">
+                    <option selected value="-1">Choose Inspector...</option>
+                    <option *ngFor="let _u of _inspector" value="{{_u.id}}">
+                    {{_u.name}}</option>
+                </select>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" (click)="applyMapping()">Save changes</button>
+        </div>
+      </div>
+    </div>
+  </div>

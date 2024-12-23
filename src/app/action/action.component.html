@@ -1,0 +1,109 @@
+<div id="frmViolation" class="row">
+    <div class="col-12 mt-3 mb-3">
+        <div class=" d-flex gap-2 justify-content-end ">
+            <button class="btn btn-outline-secondary btn-sm px-4  me-2" (click)="cancelAction()">Reset</button>
+            <button class="btn btn-outline-secondary btn-sm px-4  me-2" (click)="newAction()">New Action</button>
+            <button class="btn btn-primary px-4" (click)="saveAction()">Save</button>
+        </div>
+    </div>
+    <div class="col-lg-3  col-md-6  col-sm-12">
+        <h6 class="mb-0 text-uppercase">Add or Edit action</h6>
+        <hr />
+        <div class="col-lg-12 col-md-12 col-sm-12 mt-1 mb-1">
+            <input type="text" class="form-control" id="input1" name="searchText" [(ngModel)]="searchText"
+                (keyup)="search()" placeholder="Search Violation . . .">
+        </div>
+        <div id="actionListDiv">
+            <div id="actionList" style="height:75vh;max-height: 75vh;overflow-y: scroll;" class="demo">
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-9  col-md-6  col-sm-12">
+        <h6 class="mb-0 text-uppercase">Action Details</h6>
+        <hr />
+        <form class="row g-3">
+            <div class="col-lg-3 col-md-6 col-sm-12">
+                <label for="input1" class="form-label">Description</label>
+                <input type="text" class="form-control" id="actionDescription" name="actionDescription" maxlength="255"
+                    [(ngModel)]="_action.actionDescription" placeholder="Description" />
+                <input type="hidden" class="form-control" id="id" name="id" />
+            </div>
+
+            <div class="col-lg-3  col-md-12  col-sm-12">
+                <label for="actioncodelabel" class="form-label">Action Code</label>
+                <input type="text" class="form-control" id="actionCode" name="actionCode" maxlength="100"
+                    #actionCode="ngModel" [(ngModel)]=" _action.actionCode" placeholder="Action Code" required
+                    [ngClass]="{'requiredoutline':(actionCode.touched && actionCode.invalid) || (actionCode.errors?.pattern) || (actionCode.errors?.minlength) || (actionCode.errors?.maxlength) || (isActionCodeHasData)}"
+                    (focusout)="focusoutMethod(actionCode.name,actionCode.value)">
+
+                <div class="error" *ngIf="(actionCode.touched && actionCode.invalid) || (isActionCodeHasData)">
+                    <span class="text-danger" *ngIf="actionCode.errors?.maxlength">
+                        Max Character 50. <br />
+                    </span>
+                    <span class="text-danger" *ngIf="actionCode.errors?.pattern">
+                        Description should contains only characters.<br />
+                    </span>
+                    <span class="text-danger" *ngIf="actionCode.errors?.minlength">
+                        Minimum Character 2.<br />
+                    </span>
+                    <span class="text-danger" *ngIf="actionCode.errors?.required">
+                        {{isActionCodeErrorMessage}}<br />
+                    </span>
+                </div>
+            </div>
+
+
+
+            <div class="col-lg-3  col-md-6  col-sm-12">
+                <label for="input2" class="form-label">Violation Type</label>
+                <select id="actionType" name="actionType" class="form-select selectcontrol"
+                    [(ngModel)]="_action.actionType">
+                    <option *ngFor="let _pty of _actionType" [value]="_pty?.code">
+                        {{_pty?.value}}</option>
+                </select>
+            </div>
+            <div class="col-lg-3  col-md-12  col-sm-12">
+                <label for="input3" class="form-label">Status</label>
+                <select id="status" name="status" class="form-select selectcontrol" [(ngModel)]="_action.status">
+                    <option value="true">Active</option>
+                    <option value="false">Inactive</option>
+
+                </select>
+            </div>
+            <div class="col-lg-3  col-md-12  col-sm-12">
+                <label for="avgTimeGCLabel" class="form-label">Average Time GC </label>
+                <input type="text" class="form-control" id="avgTimeGC" name="avgTimeGC" maxlength="10"
+                    [(ngModel)]="_action.avgTimeGC" placeholder="Average Time GC">
+            </div>
+            <div class="col-lg-3  col-md-12  col-sm-12">
+                <label for="input3" class="form-label">Average Time VA</label>
+                <input type="text" class="form-control" id="avgTimeVA" name="avgTimeVA" maxlength="100"
+                    [(ngModel)]="_action.avgTimeVA" placeholder="Average Time VA">
+            </div>
+            <div class="col-lg-3  col-md-12  col-sm-12">
+                <label for="flagsLabel" class="form-label">Flags</label>
+                <select id="flags" name="flags" class="form-select selectcontrol" multiple="multiple">
+                    <option value="C">Confidential</option>
+                    <option value="F">First Contact</option>
+                    <option value="FW">First Written Contact</option>
+                    <option value="H">Hearing Board</option>
+                    <option value="HC">Hearing Board Other</option>
+                    <option value="MC">Mail Complainant Party</option>
+                    <option value="MP">Mail responsible party</option>
+                    <option value="VC">Voluntary Camp</option>
+                </select>
+            </div>
+            <div class="col-lg-3  col-md-12  col-sm-12">
+                <label for="input3" class="form-label">Average Time VA</label>
+                <input type="text" class="form-control" id="fileName" name="fileName" maxlength="100"
+                    [(ngModel)]="_action.fileName" placeholder="Average Time VA">
+            </div>
+            <div class="col-lg-12  col-md-12  col-sm-12">
+                <label for="input2" class="form-label">Sql Query</label>
+                <textarea type="text" class="form-control" id="sqlStatement" name="sqlStatement" rows="5"
+                    [(ngModel)]="_action.sqlStatement" placeholder="Sql Query"> </textarea>
+            </div>
+
+        </form>
+    </div>
+</div>

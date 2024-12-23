@@ -1,0 +1,37 @@
+.hide {
+    display: none;
+}
+
+.select2-selection__rendered {
+    color: 'green' !important;
+}
+
+.dt-button-collection dtb-b2 {
+    margin-top: 8px !important;
+    width: 100px !important;
+}
+
+.align-end {
+    margin-left: auto; 
+    cursor: pointer;
+}
+
+.w-96
+{
+    width: 96%;
+}
+
+::ng-deep
+.daterangepicker.ltr.show-calendar.openscenter.hidden-date-picker {
+  display: none !important;
+}
+
+::ng-deep .focused
+{
+    box-shadow: 0 0 10px rgba(0, 123, 255, 0.5) !important; /* Larger glow effect */
+    border-radius: 0.375rem; /* Rounded corners */
+    outline: none !important; /* Removes any default focus styles */
+    background-color: #fff; 
+    border: none !important;
+}
+

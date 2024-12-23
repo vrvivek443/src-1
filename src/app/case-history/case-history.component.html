@@ -1,0 +1,374 @@
+<div class="accordion gap-3" id="caseHistorySearchPanelAccordion">
+  <div class="accordion-item">
+    <h2 class="accordion-header" id="caseHistorySearchPanelAccordion">
+      <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#caseHistorySearchPanel"
+        aria-expanded="false" aria-controls="collapseOne">
+        Case Search Filter
+      </button>
+    </h2>
+    <div id="caseHistorySearchPanel" class="accordion-collapse collapse show" aria-labelledby="caseHistorySearchPanel"
+      data-bs-parent="#caseHistorySearchPanelAccordion">
+      <div class="accordion-body">
+        <div id="simpleFilter" class="row">
+          <div class="col-12">
+            <form>
+              <div class="row g-3">
+                <div class="col-3">
+                  <label for="caseno_c" class="form-label">Case No</label>
+                  <input id="caseno_c" name="caseno_c" type="text" class="form-control" placeholder="Case Number"
+                    [(ngModel)]="_caseHistoryViewModel.caseno" />
+                </div>
+                <div class="col-3">
+                  <label for="selectInspector_s" class="form-label">Inspector</label>
+                  <select id="selectInspector_s" name="inspector" data-placeholder="Choose Inspector.."
+                    class="form-control" multiple>
+                    <!-- <option selected="">Choose...</option> -->
+                    <option *ngFor="let _inspector of _inspectorList" value={{_inspector.id}}>
+                      {{_inspector.name}}</option>
+                  </select>
+                </div>
+                <div class="col-3">
+                  <label for="selectSupervisor_s" class="form-label">Supervisor </label>
+                  <select id="selectSupervisor_s" name="selectSupervisor_s" class="form-control"
+                    data-placeholder="Supervisor" multiple>
+                    <option *ngFor="let _inspector of _supervisorList" value={{_inspector.id}}>
+                      {{_inspector.name}}</option>
+                  </select>
+                </div>
+                <div class=" col-3">
+                  <label for="selectProgram_s" class="form-label">Program Type</label>
+                  <select id="selectProgram_s" name="program" data-placeholder="Choose Program..." class="form-control"
+                    [(ngModel)]="_caseHistoryViewModel.program" multiple>
+                    <!-- <option selected="">Choose...</option> -->
+                    <option *ngFor="let _st of _programTypeList" value={{_st?.code}}>
+                      {{_st?.value}}</option>
+                  </select>
+                </div>
+                <div class="col-3">
+                  <label for="selectStatus_s" class="form-label">Status</label>
+                  <select id="selectStatus_s" name="status" class="form-control" data-placeholder="Choose Status..."
+                    multiple>
+                    <!-- <option selected="">Choose...</option> -->
+                    <option *ngFor="let _st of _statusList" value={{_st?.code}}>
+                      {{_st?.value}}</option>
+                  </select>
+                </div>
+                <div class="col-3">
+                  <label for="addressNumber" class="form-label">Number</label>
+                  <input id="addressNumber" name="addressnumber" type="text" class="form-control"
+                    placeholder="Choose Address Number..." [(ngModel)]="_caseHistoryViewModel.addressnumber" />
+                </div>
+                <div class="col-3">
+                  <label for="selectstreet_s" class="form-label">Street</label>
+                  <select id="selectstreet_s" name="street" data-placeholder="Choose Street..." class="form-control"
+                    multiple>
+                    <!-- <option selected="">Choose...</option> -->
+                    <option *ngFor="let _st of _streetDataList" value={{_st?.streetTypeCode}}>
+                      {{_st?.streetname}} {{_st?.streettype}}</option>
+                  </select>
+                </div>
+                <div class="col-3 dropdown_s">
+                  <label for="selectrecent_s" class="form-label">Recent</label>
+                  <select id="selectrecent_s" name="street" data-placeholder="Choose" class="form-control">
+                    <option value="">Choose</option>
+                    <option value="Week">This Week</option>
+                    <option value="Month">This Month</option>
+                    <option value="Year">This Year</option>
+                    <option value="custom" id="custom-date">Custom</option>
+                  </select>
+                </div>
+                <div class="col-3 custom-template">
+                  <label for="daterange" class="form-label d-flex">Date Range
+                    <a class="align-end" (click)="changeSelection()">Others</a>
+                  </label>
+                  <input type="text" class="form-control" id="daterange" placeholder="Select date range">
+                </div>
+                <div class="col-3">
+                  <label for="created_s" class="form-label">Created</label>
+                  <input type="date" id="created_s" class="form-control" name="createdDate">
+                </div>
+                <div class="col-3">
+                  <label for="modified_s" class="form-label">Modified</label>
+                  <input type="date" id="modified_s" class="form-control" name="modifiedDate">
+                </div>
+                <div class="col-3">
+                  <label for="cudate_s" class="form-label">C/U Date</label>
+                  <input type="date" id="cudate_s" class="form-control" name="cuDate">
+                </div>
+
+              </div>
+            </form>
+          </div>
+        </div>
+        <div id="detailsFilter" class="row">
+          <div class="col-12">
+            <form id="caseHistyForm">
+              <!-- <div class="row row-cols-md-3 row-cols-xl-auto g-2"> -->
+              <div class="row g-3">
+                <div class="col-3">
+                  <!-- <label for="input1" class="form-label">Number</label>
+                <input type="text" class="form-control" id="input1" placeholder=" Case Number"> -->
+                  <label for="caseno" class="form-label">Case No</label>
+                  <input id="caseno" name="caseno" type="text" class="form-control" placeholder="Case Number"
+                    [(ngModel)]="_caseHistoryViewModel.caseno" />
+                </div>
+                <div class="col-3">
+                  <label for="selectStatus" class="form-label">Status</label>
+                  <select id="selectStatus" name="selectStatus" class="form-control" data-placeholder="Choose Status..."
+                    multiple>
+                    <option *ngFor="let _st of _statusList" value={{_st?.code}}>
+                      {{_st?.value}}</option>
+                  </select>
+                </div>
+                <div class="col-3">
+                  <label for="selectProgram" class="form-label">Program</label>
+                  <select id="selectProgram" name="program" class="form-control" data-placeholder="Search Program..."
+                    multiple>
+                    <option *ngFor="let _st of _programTypeList" value={{_st?.code}}>
+                      {{_st?.value}}</option>
+                  </select>
+                </div>
+                <div class="col-3">
+                  <label for="selectSource" class="form-label">Source</label>
+                  <select id="selectSource" name="selectSource" class="form-control" data-placeholder="Search Source..."
+                    multiple>
+                    <option *ngFor="let _s of _sourceList" value={{_s.code}}>{{_s.value}}</option>
+                  </select>
+                </div>
+                <div class="col-3">
+                  <label for="selectInspector" class="form-label">Inspector</label>
+                  <select id="selectInspector" name="inspector" class="form-control" data-placeholder="Inspector"
+                    multiple>
+                    <option *ngFor="let _inspector of _inspectorList" value={{_inspector.id}}>
+                      {{_inspector.name}}</option>
+                  </select>
+                </div>
+                <div class="col-3">
+                  <label for="selectSupervisor" class="form-label">Supervisor </label>
+                  <select id="selectSupervisor" name="supervisor" class="form-control" data-placeholder="Supervisor"
+                    multiple>
+                    <option *ngFor="let _inspector of _supervisorList" value={{_inspector.id}}>
+                      {{_inspector.name}}</option>
+                  </select>
+                </div>
+                <div class="col-3">
+                  <label for="selectCasePriority" class="form-label">Case Priority</label>
+                  <select id="selectCasePriority" name="casepriority" class="form-control"
+                    data-placeholder="Search Case Priority..." multiple>
+                    <option *ngFor="let _p of _priorityType" value={{_p.code}}>
+                      {{_p.value}}</option>
+                  </select>
+                </div>
+                <!-- <div class="col-3">
+                  <label for="caseDate" class="form-label">Case Date</label>
+                  <input id="caseDate" name="casedate" type="text" class="form-control" placeholder="Case Date"
+                    [(ngModel)]="_caseHistoryViewModel.violationtype" />
+                </div> -->
+
+                <div class="col-3">
+                  <label for="selectViolationtype" class="form-label">Violation Type</label>
+                  <select id="selectViolationType" title="ViolationType" name="violationType" class="form-control"
+                    data-placeholder="Search Violation Type..." multiple>
+                    <option *ngFor="let _p of _violationType" value={{_p.violationcode}}>
+                      {{_p.violationdescr}}</option>
+                  </select>
+                </div>
+                <div class="col-12">
+                  <label for="casedescription" class="form-label">Case Description</label>
+                  <input id="casedescription" name="casedescription" type="text" class="form-control"
+                    placeholder="Case Description" [(ngModel)]="_caseHistoryViewModel.casedescription" />
+                </div>
+
+              </div>
+              <br />
+              <h4>Address</h4>
+              <div class="col-12">
+                <div class="row g-3">
+                  <div class="col-3">
+                    <label for="apn">APN</label>
+                    <input id="apn" name="apn" type="text" class="form-control" placeholder="apn"
+                      [(ngModel)]="_caseHistoryViewModel.apn" />
+                  </div>
+                  <div class="col-3">
+                    <label for="addressnumber" class="form-label">Number</label>
+                    <input id="addressnumber" name="addressnumber" type="text" class="form-control"
+                      placeholder="Address Number" [(ngModel)]="_caseHistoryViewModel.addressnumber" />
+                  </div>
+                  <div class="col-3">
+                    <label for="selectStreet" class="form-label">Street</label>
+                    <select id="selectStreet" name="street" class="form-select" multiple>
+                      <option *ngFor="let _st of _streetDataList" value={{_st?.streetTypeCode}}>
+                        {{_st?.streetname}} {{_st?.streettype}}</option>
+
+                    </select>
+                  </div>
+
+                  <div class="col-3 dropdown_a">
+                    <label for="selectrecent" class="form-label">Recent</label>
+                    <select id="selectrecent" name="street" data-placeholder="Choose" class="form-control">
+                      <option value="">Choose</option>
+                      <option value="Week">This Week</option>
+                      <option value="Month">This Month</option>
+                      <option value="Year">This Year</option>
+                      <option value="custom" id="custom-date_a">Custom</option>
+                    </select>
+                  </div>
+                  <div class="col-3 custom-template_a">
+                    <label for="daterange" class="form-label d-flex">Date Range
+                      <a class="align-end" (click)="changeAdvanceSelection()">Others</a>
+                    </label>
+                    <input type="text" class="form-control" id="daterange_a" placeholder="Select date range">
+                  </div>
+
+                  <!-- <div class="col-3">
+                    <label for="housingpermit">Housing Permit</label>
+                    <input id="housingpermit" name="housingpermit" type="text" class="form-control"
+                      placeholder="Housing Permit" [(ngModel)]="_caseHistoryViewModel.housingpermit" />
+                  </div> -->
+                  <!-- <div class="col-3">
+                  <label for="name" class="form-label">Type</label>
+                  <input id="type" name="type" type="text" class="form-control ps-5" placeholder="Name"
+                    [(ngModel)]="_caseHistoryViewModel.type" />
+                </div> -->
+                </div>
+              </div>
+
+            </form>
+          </div>
+        </div>
+        <div class="card mt-2">
+          <div class="card-body">
+            <div id="filterActioon" class="row mt-2 float-end">
+
+              <div class=" col-md-12">
+                <button id="btnAdvancedSearch" type="button" class="btn custom-btn" (click)="advancedSearch()">
+                  Advanced Search</button> &nbsp; &nbsp;
+                <button id="btnCompressedSearch" type="button" class="btn custom-btn" (click)="simpleSearch()">Simple
+                  Search</button> &nbsp; &nbsp;
+                <button type="button" class="btn custom-btn" (click)="saveSearch()">Save
+                  Search</button> &nbsp; &nbsp;
+                <button type="button" class="btn custom-btn" (click)="search()">Search</button> &nbsp; &nbsp;
+                <button type="button" class="btn custom-btn" (click)="close()">Reset</button> &nbsp; &nbsp;
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  <br />
+
+  <div id="inputdata" class="card col-md-12">
+    <h5 class="g-3 ps-3"> Filter Data:</h5>
+    <div class="card-body">
+      <table id="tblinputdata" class="table mb-0 table-striped">
+        <tr>
+          <td *ngFor="let dynamic of filterDataArray; let i = index;">{{dynamic.key}}:<b>{{dynamic.value}}</b></td>
+        </tr>
+        <!-- <tr>
+          <td>Case No:<b>{{_caseHistoryViewModel?.caseno}}</b></td>
+          <td>Inspector:<b>{{_caseHistoryViewModel?.inspector}}</b></td>
+          <td>Program:<b>{{_caseHistoryViewModel?.program}}</b></td>
+          <td>Status:<b>{{_caseHistoryViewModel?.status}}</b></td>
+          <td>Address Number:<b>{{_caseHistoryViewModel?.addressnumber}}</b></td>
+          <td>Street:<b>{{_caseHistoryViewModel?.street}}</b></td>
+        </tr> -->
+      </table>
+    </div>
+  </div>
+  <div class="accordion" id="caseHistorySearchResultAccordion">
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="caseHistorySearchResultheader">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+          data-bs-target="#caseHistorySearchResult" aria-expanded="false" aria-controls="collapseTwo">
+          Case Search Result <i class="bx bx-star"></i>
+        </button>
+      </h2>
+      <div id="caseHistorySearchResult" class="accordion-collapse collapse"
+        aria-labelledby="caseHistorySearchResultheader" data-bs-parent="#caseHistorySearchResultAccordion">
+        <div class="accordion-body">
+          <div class="card">
+            <div class="card-body">
+              <div class="table-responsive">
+                <table id="caseHistoryTbl" class="table table-striped table-bordered display datatable"
+                  style="width:100%">
+                  <thead>
+                    <tr>
+                      <!-- <th class="select-checkbox"></th> -->
+                      <!-- <th><input id="selectAll" class="select-checkbox" type="checkbox" /></th> -->
+                      <th scope="col">Case No</th>
+                      <th scope="col">Address</th>
+                      <th scope="col">Program</th>
+                      <th scope="col">C//U Date</th>
+                      <th scope="col">Status</th>
+                      <th scope="col">Open Date</th>
+                      <th scope="col">Close Date</th>
+                      <th scope="col">Inspector</th>
+                      <th scope="col">Police District</th>
+                      <th scope="col">Case Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="selectInspectorModel" tabindex="-1" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">AddNew / Edit</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+
+          <form class="row g-3">
+            <div class="col-md-12">
+              <label for="selectInspector_m" class="form-label">Inspector</label>
+              <select id="selectInspector_m" name="assignInspectorId" data-placeholder="Choose Inspector.."
+                class="form-select">
+                <option selected="0" value="0">Choose Inspector...</option>
+                <option *ngFor="let _inspector of _inspectorList" value="{{_inspector.id}}">
+                  {{_inspector.name}}</option>
+              </select>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn custom-btn" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn custom-btn" (click)="SaveChanges()">Save changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="modal fade" id="saveSearchModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xm">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Save search</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="col-md-6">
+            <label for="searchName" class="form-label">Search name</label>
+            <input id="searchName" type="text" minlength="3" class="form-control" [(ngModel)]="this._searchProfile.name"
+              data-placeholder="Search name...">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn custom-btn" data-bs-dismiss="modal" (click)="this.saveNewSearch()">Save
+            Search</button>
+        </div>
+      </div>
+    </div>
+  </div>

@@ -1,0 +1,15 @@
+/* You can add global styles to this file, and also import other style files */
+.custom-btn {
+	background-color: #046a7a; /* Custom background color */
+	color: white;             /* Custom text color */
+	
+  }
+  
+  .custom-btn:hover {
+	background-color:#1cb4cc; /* Darker shade on hover */
+  }
+
+  .dataTables_paginate {
+    width: 50%;
+    display: inline-block;
+}

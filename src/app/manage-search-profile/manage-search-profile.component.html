@@ -1,0 +1,76 @@
+<div class="accordion-body">
+    <div class="card">
+        <div class="card-body">
+            <div class="table-responsive">
+                <!-- Person List Starts Here -->
+                <div class="row">
+                    <div class="col-md-12  d-flex gap-2 justify-content-start ">
+                        <h3>Manage Search Profle</h3>
+                    </div>
+                </div>
+                <table id="userProfileTbl" class="table table-striped table-bordered display datatable"
+                    style="width:100%">
+                    <thead>
+                        <tr>
+                            <!-- <th class="select-checkbox"></th> -->
+                            <!-- <th><input id="selectAll" class="select-checkbox" type="checkbox" /></th> -->
+                            <th scope="col">S.No</th>
+                            <th scope="col">Search Profile Name</th>
+                            <th scope="col">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="saveSearchModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Save search</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="col-md-6">
+                    <label for="searchName" class="form-label">Search name</label>
+                    <input id="searchName" type="text" minlength="3" class="form-control" #searchName
+                        data-placeholder="Search name...">
+                </div>
+                <div>
+                    <table id="tblinputdata" class="table mb-0 table-striped">
+                        <tr>
+                            <td *ngFor="let dynamic of filterDataArray; let i = index;">
+                                {{dynamic.key}}:<b>{{dynamic.value}}</b></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <div class=" modal-footer">
+                <button type="button" class="btn custom-btn" data-bs-dismiss="modal"
+                    (click)="this.saveNewSearch(searchName.value)">Save
+                    Search</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="showDataModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="filterdata"></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div>
+                    <div id="dataDisplay">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

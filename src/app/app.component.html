@@ -1,0 +1,272 @@
+<!--wrapper-->
+<div class="wrapper">
+  <!--sidebar wrapper -->
+  <div class="sidebar-wrapper" data-simplebar="true">
+    <div class="sidebar-header">
+      <div>
+        <!-- <img src="assets/images/logo-icon.png" class="logo-icon" alt="logo icon"> -->
+        <img src="https://codeenforcementapp.web.app/assets/images/SJ_color_logo.png" width="70px" class="logo-icon"
+          alt="logo icon">
+
+      </div>
+      <div>
+        <h4 class="logo-text">City Staff</h4>
+      </div>
+      <div class="toggle-icon ms-auto"><i class='bx bx-arrow-back'></i>
+      </div>
+    </div>
+    <!--navigation-->
+    <ul class="metismenu" id="menu">
+      <li>
+        <a [routerLink]="['/dashboard']">
+          <div class="parent-icon"><i class='bx bx-home-alt'></i>
+          </div>
+          <div class="menu-title">Dashboard</div>
+        </a>
+
+      </li>
+      <li id="caseManagementLink" class="">
+        <a href="javascript:;" class="has-arrow">
+          <div class="parent-icon"><i class="bx bx-category"></i>
+          </div>
+          <div class="menu-title">Case Management</div>
+        </a>
+        <ul style="list-style-type: none;">
+          <li id="newComplaintLink" class="rolePageHide"> <a [routerLink]="['/complaint']"><i
+                class='bx bx-radio-circle '></i>New
+              Complaint</a>
+          </li>
+
+          <li id="searchComplaintLink"> <a [routerLink]="['/casehistory']"><i class='bx bx-radio-circle '></i>Case Search</a>
+          </li>
+          
+        </ul>
+      </li>
+      <li id="securityManagementLink" class="rolePageHide">
+        <a href="javascript:;" class="has-arrow ">
+          <div class="parent-icon"><i class="bx bx-category"></i>
+          </div>
+          <div class="menu-title">Security</div>
+        </a>
+        <ul style="list-style-type: none;">
+          <li id="userLink" class="rolePageHide"> <a [routerLink]="['/user']"><i
+                class='bx bx-radio-circle '></i>User</a>
+          </li>
+
+        </ul>
+      </li>
+      <li id="masterDatalink" class="rolePageHide">
+        <a href="javascript:;" class="has-arrow ">
+          <div class="parent-icon"><i class="bx bx-category"></i>
+          </div>
+          <div class="menu-title">Master Data</div>
+        </a>
+        <ul style="list-style-type: none;">
+          <li id="violationLink" class=""> <a [routerLink]="['/violation']"><i
+                class='bx bx-radio-circle '></i>Violation</a>
+          </li>
+          <li id="actionLink" class=""> <a [routerLink]="['/action']"><i class='bx bx-radio-circle '></i>Action</a>
+          </li>
+
+          <li id="categoryLink" class=""> <a [routerLink]="['/category']"><i class='bx bx-radio-circle '></i>Master
+              Data</a>
+          </li>
+          <li id="inspectorLink" class=""> <a [routerLink]="['/inspectormapping']"><i
+                class='bx bx-radio-circle '></i>Program - Inspector Mapping</a>
+          </li>
+        </ul>
+      </li>
+    </ul>
+    <!--end navigation-->
+  </div>
+  <!--end sidebar wrapper -->
+  <!--start header -->
+  <header>
+    <div class="topbar d-flex align-items-center">
+      <div style="width:100%" class="d-flex justify-content-center gap-2">
+        <div style="width:350px;margin-top: 1px;">
+          <select id="searchProfiles" class="form-select selectcontrol" [(ngModel)]="this._searchId"
+            (change)="this.loadSearch()" data-placeholder="Select search profile">
+            <option *ngFor="let _st of _userProfile" value="{{_st?.id}}">
+              {{_st?.name}}</option>
+          </select>
+        </div>
+        <div><button id="btnManageSearchProfile" class="btn custom-btn" (click)="ManageSearchProfile()">Manage Search
+            Profile</button></div>
+      </div>
+      <nav class="navbar navbar-expand gap-3">
+        <div class="mobile-toggle-menu"><i class='bx bx-menu'></i>
+        </div>
+
+
+        <div class="top-menu ms-auto">
+          <ul class="navbar-nav align-items-center gap-1">
+            <li class="nav-item dropdown dropdown-large">
+              <a class="nav-link dropdown-toggle dropdown-toggle-nocaret position-relative" href="#"
+                data-bs-toggle="dropdown"><span class="alert-count">{{_newNoticeCount}}</span>
+                <i class='bx bx-bell'></i>
+              </a>
+              <!-- _notices.length-->
+              <div class="dropdown-menu dropdown-menu-end">
+                <a href="javascript:;">
+                  <div class="msg-header">
+                    <p class="msg-header-title">Notifications</p>
+                    <p class="msg-header-badge">{{_newNoticeCount}} New</p>
+                  </div>
+                </a>
+                <div class="header-notifications-list" style="overflow: auto;">
+                  <a class="dropdown-item" href="javascript:;" *ngFor="let _asr of _notices">
+                    <div class="d-flex align-items-center">
+
+                      <div class="flex-grow-1">
+                        <h6 class="msg-name">{{_asr?.fullName}}<span
+                            class="msg-time float-end">{{getTimespan(_asr?.actionDate)}}</span></h6>
+                        <p class="msg-info" [class.bold-text]="_asr?.isRead==false">{{_asr?.message}}</p>
+                      </div>
+                    </div>
+                  </a>
+
+
+                </div>
+
+                <div class="text-center msg-footer">
+                  <a [routerLink]="['/viewallnotification']">View All Notifications </a>
+                </div>
+
+              </div>
+            </li>
+
+          </ul>
+        </div>
+        <div class="user-box dropdown px-3">
+          <a class="d-flex align-items-center nav-link dropdown-toggle gap-3 dropdown-toggle-nocaret" href="#"
+            role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <!-- <img src="assets/images/avatars/avatar-2.png" class="user-img" alt="user avatar"> -->
+            <div class="user-info">
+              <p class="user-name mb-0">{{this._user?.name}}</p>
+              <p class="designattion mb-0">{{this._user?.role.rolename}}</p>
+            </div>
+          </a>
+          <ul class="dropdown-menu dropdown-menu-end">
+            <li><a class="dropdown-item d-flex align-items-center" href="javascript:;"><i
+                  class="bx bx-user fs-5"></i><span>Profile</span></a>
+            </li>
+            <li><a class="dropdown-item d-flex align-items-center" href="javascript:;"><i
+                  class="bx bx-cog fs-5"></i><span>Settings</span></a>
+            </li>
+            <li><a class="dropdown-item d-flex align-items-center" href="javascript:;"><i
+                  class="bx bx-home-circle fs-5"></i><span>Dashboard</span></a>
+            </li>
+            <li><a class="dropdown-item d-flex align-items-center" href="javascript:;"><i
+                  class="bx bx-dollar-circle fs-5"></i><span>Earnings</span></a>
+            </li>
+            <li><a class="dropdown-item d-flex align-items-center" href="javascript:;"><i
+                  class="bx bx-download fs-5"></i><span>Downloads</span></a>
+            </li>
+            <li>
+              <div class="dropdown-divider mb-0"></div>
+            </li>
+            <li><button class="dropdown-item d-flex align-items-center" (click)="logout()"><i
+                  class="bx bx-log-out-circle"></i><span>Logout</span></button>
+            </li>
+          </ul>
+        </div>
+      </nav>
+    </div>
+  </header>
+  <!--end header -->
+  <div>
+
+  </div>
+  <!--start page wrapper -->
+  <div class="page-wrapper">
+    <div class="page-content">
+      <router-outlet></router-outlet>
+
+    </div>
+  </div>
+  <!--end page wrapper -->
+  <!--start overlay-->
+  <div class="overlay toggle-icon"></div>
+  <!--end overlay-->
+  <!--Start Back To Top Button-->
+  <a href="javaScript:;" class="back-to-top"><i class='bx bxs-up-arrow-alt'></i></a>
+  <!--End Back To Top Button-->
+  <footer class="page-footer">
+    <p class="mb-0">Copyright © 2024. All right reserved.</p>
+  </footer>
+</div>
+<!-- <div class="modal fade" id="manageSearchProfile" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Manage Search Profile</h5>
+        <button type="button" class="btn-m-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-lg-12  col-sm-12">
+            <table id="userProfileTbl" class="table table-striped table-bordered display datatable" style="width:100%">
+              <thead>
+                <tr>
+                  <th scope="col">Search Profile Name</th>
+                  <th scope="col">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" id="btnMDClose" class="btn custom-btn" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="btn custom-btn">Edit</button>
+      </div>
+    </div>
+  </div>
+</div> -->
+<!-- <div class="modal fade" id="editSearchProfile" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Edit Search Profile</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-lg-12  col-sm-12">
+            <label for="searchProfileName">Profile Name</label>
+            <input type="text" id="searchProfileName" />
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" id="btnMDClose" class="btn custom-btn" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="btn custom-btn">Save Profile</button>
+      </div>
+    </div>
+  </div>
+  <div class="modal fade" id="saveSearchModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xm">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Save search</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="col-md-6">
+            <label for="searchName" class="form-label">Search name</label>
+            <input id="searchName" type="text" minlength="3" class="form-control" data-placeholder="Search name...">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn custom-btn" data-bs-dismiss="modal" (click)="this.saveNewSearch()">Save
+            Search</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> -->
+
+<!--end wrapper-->

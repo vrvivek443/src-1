@@ -1,0 +1,65 @@
+<div id="frmViolation" class="row">
+    <div class="col-12 mt-3 mb-3">
+        <div class=" d-flex gap-2 justify-content-end ">
+            <button class="btn btn-outline-secondary btn-sm px-4  me-2" (click)="cancelCategory()">Reset</button>
+            <button class="btn btn-outline-secondary btn-sm px-4  me-2" (click)="newCategory()">New master data</button>
+            <button class="btn btn-primary px-4" (click)="saveCategory()">Save</button>
+        </div>
+    </div>
+    <div class="col-lg-3  col-md-6  col-sm-12">
+        <h6 class="mb-0 text-uppercase">Add or Edit Master data</h6>
+        <hr />
+        <div class="col-lg-12 col-md-12 col-sm-12 mt-1 mb-1">
+            <input type="text" class="form-control" id="input1" name="searchText" [(ngModel)]="searchText"
+                (keyup)="search()" placeholder="Search Master data . . .">
+        </div>
+        <div id="categoryListDiv">
+            <div id="categoryList" style="height:75vh;max-height: 75vh;overflow-y: scroll;" class="demo">
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-9  col-md-6  col-sm-12">
+        <h6 class="mb-0 text-uppercase">Category Details</h6>
+        <hr />
+        <form class="row g-3">
+            <div class="col-lg-3  col-md-6  col-sm-12">
+                <label for="input2" class="form-label">Category</label>
+                <select id="category" name="category" class="form-select selectcontrol"
+                    [(ngModel)]="_category.category">
+                    <option *ngFor="let _pty of _categoryType" [value]="_pty?.category">
+                        {{_pty?.category}}</option>
+                </select>
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-12">
+                <label for="input1" class="form-label">Code</label>
+                <input type="text" class="form-control" id="code" name="code" maxlength="255"
+                    [(ngModel)]="_category.code" placeholder="Code" />
+                <input type="hidden" class="form-control" id="id" name="id" />
+            </div>
+
+            <div class="col-lg-3  col-md-12  col-sm-12">
+                <label for="input3" class="form-label">Category Code</label>
+                <input type="text" class="form-control" id="value" name="value" maxlength="100"
+                    [(ngModel)]="_category.value" placeholder="Category Code">
+            </div>
+            <div class="col-lg-3  col-md-12  col-sm-12">
+                <label for="input3" class="form-label">Status</label>
+                <select id="status" name="status" class="form-select selectcontrol" [(ngModel)]="_category.status">
+                    <option value="true">Active</option>
+                    <option value="false">Inactive</option>
+
+                </select>
+            </div>
+            <div class="col-lg-3  col-md-12  col-sm-12">
+                <label for="input3" class="form-label">Default</label>
+                <select id="isDefault" name="status" class="form-select selectcontrol"
+                    [(ngModel)]="_category.isDefault">
+                    <option value="true">Active</option>
+                    <option value="false">Inactive</option>
+
+                </select>
+            </div>
+
+        </form>
+    </div>
+</div>

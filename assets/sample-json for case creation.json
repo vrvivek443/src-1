@@ -1,0 +1,209 @@
+/*only address*/
+{
+"id":-1,
+ "caseaddress": {
+        "id": -1,
+        "apn": "01506104",
+        "houseNumber": "1416",
+        "streetName": "GRAND",
+        "streetType": "BL",
+        "district": "4",
+        "ownerName": "ALVAREZ CARMEN C ET AL",
+        "ownerStreet": "",
+        "ownerPhone": null,
+        "ownerCityStateZip": null,
+        "censustract": "5046.02",
+        "noofunits": 0,
+        "propertytype": "",
+        "zoningresearch": "",
+        "propertycomment": "update ownership",
+        "taxratearea": "17120",
+        "trashpickupday": "Monday",
+        "trashputoutday": "Monday",
+        "policebeat": "12",
+        "buildingpermit": null,
+        "planningpermit": "12",
+        "policedistrict": "",
+        "housingpermit": null,
+        "lastinspectionrtndate": "2013-11-20"
+      }
+}
+/* update person details */
+{
+"id":12,
+ "caseaddress": {
+        "id": -1,
+        "apn": "01506104",
+        "houseNumber": "1416",
+        "streetName": "GRAND",
+        "streetType": "BL",
+        "district": "4",
+        "ownerName": "ALVAREZ CARMEN C ET AL",
+        "ownerStreet": "",
+        "ownerPhone": null,
+        "ownerCityStateZip": null,
+        "censustract": "5046.02",
+        "noofunits": 0,
+        "propertytype": "",
+        "zoningresearch": "",
+        "propertycomment": "update ownership",
+        "taxratearea": "17120",
+        "trashpickupday": "Monday",
+        "trashputoutday": "Monday",
+        "policebeat": "12",
+        "buildingpermit": null,
+        "planningpermit": "12",
+        "policedistrict": "",
+        "housingpermit": null,
+        "lastinspectionrtndate": "2013-11-20"
+      }
+,
+"casePerson": [
+   {
+      "address1": "gandhi road",
+      "address2": "",
+      "caseMaster": {"id": 24},
+      "createdBy": "muthu",
+      "createdOn": "2024-03-16",
+      "email": "muthu@6o4.in",
+      "firstname": "Muthu",
+      "id": -1,
+      "lastname": "Nachi",
+      "middlename": "B",
+      "modifiedBy": "Muthu",
+      "modifiedOn": "2024-03-16",
+      "phone1": "string",
+      "phone1type": "string",
+      "phone2": "string",
+      "phone2type": "string"
+    },
+	{
+		  "address1": "200 santa clara street",
+		  "address2": "",
+		  "createdBy": "muthu",
+		  "createdOn": "2024-03-16",
+		  "email": "muthu@sixofour.in",
+		  "firstname": "muthu",
+		  "id": -1,
+		  "lastname": "balan",
+		  "middlename": "nachimuthu",
+		  "modifiedBy": "muthu",
+		  "modifiedOn": "2024-03-16",
+		  "phone1": "+1-555-1234",
+		  "phone1type": "M",
+		  "phone2": "+1-555-1235",
+		   "caseMaster": {"id": 24},
+		  "phone2type": "P"
+		}
+  ]
+
+}
+
+
+/* update case detaiils */
+
+ {
+      "id": 12,
+
+      "casePerson": [
+        {
+          "id": 8,
+          "phone1": "9629095903",
+          "phone2": "string",
+          "email": "muthu@6o4.in",
+          "address1": "gandhi road",
+          "address2": "",
+          "createdBy": "muthu",
+          "modifiedBy": "Muthu",
+          "createdOn": "2024-03-16",
+          "modifiedOn": "2024-03-16",
+          "phone1type": "string",
+          "middlename": "B",
+          "phone2type": "string",
+          "firstname": "Muthu",
+          "lastname": "Nachi"
+        },
+		{
+          "id": -1,
+          "phone1": "1234567890",
+          "phone2": "string",
+          "email": "madhu@6o4.in",
+          "address1": "gandhi road",
+          "address2": "",
+          "createdBy": "muthu",
+          "modifiedBy": "Muthu",
+          "createdOn": "2024-03-16",
+          "modifiedOn": "2024-03-16",
+          "phone1type": "string",
+          "middlename": "B",
+          "phone2type": "string",
+          "firstname": "Madhu",
+          "lastname": "Nachi"
+        },
+        {
+          "id": 9,
+          "phone1": "+1-555-1234",
+          "phone2": "+1-555-1235",
+          "email": "muthu@sixofour.in",
+          "address1": "200 santa clara street",
+          "address2": "",
+          "createdBy": "muthu",
+          "modifiedBy": "muthu",
+          "createdOn": "2024-03-16",
+          "modifiedOn": "2024-03-16",
+          "phone1type": "M",
+          "middlename": "nachimuthu",
+          "phone2type": "P",
+          "firstname": "muthu",
+          "lastname": "balan"
+        }
+      ],
+
+      "caseaddress": {
+        "id": 13,
+        "apn": "01506104",
+        "houseNumber": "1416",
+        "streetName": "GRAND",
+        "streetType": "BL",
+        "district": "4",
+        "ownerName": "ALVAREZ CARMEN C ET AL",
+        "ownerStreet": "",
+        "ownerPhone": null,
+        "ownerCityStateZip": null,
+        "censustract": "5046.02",
+        "noofunits": 0,
+        "propertytype": "",
+        "propertycomment": "update ownership",
+        "policedistrict": "",
+        "trashputoutday": "Monday",
+        "taxratearea": "17120",
+        "trashpickupday": "Monday",
+        "buildingpermit": null,
+        "housingpermit": null,
+        "planningpermit": "12",
+        "zoningresearch": "",
+        "policebeat": "12",
+        "lastinspectionrtndate": "2013-11-20"
+      },
+     "description": "test",
+      "version": 0,
+	   "programcode": "G",
+      "sourcecode": "P",
+      "prioritycode": "T",
+      "dispositioncode": "",
+      "coreservicecode": "",
+      "inspector1id": null,
+      "modifiedon": "2024-03-16",
+      "casestatus": "D",
+      "opendate": null,
+      "cudate": null,
+      "receiveddate": "2024-03-16",
+      "closedate": null,
+      "createdon": "2024-03-16",
+      "createdby": "muthu",
+      "cdbgcasetype": "",
+      "modifiedby": "muthu",
+      "inspector2id": null
+    }
+	
+	

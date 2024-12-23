@@ -1,0 +1,39 @@
+.rolePageHide {
+    display: none !important;
+}
+
+.roleHide {
+    display: none !important;
+}
+
+.bold-text {
+    color: red;
+    font-style: italic;
+}
+
+:host ::ng-deep .select2-container .select2-selection--single
+{
+    height: 37px !important;
+    border-color: #dee2e6;
+    border-radius: 0.375rem;
+}
+:host ::ng-deep .select2-container .select2-selection--single .select2-selection__rendered
+{
+ line-height: 33px !important;
+}
+:host ::ng-deep .select2-container .select2-selection--single .select2-selection__arrow
+{
+    display: none;
+}
+
+.modal:nth-of-type(even) {
+    z-index: 1052 !important;
+}
+
+.modal-backdrop.show:nth-of-type(even) {
+    z-index: 1051 !important;
+}
+
+.hide {
+    display: none !important;
+}

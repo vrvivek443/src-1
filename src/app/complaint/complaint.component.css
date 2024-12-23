@@ -1,0 +1,124 @@
+.image-row {
+    text-align: center;
+}
+
+
+.table-responsive{
+    td {
+        white-space: normal; /* Allows the text to wrap normally */
+        word-wrap: break-word; /* Ensures words break if necessary */
+        word-break: break-word; /* Handles breaking for older browsers */
+        overflow-wrap: anywhere; /* Ensures breaking works in modern browsers */
+    }
+}
+
+:host ::ng-deep .row-hover
+{
+    cursor: pointer!important;
+}
+
+@media (min-width: 720px) {
+    .image-row {
+        text-align: left;
+    }
+}
+
+.image-gallery-link {
+    display: inline-block;
+    padding: 4px;
+    margin: 0 0.5rem 1rem 0.5rem;
+    background-color: var(--bg-color);
+    line-height: 0;
+    border-radius: var(--border-radius-large);
+}
+
+.image-gallery-link:hover {
+    background-color: var(--primary-color);
+}
+
+::ng-deep
+.custom-data-row td
+{
+    border-style: none !important;
+}
+
+.gallery-image-thumb {
+    width: 100%;
+    border-radius: var(--border-radius);
+}
+
+.required:after {
+    content: " *";
+    color: red;
+}
+
+.requiredoutline {
+    border: 0.125px initial black;
+    outline-style: solid;
+    outline-width: 1px;
+    outline-color: red;
+}
+
+.inputBorder {
+    border-color: red;
+    border-radius: 4px;
+}
+
+.bs-stepper-circle {
+    width: 1.5rem;
+    height: 1.5rem;
+    font-size: 14px;
+}
+
+:host ::ng-deep .select2-container .select2-selection--single
+{
+    height: 37px !important;
+    border-color: #dee2e6;
+    border-radius: 0.375rem;
+}
+:host ::ng-deep .select2-container .select2-selection--single .select2-selection__rendered
+{
+ line-height: 33px !important;
+}
+:host ::ng-deep .select2-container .select2-selection--single .select2-selection__arrow
+{
+    display: none;
+}
+
+.vertical-divider {
+    border-left: 2px solid #ddd;
+    padding-left: 10px;   
+}
+
+
+.d-table-row {
+    margin-bottom: 5px;  
+}
+
+.d-table-cell {
+    padding: 2px 5px;  
+}
+
+
+.modal-body {
+    padding-top: 10px;   
+    padding-bottom: 10px;
+}
+
+::ng-deep .focused
+{
+    box-shadow: 0 0 10px rgba(0, 123, 255, 0.5) !important; 
+    border-radius: 0.375rem; 
+    outline: none !important; 
+    background-color: #fff; 
+}
+
+::ng-deep .tgl-btn:disabled {
+    background-color: #cccccc; 
+    color: #ffffff; 
+    border: 1px solid #aaaaaa; 
+    cursor: not-allowed; 
+    opacity: 0.7;
+}
+
+

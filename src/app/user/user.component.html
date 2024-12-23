@@ -1,0 +1,157 @@
+<div class="accordion" id="caseHistorySearchResultAccordion">
+  <div class="accordion-item">
+    <h2 class="accordion-header" id="caseHistorySearchResultheader">
+      <button class="accordion-button " type="button" data-bs-toggle="collapse"
+        data-bs-target="#caseHistorySearchResult" aria-expanded="false" aria-controls="collapseTwo">
+        User List <i class="bx bx-star"></i>
+      </button>
+    </h2>
+    <div id="caseHistorySearchResult" class="accordion-collapse collapse show"
+      aria-labelledby="caseHistorySearchResultheader" data-bs-parent="#caseHistorySearchResultAccordion">
+      <div class="accordion-body">
+        <div class="card">
+          <div class="card-body">
+            <div class="table-responsive">
+              <!-- Person List Starts Here -->
+              <div class="row">
+                <div class="col-md-12 d-flex gap-2 justify-content-end ">
+                  <button class="btn custom-btn btn-sm float-end mb-3 roleHide" id="approveBtn"
+                    (click)="approveUser()">Approve User </button>
+                  <button class="btn custom-btn btn-sm float-end mb-3 roleHide" id="rejectBtn"
+                    (click)="rejectUser()">Reject User </button>
+                  <button class="btn custom-btn btn-sm float-end mb-3 me-1 roleHide" id="enableBtn"
+                    (click)="enableUser()">Activate User</button>
+                  <button class="btn custom-btn btn-sm float-end mb-3 me-1 roleHide" id="disableBtn"
+                    (click)="disableUser()">Deactivate User</button>
+                  <button class="btn custom-btn btn-sm float-end mb-3 me-1 " id="inspectorsBtn"
+                    (click)="displayInspectors()">Inspectors</button>
+                  <button class="btn custom-btn btn-sm float-end mb-3 me-1 " id="disabledBtn" [disabled]="true">Activate
+                    / Deactivate User</button>
+                </div>
+              </div>
+
+
+              <table id="userTbl" class="table table-striped table-bordered" style="width:100%">
+                <thead>
+                  <tr>
+                    <th scope="col">Full Name</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Phone</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Role</th>
+                    <th scope="col">Inspector?</th>
+                  </tr>
+                </thead>
+                <tbody>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="selectRole" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Select Role</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+
+        <form class="row g-3">
+          <div class="col-md-12">
+            <label for="selectInspector" class="form-label">Role</label>
+            <select id="selectRoleId" name="selectRoleId" data-placeholder="Choose Role.." class="form-select">
+              <option></option>
+              <option *ngFor="let _role of _roleList" value="{{_role.id}}">
+                {{_role.rolename}}</option>
+            </select>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn custom-btn" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn custom-btn" (click)="applyRole()">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="rejectUserModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Reject User</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+
+        <form class="row g-3">
+          <div class="col-md-12">
+            <label for="selectInspector" class="form-label">Reason for rejection</label>
+            <input type="text" id="_rejectionReason" name="_rejectionReason" [(ngModel)]="_rejectionReason"
+              class="form-control" />
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn custom-btn" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn custom-btn" (click)="applyRejectUser()">Reject User</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="inspectorModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Inpector Mapping</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+
+        <form class="row g-3">
+          <div class="col-md-12">
+            <label for="selectInspector" class="form-label">Supervisor</label>
+            <input type="text" id="_inspectorName" name="_inspectorName" [(ngModel)]="_inspector.name" readonly
+              class="form-control" />
+          </div>
+
+          <div class="col-md-12">
+            <label for="selectInspector" class="form-label">Inspectors</label>
+            <ul>
+              <li *ngFor="let _st of _inspector.inspectors">
+                {{_st.name}} <button (click)="this.removeInspector(_st.id)">Delete</button>
+              </li>
+              <li>
+                <a *ngIf="_showInspector==false" href="#" (click)="this.addInspector()">Add Inspector</a>
+                <div id="showInspectorList">
+                  
+                    <!-- <select id="_listOfInspector" class="form-select">
+                        <option *ngFor="let _st of _allInspectors" value={{_st.id}}>
+                          {{_st.name}}
+                        </option>
+                      </select> -->
+                    <select id="selectInspector" name="selectInspector" data-placeholder="Choose Inspector" class="form-select">
+                      <option></option>
+                      <option *ngFor="let _role of _allInspectors" value="{{_role.id}}">
+                        {{_role.name}}</option>
+                    </select>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn custom-btn" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn custom-btn" (click)="rejectUser()">Reject User</button>
+      </div>
+    </div>
+  </div>
+</div>
