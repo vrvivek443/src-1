@@ -26,6 +26,16 @@ export class caseAddressViewModel {
     zoningresearch: string;
 }
 
+export class PropertyNote {
+    id: number;
+    caseid: number;
+    notes: string;
+    propertyid: number;
+    status: number;
+    createby: string;
+    createdDate?: string; 
+}
+
 export class casePersonViewModel {
     address1: string;
     address2: string;

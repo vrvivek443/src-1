@@ -13,6 +13,8 @@ import { CaseStatusState } from '../app.complaintmodel';
 import { UserModel, UserProfile } from '../user/user.viewmodel';
 import { DatePipe } from '@angular/common';
 import { DataTableDirective } from 'angular-datatables';
+import { PropertyNote } from './complaint.viewmodel';
+import { HttpHeaders } from '@angular/common/http';
 
 
 
@@ -130,6 +132,7 @@ export class ComplaintComponent {
   _secondaryInspectorAssignment: string;
   _violationTable: any;
   _actionsTable: any;
+  isCase = false;
   dataComments = [
     {
       comment: "The document has been reviewed and approved for further processing.",
@@ -204,6 +207,7 @@ export class ComplaintComponent {
   _violation: ViolationDataViewModel;
   _caseHistoryList: any[];
   _inspectorList: any[] = [];
+  _usersList: any[] = [];
   _caseViolationDataList: any[] = [];
   // Version
   _personVersion: number;
@@ -232,25 +236,7 @@ export class ComplaintComponent {
   dtActionOptions: DataTables.Settings = {};
   dtActionTrigger: Subject<any> = new Subject<any>();
   _canChangeStatus: boolean = false;
-  notedetails = [
-    { id: 1, notes: 'Initial meeting with client', status: 'Completed', createdBy: 'Vivek', isActive: true, createdDate: '2024-01-15' },
-    { id: 2, notes: 'Follow-up on project progress', status: 'Pending', createdBy: 'Jane Smith', isActive: false, createdDate: '2024-01-18' },
-    { id: 3, notes: 'Approval of design documents', status: 'In Progress', createdBy: 'Alice Johnson', isActive: true, createdDate: '2024-01-20' },
-    { id: 4, notes: 'Discussion on budget allocation', status: 'Completed', createdBy: 'Robert Brown', isActive: false, createdDate: '2024-01-25' },
-    { id: 5, notes: 'Team brainstorming session', status: 'Scheduled', createdBy: 'Emily Davis', isActive: true, createdDate: '2024-02-01' },
-    // { id: 6, notes: 'Client feedback review', status: 'Pending', createdBy: 'Michael Scott', isActive: true, createdDate: '2024-02-03' },
-    // { id: 7, notes: 'Prepare project timeline', status: 'In Progress', createdBy: 'Angela Martin', isActive: false, createdDate: '2024-02-10' },
-    // { id: 8, notes: 'Budget approval meeting', status: 'Completed', createdBy: 'Dwight Schrute', isActive: true, createdDate: '2024-02-15' },
-    // { id: 9, notes: 'Finalize contract details', status: 'Scheduled', createdBy: 'Pam Beesly', isActive: false, createdDate: '2024-02-18' },
-    // { id: 10, notes: 'Review quality assurance report', status: 'Completed', createdBy: 'Oscar Martinez', isActive: true, createdDate: '2024-02-20' },
-    // { id: 11, notes: 'Discuss vendor agreements', status: 'Pending', createdBy: 'Stanley Hudson', isActive: false, createdDate: '2024-02-25' },
-    // { id: 12, notes: 'Evaluate risk assessment', status: 'In Progress', createdBy: 'Ryan Howard', isActive: true, createdDate: '2024-03-01' },
-    // { id: 13, notes: 'Plan marketing strategy', status: 'Scheduled', createdBy: 'Kelly Kapoor', isActive: false, createdDate: '2024-03-05' },
-    // { id: 14, notes: 'Onboard new team members', status: 'Completed', createdBy: 'Andy Bernard', isActive: true, createdDate: '2024-03-10' },
-    // { id: 15, notes: 'Weekly project update', status: 'Pending', createdBy: 'Phyllis Vance', isActive: false, createdDate: '2024-03-12' },
-    // { id: 16, notes: 'Finalize presentation slides', status: 'In Progress', createdBy: 'Jim Halpert', isActive: true, createdDate: '2024-03-15' },
-    // { id: 17, notes: 'Kickoff meeting with stakeholders', status: 'Completed', createdBy: 'Karen Filippelli', isActive: false, createdDate: '2024-03-18' },
-  ];
+  notedetails: PropertyNote[] = [];
 
 
   constructor(private _http: HttpClient, private _fb: FormBuilder, private _urlConstant: APIURLConstant, private _complaintServiceCall: ComplaintService, private router: Router, private _activatedRoute: ActivatedRoute, private renderer: Renderer2, private elRef: ElementRef) {
@@ -326,14 +312,31 @@ export class ComplaintComponent {
     this._currentStepIndex = 1;
     this.searchText = "";
     this._enableSave = false;
+
+    if (localStorage.getItem("nc") == "yes") {
+      localStorage.setItem("nc", "no");
+      location.reload()
+    }
+
+    if (localStorage.getItem("user") != undefined) {
+      this._user = JSON.parse(localStorage.getItem('user'));
+      this._user.role.id === 5 ? jQuery('#propertyNotesTab').hide() : jQuery('#propertyNotesTab').show();
+      console.log(this._user);
+    }
+
     this._activatedRoute.queryParamMap.subscribe((q: any) => {
       var lowerParams = this.toLower(q.params);
       var caseid = lowerParams['caseid'];
-      if (caseid != null && caseid != undefined)
+      if (caseid != null && caseid != undefined){
+        this.isCase = true
         this.getCaseByID(lowerParams['caseid']);
+      }
       else
+      {
+        this.isCase = false;
         this.Initializecaseselect();
-
+        jQuery('#propertyNotesTab').hide();
+      }
     })
 
     jQuery('#single-select-optgroup-field').select2({
@@ -342,17 +345,7 @@ export class ComplaintComponent {
       placeholder: jQuery(this).data('placeholder'),
     });
 
-    if (localStorage.getItem("nc") == "yes") {
-      localStorage.setItem("nc", "no");
-      location.reload()
-    }
-    if (localStorage.getItem("user") != undefined) {
-      this._user = JSON.parse(localStorage.getItem('user'));
-      console.log(this._user.name);
-    }
-
     this._userName = this._user.name
-    this.initializeNoteTable();
 
     let self: any = this;
 
@@ -587,6 +580,9 @@ export class ComplaintComponent {
     jQuery("#streetType").select2({}).on('select2:open', () => {
       // Add a class to the select2 container when opened (focused)
       jQuery('#streetType').next('.select2-container').addClass('focused');
+    }).on('select2:close', () => {
+      // Add a class to the select2 container when opened (focused)
+      jQuery('#streetType').next('.select2-container').removeClass('focused');
     });
     jQuery("#programcode").val(this._caseDetailViewModel.programcode || '').select2({ width: '100%' }).on('change', (event: any) => {
       this.onProgramCodeChange(event);
@@ -719,8 +715,11 @@ export class ComplaintComponent {
 
   changeCUDate() {
     if (!this._caseDetailViewModel.cudate) {
+      if(this.pastCUDate){
       alert('Cannot remove the C/U Date!')
+      }
       this._caseDetailViewModel.cudate = this.pastCUDate
+      console.log(this.pastCUDate);
     }
     else if (this.pastCUDate) {
       if (this._caseDetailViewModel.cudate > this.formattedDate) {
@@ -728,9 +727,12 @@ export class ComplaintComponent {
       }
     }
   }
+  
 
 
   initializeNoteTable(): void {
+    // console.log(this._viewAddressDetail.apn);
+    console.log(this.notedetails) 
     if (!this.notedetails || this.notedetails.length === 0) {
       console.error('No data available in notedetails');
       return;
@@ -741,10 +743,6 @@ export class ComplaintComponent {
 
     const userName = this._userName;
 
-    // Filter the data based on the condition
-    const filteredData = this.notedetails.filter(row => row.createdBy === userName);
-
-    console.log(filteredData);
 
     const cols = [
       { data: "id", title: "ID" },
@@ -753,12 +751,21 @@ export class ComplaintComponent {
         data: " ",
         title: "Status",
         render: (data: any, type: any, row: any) => {
-          const buttonText = row.isActive ? 'Inactive' : 'Active';
-          return `<button class="toggle-button btn-primary" data-id="${row.id}">${buttonText}</button>`;
+          const buttonText = row.status ? 'Active' : 'Inactive';
+          const buttonClass = row.status ? 'btn-primary' : 'btn-secondary';
+          const isDisabled = this.userIsInspector && row.createby !== this._user.email ? 'disabled' : '';
+          return `<button class="toggle-button tgl-btn ${buttonClass}" data-id="${row.id}" ${isDisabled}>${buttonText}</button>`;
         },
       },
-      { data: "createdBy", title: "Created By" },
-      { data: "createdDate", title: "Date" },
+      { data: "createByName", title: "Created By" },
+      {
+        data: "createdOn",
+        title: "Date",
+        render: (data: any) => {
+          if (!data) return ''; 
+          return this.formatDate(data); // Call your custom formatDate function
+        }
+      },
       {
         data: " ",
         render: (data: any, type: any, row: any) => {
@@ -776,7 +783,7 @@ export class ComplaintComponent {
 
     // Initialize the DataTable
     const table = jQuery('#tblnotes').DataTable({
-      data: this.userIsInspector ? filteredData : this.notedetails, // Use the filtered data
+      data: this.notedetails, // Use the filtered data
       columns: cols,
       paging: true,
       autoWidth: false,
@@ -799,11 +806,36 @@ export class ComplaintComponent {
       // Toggle active state in notedetails
       const rowIndex = this.notedetails.findIndex((item: any) => item.id === rowId);
       if (rowIndex !== -1) {
-        this.notedetails[rowIndex].isActive = !this.notedetails[rowIndex].isActive;
-
-        // Update the row in DataTable
+        // Toggle the status between 0 (Inactive) and 1 (Active)
+        this.notedetails[rowIndex].status = this.notedetails[rowIndex].status === 0 ? 1 : 0;
+        const status = this.notedetails[rowIndex].status === 0 ? 'inactive':'active';
+        const data = `id=${rowIndex}&status=${status}`
+        this._complaintServiceCall.saveById(this._urlConstant.CaseMasterModule, '/' + this._urlConstant.Edit, data).subscribe((response) => {
+          if (response.status == "SUCCESS") {
+            Lobibox.notify('success', {
+              pauseDelayOnHover: true,
+              continueDelayOnInactiveTab: false,
+              position: 'top right',
+              icon: 'bx bx-check-circle',
+              msg: 'Status Updated'
+            });
+          this.initializeNoteTable();
+          this.bindToggleEvents();
+          }
+          else 
+          {
+            Lobibox.notify('error', {
+              pauseDelayOnHover: true,
+              continueDelayOnInactiveTab: false,
+              position: 'top right',
+              icon: 'bx bx-check-circle',
+              msg: 'Error while updating'
+            });
+          }
+        })
+        // Reinitialize the row data in DataTable
         table.row(button.parents('tr')).data(this.notedetails[rowIndex]).draw(false);
-      }
+    }
     });
     jQuery('#tblnotes').off('click', '#delbtn').on('click', '#delbtn', (event: any) => {
       const button = jQuery(event.currentTarget);
@@ -825,13 +857,36 @@ export class ComplaintComponent {
   }
 
   deleteData(rowId: any) {
-    this.notedetails = this.notedetails.filter((row) => row.id !== rowId)
-    this.initializeNoteTable();
+    this._complaintServiceCall.saveById(this._urlConstant.CaseMasterModule, this._urlConstant.deletePropertyNotes, `id=${rowId}`).subscribe((response) => {
+      if (response.status == "SUCCESS") {
+        Lobibox.notify('success', {
+          pauseDelayOnHover: true,
+          continueDelayOnInactiveTab: false,
+          position: 'top right',
+          icon: 'bx bx-check-circle',
+          msg: `${rowId} deleted Successully`
+        });
+      }
+      else 
+      {
+        Lobibox.notify('error', {
+          pauseDelayOnHover: true,
+          continueDelayOnInactiveTab: false,
+          position: 'top right',
+          icon: 'bx bx-check-circle',
+          msg: response.errorMessage,
+        });
+      }
+    })
+    // this.notedetails = this.notedetails.filter((row) => row.id !== rowId)
+    // this.initializeNoteTable();
   }
 
   changeCheck() {
+    console.log(this._caseViolationViewModel.duedate)
     if (!this._caseViolationViewModel.duedate) {
-      alert('Cannot remove the Due Date!')
+      if(this.pastDate){
+      alert('Cannot remove the Due Date!')}
       this._caseViolationViewModel.duedate = this.pastDate
     }
     else if (this.pastDate) {
@@ -852,6 +907,12 @@ export class ComplaintComponent {
       this._caseDetailViewModel.cudate = this.pastCUDate
       jQuery('#cuDateModal').modal("hide");
     }
+
+    else if(title === 'notes')
+    {
+      jQuery('#noteInput').val('').trigger('change');
+      jQuery('#addNewModal').modal('hide');
+    }
   }
 
   saveReason(title: any) {
@@ -859,9 +920,9 @@ export class ComplaintComponent {
     {
       this.cuReason = jQuery('#cuDateReason').val().trim();
       if (this.cuReason) {
-        this.pastCUDate = this._caseDetailViewModel.cudate
+        // this.pastCUDate = this._caseDetailViewModel.cudate;
         jQuery('#cuDateModal').modal("hide");
-        jQuery('#cuDateComments').html(`<strong>Reason for Due Date Change:</strong> ${this.cuReason}`)
+        jQuery('#cuDateComments').html(`<strong>Reason for Current C/U Date Change:</strong> ${this.cuReason}`)
       }
       else
         jQuery('#cu-reason-mandate').html("Kindly fill the Reason for CU Date Change")
@@ -1299,6 +1360,7 @@ export class ComplaintComponent {
       this._inspectorList = [];
       this._inspectorList = response.data;
     });
+
   }
   getProgramName(c: string) {
     var pg = this._programTypeDataList.find(x => x.code == c);
@@ -1373,17 +1435,27 @@ export class ComplaintComponent {
     return _d;
   }
   getCaseByID(id: any) {
-
     this._complaintServiceCall.getByModuleMethodAndParameter(this._urlConstant.CaseMasterModule, this._urlConstant.GetByID, "id=" + id).subscribe((response) => {
       this._caseHistoryList = [];
       if (response.status == "SUCCESS") {
         this._caseTitle = "Edit Complaint";
         // console.log("Case Detail : " + JSON.stringify(response));
         this._caseDetail = response.data[0];
+        this.notedetails = response.data[0].propertyNotes;
+        const length = response.data[0].caseComeUpdateNotes.length;
+        if(length){
+        this.cuReason = response.data[0].caseComeUpdateNotes[length - 1].reasonNotes;
+        if(this.cuReason)
+          jQuery('#cuDateComments').html(`<strong>Reason for Current C/U Date Change:</strong> ${this.cuReason}`)
+        }
+        this.initializeNoteTable();
+        this.bindToggleEvents();
         this.caseViolationDetails = response.data[0].caseViolation;
+        
         // console.log("Total Count : " + this._caseDetail?.caseActions.length);
         if (JSON.stringify(this._caseDetail).includes("caseaddress")) {
           this._viewAddressDetail = response.data[0].caseaddress;
+
         }
 
         jQuery(".tab-page").removeAttr("disabled");
@@ -1398,13 +1470,19 @@ export class ComplaintComponent {
         this._caseId = response.data[0].id;
         // this._caseAddressId = response.data[0].caseaddress.id;
         this._enableSave = true;
+        
         this._personTable.clear().rows.add(this._personDataList).draw();
         this._personTable.draw();
         this.InitializeViolationTable();
         this.InitializeActionTable();
         this.resetCaseDetailViewModel();
         this._caseDetailViewModel = this._caseDetail;
-        this.pastCUDate = this._caseDetailViewModel.cudate;
+        if(this._caseDetailViewModel.cudate)
+        {
+          this.pastCUDate = this._caseDetailViewModel.cudate;
+          this.pastCUDate = this.formatDate(this.pastCUDate)
+          this._caseDetailViewModel.cudate = this.formatDate(this._caseDetailViewModel.cudate);
+        }
         jQuery('#createCaseBtn').hide();
         jQuery('#nextPersonBtn').show();
         this.dtTrigger.next(null);
@@ -1418,6 +1496,22 @@ export class ComplaintComponent {
       this.Initializecaseselect()
     });
   }
+
+  getByIDPropertyNotes(id: any) {
+    this._complaintServiceCall.getByModuleMethodAndParameter(this._urlConstant.CaseMasterModule, this._urlConstant.GetByID, "id=" + id).subscribe((response) => {
+      this._caseHistoryList = [];
+      if (response.status == "SUCCESS") {
+        this.notedetails = response.data[0].propertyNotes;
+        console.log(this.notedetails)
+        this.initializeNoteTable();
+        this.bindToggleEvents();
+      }
+      else {
+        console.log("Unable to receive Case Address : " + response.errorMessage)
+      }
+    });
+  }
+
 
   getActionName(code: string) {
     let item: any = this._actionListDataList.filter((itm) => (itm.actionCode == code))
@@ -1472,6 +1566,7 @@ export class ComplaintComponent {
 
   searchAddress() {
     const streetTypeCode = jQuery('#streetType').val();
+    console.log(this._searchViewModel.streetNumber);
     // console.log(this._streetMasterDataList)
 
     let searchParameter = [];
@@ -1483,6 +1578,7 @@ export class ComplaintComponent {
     if (this._searchViewModel.apnNumber.length > 0) {
       searchParameter.push("apnNumber=" + this._searchViewModel.apnNumber);
       callSearchAPI = true;
+      console.log(this._searchViewModel.apnNumber)
     }
     /*     if (this._searchViewModel.streetName.length > 0) {
           searchParameter.push("streetName=" + this._searchViewModel.streetName);
@@ -1556,6 +1652,7 @@ export class ComplaintComponent {
     this._caseAddressViewModel = this._viewAddressDetail;
     jQuery("#SearchResultAddress").modal("hide");
   }
+
   focusoutMethod(id: any, data: string) {
     console.log('Event:', event);
     if (id == 'sourcecode') {
@@ -1687,6 +1784,7 @@ export class ComplaintComponent {
       self._viewAddressDetail = self._addressListTbl.row(s).data();
       console.log('Selected Address:', self._viewAddressDetail);
       self.selectedAddress();
+      self._viewAddressDetail.apn ? jQuery('#propertyNotesTab').show() : jQuery('#propertyNotesTab').hide();
     });
     jQuery('#addressList tbody').on('click', '.view-btn', function (this: any) {
       var s = $(this).parents('tr');
@@ -1695,6 +1793,7 @@ export class ComplaintComponent {
       self.viewAddress(self._addressListTbl.row(s).data());
     });
   }
+
   showAddressList() {
     jQuery("#addressDetail").hide();
     jQuery("#addressList").show();
@@ -2436,12 +2535,15 @@ export class ComplaintComponent {
       console.log("Error in receiving Inspector : " + JSON.stringify(error))
     }
   }
+  
   hideRegisteredCases() {
     jQuery("#registeredCases").hide();
   }
+
   getRegisteredCases() {
     jQuery("#registeredCases").show();
   }
+
   createCase(index: any) {
     if (this._viewAddressDetail != null) {
       this._selectedAPN = this._viewAddressDetail.apn;
@@ -2451,8 +2553,6 @@ export class ComplaintComponent {
       this._messageText = "Please select an address to create a case.";
       jQuery("#messageBox").modal("show");
     }
-
-
   }
   _actionType: number = 0;
   _newViolationAction: number = 1;
@@ -2545,6 +2645,7 @@ export class ComplaintComponent {
           jQuery('#createCaseBtn').hide();
           jQuery('#nextPersonBtn').show();
           this.createResponsiblePerson(this._viewAddressDetail);
+          this.isCase = true;
         } else {
           alert("Unable to save case in draft. Please contact IT Helpdesk.");
           Lobibox.notify('error', {
@@ -2554,6 +2655,7 @@ export class ComplaintComponent {
             icon: 'bx bx-check-circle',
             msg: 'Unable to save case in draft. Please contact IT Helpdesk.'
           });
+          this.isCase = false;
         }
       },
         (error) => {
@@ -2870,7 +2972,13 @@ export class ComplaintComponent {
 
   saveViolation() {
     try {
-
+      if(this._caseViolationViewModel.duedate)
+        this._caseViolationViewModel.duedate = this.formatDateToCustomISO(this._caseViolationViewModel.duedate);
+      if(this._caseViolationViewModel.opendate)
+        this._caseViolationViewModel.opendate = this.formatDateToCustomISO(this._caseViolationViewModel.opendate);
+      if(this._caseViolationViewModel.closedate)
+        this._caseViolationViewModel.closedate = this.formatDateToCustomISO(this._caseViolationViewModel.closedate);
+  
       this._caseViolationViewModel.area = jQuery("#area").val();
       this._caseViolationViewModel.priority = jQuery("#priority").val();
       this._caseViolationViewModel.violationstatus = jQuery("#violationstatus").val();
@@ -2896,6 +3004,12 @@ export class ComplaintComponent {
               this._violationTable.clear().rows.add(this._caseDetail.caseViolation).draw();
               this.addShortDescriptionRows(); // Add short descriptions for new rows
             }
+            if(this._caseViolationViewModel.duedate)
+              this._caseViolationViewModel.duedate = this.formatDate(this._caseViolationViewModel.duedate);
+            if(this._caseViolationViewModel.opendate)
+              this._caseViolationViewModel.opendate = this.formatDate(this._caseViolationViewModel.opendate);
+            if(this._caseViolationViewModel.closedate)
+              this._caseViolationViewModel.opendate = this.formatDate(this._caseViolationViewModel.opendate);
             else
               this.InitializeViolationTable();
             Lobibox.notify('success', {
@@ -2977,6 +3091,20 @@ export class ComplaintComponent {
       });
     }
   }
+
+  formatDate(dateString: string): string {
+    const date = new Date(dateString); // Create a Date object
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // Month is 0-based
+    const day = String(date.getDate()).padStart(2, '0');
+
+    return `${year}-${month}-${day}`; // Return in yyyy-MM-dd format
+  }
+
+  formatDateToCustomISO(dateString: string): string {
+    return new Date(dateString).toISOString().split('T')[0] + 'T00:00:00';
+  }
+
   saveCaseDetail(status: string) {
     this._caseDetailViewModel.programcode = jQuery('#programcode').val();
     this._caseDetailViewModel.sourcecode = jQuery('#sourcecode').val();
@@ -2986,6 +3114,8 @@ export class ComplaintComponent {
     this._caseDetailViewModel.prioritycode = jQuery('#prioritycode').val();
     this._caseDetailViewModel.coreservicecode = jQuery('#coreservicecode').val()
     this._caseDetailViewModel.cdbgcasetype = jQuery('#cdbgcasetype').val()
+    if(this._caseDetailViewModel.cudate)
+      this._caseDetailViewModel.cudate = this.formatDateToCustomISO(this._caseDetailViewModel.cudate);
     this._caseDetailErrorSummary = [];
     console.log(this._caseDetailViewModel);
     console.log("Case ID : " + this._caseId);
@@ -3012,6 +3142,43 @@ export class ComplaintComponent {
                 icon: 'bx bx-check-circle',
                 msg: 'Case Detail saved successfully.'
               });
+              console.log(response.data[0].cudate);
+              
+              console.log(this.pastCUDate)
+              if(this._caseDetailViewModel.cudate)
+                this._caseDetailViewModel.cudate = this.formatDate(this._caseDetailViewModel.cudate);
+              if(this.pastCUDate !== this._caseDetailViewModel.cudate && this.cuReason)
+              {
+              const addValue = {
+                id: -1,
+                caseId: this._caseId,
+                reasonNotes: this.cuReason, 
+              }
+              this._complaintServiceCall.saveByMethodName(this._urlConstant.CaseMasterModule + '/', this._urlConstant.upsertCUDateReason, addValue).subscribe((response) => {
+                if (response.status == "SUCCESS") {
+                  Lobibox.notify('success', {
+                    pauseDelayOnHover: true,
+                    continueDelayOnInactiveTab: false,
+                    position: 'top right',
+                    icon: 'bx bx-check-circle',
+                    msg: 'CU Reason Updated'
+                  });
+              
+                }
+                else
+                {
+                  Lobibox.notify('error', {
+                    pauseDelayOnHover: true,
+                    continueDelayOnInactiveTab: false,
+                    position: 'top right',
+                    icon: 'bx bx-check-circle',
+                    msg: response.errorMessage
+                  });
+                }
+              })
+            }
+            if(response.data[0].cudate)
+              this.pastCUDate = this.formatDate(response.data[0].cudate);
               console.log("Case Detail Response : " + JSON.stringify(response));
               if (status != null) {
                 this._caseDetail.casestatus = status;
@@ -3019,6 +3186,7 @@ export class ComplaintComponent {
                 jQuery('#caseStatusModel').modal('hide');
               }
               this.canChangeStatus();
+             
               this._enableSave = true;
             } else {
               this._caseDetailErrorSummary = JSON.parse(response.errorMessage.toString()
@@ -3060,10 +3228,11 @@ export class ComplaintComponent {
                 icon: 'bx bx-check-circle',
                 msg: 'Unable to save case details: ' + errorMsg
               });
-              // if (this.casedetailStatusMessage) {
-              //   this.stepClick(4);
-              //   jQuery('#caseStatusModel').modal('hide');
-              // }
+              if(this.casedetailStatusMessage)
+              { 
+                  this.stepClick(4); 
+                  jQuery('#caseStatusModel').modal('hide')
+              };
             }
           },
           error: (err) => {
@@ -3076,6 +3245,7 @@ export class ComplaintComponent {
             });
           }
         });
+
 
       } else {
         Lobibox.notify('error', {
@@ -3696,16 +3866,41 @@ export class ComplaintComponent {
 
   }
 
+
   bindToggleEvents() {
     jQuery('#tblnotes').off('click', '.toggle-button').on('click', '.toggle-button', (event: any) => {
       const button = jQuery(event.currentTarget);
       const rowId = parseInt(button.data('id'), 10);
-
-      // Toggle active state in notedetails
       const rowIndex = this.notedetails.findIndex((item: any) => item.id === rowId);
       if (rowIndex !== -1) {
-        this.notedetails[rowIndex].isActive = !this.notedetails[rowIndex].isActive;
-
+        const pastValue = this.notedetails[rowIndex].status;
+        this.notedetails[rowIndex].status = this.notedetails[rowIndex].status === 0 ? 1 : 0;
+        const status = this.notedetails[rowIndex].status === 0 ? 'inactive':'active';
+        const data = `id=${rowId}&status=${status}`
+        this._complaintServiceCall.saveById(this._urlConstant.CaseMasterModule + '/', this._urlConstant.Edit, data).subscribe((response) => {
+          if (response.status == "SUCCESS") {
+            Lobibox.notify('success', {
+              pauseDelayOnHover: true,
+              continueDelayOnInactiveTab: false,
+              position: 'top right',
+              icon: 'bx bx-check-circle',
+              msg: 'Status Updated'
+            });
+            this.getByIDPropertyNotes(this._caseId);
+          }
+          else 
+          {
+            Lobibox.notify('error', {
+              pauseDelayOnHover: true,
+              continueDelayOnInactiveTab: false,
+              position: 'top right',
+              icon: 'bx bx-check-circle',
+              msg: response.errorMessage,
+            });
+            this.getByIDPropertyNotes(this._caseId);
+          }
+        })
+        
         // Reinitialize the row data in DataTable
         const table = jQuery('#tblnotes').DataTable();
         table.row(button.parents('tr')).data(this.notedetails[rowIndex]).draw(false);
@@ -3717,18 +3912,41 @@ export class ComplaintComponent {
   saveNotes() {
     if (jQuery('#noteInput').val()) {
       const addValue = {
-        id: this.notedetails.length + 1,
+        id: 0,
+        caseid: this._caseId,
         notes: jQuery('#noteInput').val(),
-        isActive: true,
-        status: 'Completed',
-        createdBy: jQuery('#createdByInput').val(),
-        createdDate: jQuery('#createdDate').val()
+        propertyid: this._viewAddressDetail.apn,
+        status: 0,
+        createby: this._user.email,
       }
 
-      this.notedetails.push(addValue);
-      this.initializeNoteTable();
-      this.bindToggleEvents();
+      this._complaintServiceCall.saveByMethodName(this._urlConstant.CaseMasterModule + '/', this._urlConstant.SavePropertyNotes,addValue).subscribe((response) => {
+        if (response.status == "SUCCESS") {
+          Lobibox.notify('success', {
+            pauseDelayOnHover: true,
+            continueDelayOnInactiveTab: false,
+            position: 'top right',
+            icon: 'bx bx-check-circle',
+            msg: 'Property Notes have been Succesfully Updated'
+          });
+          this.getByIDPropertyNotes(this._caseId);
+          // this.initializeNoteTable();
+          // this.bindToggleEvents();
+        }
+        else
+        {
+          Lobibox.notify('error', {
+            pauseDelayOnHover: true,
+            continueDelayOnInactiveTab: false,
+            position: 'top right',
+            icon: 'bx bx-check-circle',
+            msg: response.errorMessage
+          });
+        }
+      })
+     
       jQuery('#addNewModal').modal('hide');
+      jQuery('#noteInput').val('').trigger('change');
     }
     else {
       jQuery('#noteError').html('Kindly Fill the Note Description')
@@ -4013,7 +4231,8 @@ export class ComplaintComponent {
     }
 
     this._caseViolationViewModel = violation;
-
+    this._caseViolationViewModel.duedate = this.formatDateToCustomISO(this._caseViolationViewModel.duedate);
+    this._caseViolationViewModel.opendate = this.formatDateToCustomISO(this._caseViolationViewModel.opendate)
     this._caseViolationViewModel.inspectionVersion = (this.getVersion("Violation") != -1) ? this._violationVersion : 0;
     console.log("Violation Save : " + JSON.stringify(this._caseViolationViewModel));
     // jQuery("#violationGrid").hide();
@@ -4045,7 +4264,15 @@ export class ComplaintComponent {
     this.isCorrectiveActionHasData = false;
     this._violationErrorSummary = [];
     this._caseViolationViewModel = violation;
+    if(this._caseViolationViewModel.duedate){
+    this._caseViolationViewModel.duedate = this.formatDate(this._caseViolationViewModel.duedate);
     this.pastDate = this._caseViolationViewModel.duedate;
+    this.pastDate = this.formatDate(this.pastDate);
+    }
+    if(this._caseViolationViewModel.opendate)
+    this._caseViolationViewModel.opendate = this.formatDate(this._caseViolationViewModel.opendate);
+    if(this._caseViolationViewModel.closedate)
+    this._caseViolationViewModel.opendate = this.formatDate(this._caseViolationViewModel.opendate);
     this.InitializeViolation();
     this._caseViolationViewModel.inspectionVersion = (this.getVersion("Violation") != -1) ? this._violationVersion : 0;
     console.log("Violation Save : " + JSON.stringify(this._caseViolationViewModel));

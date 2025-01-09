@@ -11,6 +11,7 @@ import { Router } from '@angular/router';
 import { AppService } from './services/app.services';
 import { CaseHistoryService } from './services/casehistory.service';
 import { MsalService } from '@azure/msal-angular';
+
 declare var jQuery: any;
 
 @Component({
@@ -30,6 +31,7 @@ export class AppComponent {
   _userProfileTbl: any;
   _edituserprofile: any;
   _userProfile: any;
+
   constructor(private router: Router,
     private _http: HttpClient,
     private _fb: FormBuilder,
@@ -43,8 +45,6 @@ export class AppComponent {
 
 
   SetNoOfNotices() {
-    // this.appservice.getMessage.subscribe(msg => this._message = msg);
-    // console.log('Message:', this._message);
     this._noofNotices = this._notices.length + '';
     this._count = this._notices.filter(x => x.isRead == false).length;
     this.appservice.setNoticeCount(this._count);
@@ -52,27 +52,74 @@ export class AppComponent {
       this._newNoticeCount = list;
     });
   }
+  
   ngOnInit() {
     try {
       jQuery("#searchProfiles").select2({}).on('change', () => {
         this.loadSearch();
       });
-      let userString = localStorage.getItem('user');
-      if (userString == null)
-        this.logout();
-      this._user = JSON.parse(userString);
-      this._urlConstant.rolePageActions(this._user);
+  
+      // Subscribe to the service to check if user data is available
+      this.appservice.user$.subscribe((userData: any) => {
+        if (userData) {
+          try {
+            console.log("User data available from app service:", userData);
+            this._user = userData; // Use data from the service
+        
+            // Check if _user is null and log out if necessary
+            if (this._user == null) {
+              console.warn("User data is null. Logging out.");
+              this.logout();
+              return; // Exit further execution after logout
+            }
+        
+            // Additional logic if _user is not null
+            if (this._user) {
+              console.log("User data is valid, proceeding with rolePageActions.");
+              this._urlConstant.rolePageActions(this._user);
+              this.appservice.setMessage(this._user.userProfiles);
+            }
+          } catch (error: any) {
+            console.error("An error occurred while processing user data:", error.message);
+            console.error("Error stack trace:", error.stack);
+        
+            // Handle error gracefully
+            this.logout();
+          }
+        }
+         else {
+          console.log("No data from app service; checking local storage.");
+          const userString = localStorage.getItem('user');
+          if (!userString) {
+            console.warn("No user data in local storage. Logging out.");
+            this.logout();
+          } else {
+            console.log("User data found in local storage:", userString);
+            this._user = JSON.parse(userString);
+          }
+        }
+  
+        // Call rolePageActions if _user is populated
+        if (this._user) {
+          this._urlConstant.rolePageActions(this._user);
+          this.appservice.setMessage(this._user.userProfiles);
+        }
+      });
+      
     } catch (error: any) {
-      // Handle the error
-      console.error('An error occurred:', error.message);
-      console.error('Error name:', error.name);
-      console.error('Stack trace:', error.stack);
-
+      console.error("An error occurred during initialization:", error.message);
+      console.error("Error name:", error.name);
+      console.error("Stack trace:", error.stack);
+  
       this.logout();
-
     }
+    this.notifyProfile();
+  }
+  
+
+  notifyProfile()
+  {
     this.loadMessageForUser();
-    this.appservice.setMessage(this._user.userProfiles);
     this.appservice.currentList.subscribe(list => {
       this._userProfile = list;
     });
@@ -80,76 +127,9 @@ export class AppComponent {
       this._newNoticeCount = list;
     });
   }
-  // UpadateManageSearchProfile(id: any) {
-  //   let item = this._user?.userProfiles.find(d => d.id = id);
-  //   if (item != null) {
-  //     jQuery('#searchProfileName').val(item.name);
-  //   }
-  // }
-  // InitialzeUserProfiles() {
-  //   let self: any = this;
-  //   this._userProfileTbl = jQuery('#userProfileTbl').DataTable({
-  //     columns: [{
-  //       data: "name",
-  //       targets: 0,
-  //       render(data: any, index: any, row: any) {
-  //         return '<input class="hide" id="searchproflename" data-name="' + row.id + '" value=' + data + '></input>';
-  //       }
-  //     },
-  //     {
-  //       data: "action",
-  //       targets: 1,
-  //       render: function (data: any, type: any, row: any) {
-  //         return '<button id="editSearchProfile" href="#saveSearchModal" class="btn custom-btn btn-sm" data-name="' + row.id + '">Edit / View</button> <button id="editSearchProfile" href="#saveSearchModal" class="btn custom-btn btn-sm" data-name="' + row.id + '">Save</button>';
-  //       }
-  //     }]
-  //   });
 
-  // }
-
-  // saveNewSearch() {
-  //   this.SaveOrUpdateProfile();
-  // }
-  // SaveOrUpdateProfile() {
-  //   let name = jQuery('#searchName').val();
-  //   this._edituserprofile.name = name;
-  //   this._caseHistoryServiceCall.saveByMethodName(this._urlConstant.UserDataModule, "userProfile", this._edituserprofile)
-  //     .subscribe((response) => {
-  //       if (response.status == "SUCCESS") {
-  //         this._user = response.data[0];
-  //         if ((this._userProfileTbl == undefined) || (this._userProfileTbl == undefined)) {
-  //           this.InitialzeUserProfiles();
-  //         }
-  //         this._userProfileTbl.clear().rows.add(this._user?.userProfiles).draw();
-  //         //this.saveLocalstore();
-  //       } else {
-  //         alert(response.errorMessage);
-  //       }
-  //     }
-  //     );
-  // }
   ManageSearchProfile() {
     this.router.navigateByUrl('/managesearchprofile');
-    // let self: any = this;
-    // if ((this._userProfileTbl == undefined) || (this._userProfileTbl == undefined)) {
-    //   this.InitialzeUserProfiles();
-    // }
-    // this._userProfileTbl.clear().rows.add(this._user?.userProfiles).draw();
-
-    // jQuery('#manageSearchProfile').modal('show');
-
-    // this._userProfileTbl.on('click', 'button', function (e: any) {
-    //   console.log(e.target.dataset.name);
-    //   console.log(e.target.id);
-    //   self._edituserprofile = self._user.userProfiles.find((v: any) => v.id == e.target.dataset.name);
-    //   jQuery('#saveSearchModal').modal('show');
-    //   //console.log(self._user.userProfiles.find((v: any) => v.id == e.target.dataset.name));
-    // });
-
-    // // jQuery('#editSearchProfile').on('click', 'button', function (e: any) {
-    // //   console.log(e.target.dataset.name);
-    // //   self.UpadateManageSearchProfile(e.target.dataset.name);
-    // // });
   }
 
   loadSearch() {
@@ -158,6 +138,7 @@ export class AppComponent {
       queryParams: { searchid: this._searchId }
     });
   }
+
   logout() {
     localStorage.clear();
     const account = this.authService.instance.getActiveAccount();
@@ -165,10 +146,9 @@ export class AppComponent {
       account: account,
       postLogoutRedirectUri: window.location.origin + '/memberlogout'
     });
-    // this.router.navigateByUrl('');
   }
+
   setNoticeCount(newItem: string) {
-    // this._user.noofnotices = newItem;
     console.log('Event Emitter called');
   }
 

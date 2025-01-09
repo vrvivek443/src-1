@@ -10,6 +10,7 @@ export class AppService {
     currentList = this._userProfile.asObservable();
     private _noticeCount = new BehaviorSubject<any>([]);
     currentNoticeCount = this._noticeCount.asObservable();
+    private userSubject = new BehaviorSubject<any>(null);
     //_userProfile: any;
     constructor() {
 
@@ -22,4 +23,11 @@ export class AppService {
     }
     getMessage(): any { return this._userProfile; }
 
+    get user$() {
+        return this.userSubject.asObservable();
+    }
+
+    updateUser(user: any) {
+        this.userSubject.next(user);
+    }
 }

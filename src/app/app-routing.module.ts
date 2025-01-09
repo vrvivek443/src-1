@@ -24,6 +24,7 @@ import { AiSearchComponent } from './ai-search/ai-search.component';
 import { ManageSearchProfileComponent } from './manage-search-profile/manage-search-profile.component';
 import { MsalGuard } from '@azure/msal-angular';
 import { ProfileDataComponent } from './profile-data/profile-data.component';
+import { MemberlogoutComponent } from './memberlogout/memberlogout.component';
 const routes: Routes = [
   {
     path: "", component: MemberloginComponent,
@@ -31,9 +32,12 @@ const routes: Routes = [
       MsalGuard
     ]
   },
+  {
+    path: "memberlogout", component: MemberlogoutComponent
+  },
   // { path: "", component: UserComponent, canActivate: [MsalGuard] },
   { path: "profile-data", component: ProfileDataComponent },
-  { path: "dashboard", component: DashboardComponent },
+  { path: "dashboard", component: DashboardComponent, canActivate: [MsalGuard] },
   { path: "casemanagement", component: CaseManagementComponent, canActivate: [MsalGuard] },
   { path: "complaint", component: ComplaintComponent, canActivate: [MsalGuard] },
   { path: "mockpage", component: MockpageComponent, canActivate: [MsalGuard] },

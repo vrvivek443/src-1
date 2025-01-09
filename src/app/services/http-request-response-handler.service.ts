@@ -54,6 +54,11 @@ export class HttpRequestResponseHandlerService {
     return this.http.get<HttpResponseViewModel>(this.aPIBaseURL + moduleName + methodName + "?" + parameter, this.httpOptions).pipe(retry(1), catchError(this.handleError));
   }
 
+  saveById(moduleName: string, methodName: string, data: string) {
+    // this.httpOptions = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }), };
+    return this.http.post<HttpResponseViewModel>(this.aPIBaseURL + moduleName + methodName+"?"+data, null, this.httpOptions).pipe(retry(1), catchError(this.handleError));
+  }
+
   caseSearch(moduleName: string, methodName: string, data: string) {
     // this.httpOptions = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }), };
     return this.http.post<HttpResponseViewModel>(this.aPIBaseURL + moduleName + methodName, data, this.httpOptions).pipe(retry(1), catchError(this.handleError));

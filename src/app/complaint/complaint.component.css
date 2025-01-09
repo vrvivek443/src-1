@@ -36,6 +36,15 @@
     background-color: var(--primary-color);
 }
 
+.gallery-image-thumb {
+    width: 250px; /* Set desired width */
+    height: 100px; /* Set desired height */
+    object-fit: cover; /* Ensure images fit within the specified size */
+    border-radius: 5px; /* Optional: for rounded corners */
+    margin: 5px; /* Optional: for spacing between images */
+  }
+  
+
 ::ng-deep
 .custom-data-row td
 {
@@ -105,13 +114,13 @@
     padding-bottom: 10px;
 }
 
-::ng-deep .focused
+ ::ng-deep .focused
 {
-    box-shadow: 0 0 10px rgba(0, 123, 255, 0.5) !important; 
+    box-shadow: 0 0 10px #669def !important; 
     border-radius: 0.375rem; 
     outline: none !important; 
     background-color: #fff; 
-}
+} 
 
 ::ng-deep .tgl-btn:disabled {
     background-color: #cccccc; 
@@ -120,5 +129,4 @@
     cursor: not-allowed; 
     opacity: 0.7;
 }
-
 

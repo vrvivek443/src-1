@@ -114,7 +114,7 @@
                 </div>
                 <div class="col-3">
                   <label for="selectStatus" class="form-label">Status</label>
-                  <select id="selectStatus" name="selectStatus" class="form-control" data-placeholder="Choose Status..."
+                  <select id="selectStatus" name="selectStatus" class="form-control" data-placeholder="Choose Staus..."
                     multiple>
                     <option *ngFor="let _st of _statusList" value={{_st?.code}}>
                       {{_st?.value}}</option>
@@ -334,7 +334,7 @@
             <div class="col-md-12">
               <label for="selectInspector_m" class="form-label">Inspector</label>
               <select id="selectInspector_m" name="assignInspectorId" data-placeholder="Choose Inspector.."
-                class="form-select">
+                class="form-control">
                 <option selected="0" value="0">Choose Inspector...</option>
                 <option *ngFor="let _inspector of _inspectorList" value="{{_inspector.id}}">
                   {{_inspector.name}}</option>

@@ -54,9 +54,9 @@ export class SimpleSearchExViewModel {
     houseNumber: any[] = [];
     status: any[] = [];
     street: any[] = [];
-    // createDate: string;
-    // cuDate: string;
-    // modifiedDate: string;
+    createDate?: any;
+    cuDate?: any;
+    modifiedDate?: string;
 }
 export class AdvancedSearchViewModel {
     //adminCiatation: string;

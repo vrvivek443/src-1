@@ -79,6 +79,11 @@ export class APIURLConstant {
   public Get: string = "get";
   public GetByCategory: string = "getByCategory";
   public GetCategoryMaster: string = "getAllMaster";
+  public SavePropertyNotes: string = "upsertPropertyNotes";
+  public Edit: string = "editPropertyNotes";
+  public deletePropertyNotes: string = "deletePropertyNotes"
+  public upsertCUDateReason: string = "upsertCaseComeUpdateNotes";
+
   public ViewOnlyRole: any = 6;
   public SupervisorRole: any = 3;
 

@@ -1697,7 +1697,7 @@ AdvancesearchDate() {
       jQuery('#selectStatus_s').next('.select2-container').addClass('focused');
     }).on('select2:close', (event: any) => {
       jQuery('#selectStatus_s').next('.select2-container').removeClass('focused');
-    });;
+    });
     jQuery('#selectstreet_s').select2({}).on('select2:open', () => {
       jQuery('#selectstreet_s').next('.select2-container').addClass('focused');
     }).on('select2:close', (event: any) => {
