@@ -66,7 +66,13 @@ export class casePersonViewModel {
 }
 
 
-
+export class ComeUpDateViewModel{
+    id:number;
+    reasonNotes: string;
+    createdBy:string;
+    createdOn: string;
+    caseid: number
+}
 
 
 export class SearchViewModel {

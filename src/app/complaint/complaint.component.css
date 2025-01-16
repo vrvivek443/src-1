@@ -37,7 +37,7 @@
 }
 
 .gallery-image-thumb {
-    width: 250px; /* Set desired width */
+    width: 100px; /* Set desired width */
     height: 100px; /* Set desired height */
     object-fit: cover; /* Ensure images fit within the specified size */
     border-radius: 5px; /* Optional: for rounded corners */

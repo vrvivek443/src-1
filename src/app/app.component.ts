@@ -140,7 +140,7 @@ export class AppComponent {
   }
 
   logout() {
-    localStorage.clear();
+    // localStorage.clear();
     const account = this.authService.instance.getActiveAccount();
     this.authService.instance.logoutRedirect({
       account: account,

@@ -8,10 +8,16 @@ import { Router } from '@angular/router';
 })
 export class MemberlogoutComponent {
 
+  _userEmail: string;
+
   constructor(private router: Router){}
 
   ngOnInit()
   {
+    console.log(localStorage.getItem('NA_User'));
+    if (localStorage.getItem('NA_User')) {
+      this._userEmail = localStorage.getItem('NA_User');
+    }
     jQuery(".sidebar-wrapper").hide();
     jQuery("#nav-bar-header").hide();
     jQuery(".page-footer").hide();
@@ -22,6 +28,7 @@ export class MemberlogoutComponent {
 
   login()
   {
+    localStorage.clear();
     this.router.navigate(['']);
   }
 }

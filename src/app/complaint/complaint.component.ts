@@ -4,7 +4,7 @@ import { MockupViewModel } from '../mockpage/mockup.viewmodel';
 import { APIURLConstant } from '../api.url.constant';
 import { ComplaintService } from '../services/complaint.service';
 import { ViolationViewModel } from '../violations/violation.viewmodel';
-import { ActionLogAppointmentViewModel, ActionLogCitiationViewModel, ActionLogPictureViewModel, ActionLogTypeViewModel, ActionLogViewModel, CaseAddress, caseAddressViewModel, CaseDetailViewModel, casePersonViewModel, CaseViewModel, CaseViolationViewModel, City, SearchViewModel, ViolationDataViewModel } from './complaint.viewmodel';
+import { ActionLogAppointmentViewModel, ActionLogCitiationViewModel,ComeUpDateViewModel ,ActionLogPictureViewModel, ActionLogTypeViewModel, ActionLogViewModel, CaseAddress, caseAddressViewModel, CaseDetailViewModel, casePersonViewModel, CaseViewModel, CaseViolationViewModel, City, SearchViewModel, ViolationDataViewModel } from './complaint.viewmodel';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Observable, Subject } from 'rxjs';
@@ -17,7 +17,7 @@ import { PropertyNote } from './complaint.viewmodel';
 import { HttpHeaders } from '@angular/common/http';
 
 
-
+declare var Fancybox: any;
 declare const bootstrap: any;
 declare var jQuery: any;
 declare var stepper1: any;
@@ -132,6 +132,7 @@ export class ComplaintComponent {
   _secondaryInspectorAssignment: string;
   _violationTable: any;
   _actionsTable: any;
+  _caseComeUpDate: ComeUpDateViewModel[];
   isCase = false;
   dataComments = [
     {
@@ -728,6 +729,50 @@ export class ComplaintComponent {
     }
   }
   
+  initializeReasonTable(): void {
+    if (!this._caseComeUpDate || this._caseComeUpDate.length === 0) {
+      console.error('No data available');
+      jQuery('#tblreason').DataTable().clear().draw();
+      return;
+    }
+
+    const cols = [
+      { data: "id", title: "ID" },
+      { data: "reasonNotes", title: "Reason" },
+      { data: "createdBy", title: "Created By" },
+      {
+        data: "cuDate",
+        title: "Previous Date",
+        render: (data: any) => {
+          if (!data) return ''; 
+          return this.formatDate(data); // Call your custom formatDate function
+        }
+      },
+    ];
+
+    // Destroy the table if it already exists
+    if (jQuery.fn.DataTable.isDataTable('#tblreason')) {
+      jQuery('#tblreason').DataTable().clear().destroy();
+    }
+
+    // Initialize the DataTable
+    const table = jQuery('#tblreason').DataTable({
+      data: this._caseComeUpDate, // Use the filtered data
+      columns: cols,
+      autoWidth: false,
+      responsive: true,
+      paging: false, 
+      searching: false, 
+      columnDefs: [
+        { width: "5%", targets: 0 },
+        { width: "65%", targets: 1 },
+        { width: "10%", targets: 2 },
+        { width: "10%", targets: 3 },
+        { className: "dt-left", targets: "_all" },
+      ],
+    });
+    
+  }
 
 
   initializeNoteTable(): void {
@@ -735,6 +780,7 @@ export class ComplaintComponent {
     console.log(this.notedetails) 
     if (!this.notedetails || this.notedetails.length === 0) {
       console.error('No data available in notedetails');
+      jQuery('#tblnotes').DataTable().clear().draw();
       return;
     }
 
@@ -866,6 +912,7 @@ export class ComplaintComponent {
           icon: 'bx bx-check-circle',
           msg: `${rowId} deleted Successully`
         });
+        this.selectedAddress();
       }
       else 
       {
@@ -876,6 +923,7 @@ export class ComplaintComponent {
           icon: 'bx bx-check-circle',
           msg: response.errorMessage,
         });
+        this.selectedAddress();
       }
     })
     // this.notedetails = this.notedetails.filter((row) => row.id !== rowId)
@@ -920,9 +968,48 @@ export class ComplaintComponent {
     {
       this.cuReason = jQuery('#cuDateReason').val().trim();
       if (this.cuReason) {
+        if(this._caseDetailViewModel.cudate)
+          this._caseDetailViewModel.cudate = this.formatDateToCustomISO(this._caseDetailViewModel.cudate);    
         // this.pastCUDate = this._caseDetailViewModel.cudate;
+        const addValue = {
+          id: -1,
+          caseId: this._caseId,
+          reasonNotes: this.cuReason, 
+          cuDate: this._caseDetailViewModel.cudate
+        }
+        this._complaintServiceCall.saveByMethodName(this._urlConstant.CaseMasterModule + '/', this._urlConstant.upsertCUDateReason, addValue).subscribe((response) => {
+          if (response.status == "SUCCESS") {
+            Lobibox.notify('success', {
+              pauseDelayOnHover: true,
+              continueDelayOnInactiveTab: false,
+              position: 'top right',
+              icon: 'bx bx-check-circle',
+              msg: 'CU Reason Updated'
+            });
+            console.log(response.data[0].cuDate)
+            if(response.data[0].cuDate)
+            {
+              this.pastCUDate = this.formatDate(response.data[0].cuDate);
+              console.log(response.data[0].cudate)
+              this._caseDetailViewModel.cudate = this.pastCUDate;
+            }
+            // this.getCaseByID(this._caseId)
+            this.getByComeUpDate(this._caseId);
+            
+          }
+          else
+          {
+            Lobibox.notify('error', {
+              pauseDelayOnHover: true,
+              continueDelayOnInactiveTab: false,
+              position: 'top right',
+              icon: 'bx bx-check-circle',
+              msg: response.errorMessage
+            });
+            this.getByComeUpDate(this._caseId);
+          }
+        })
         jQuery('#cuDateModal').modal("hide");
-        jQuery('#cuDateComments').html(`<strong>Reason for Current C/U Date Change:</strong> ${this.cuReason}`)
       }
       else
         jQuery('#cu-reason-mandate').html("Kindly fill the Reason for CU Date Change")
@@ -1146,6 +1233,11 @@ export class ComplaintComponent {
   }
 
   ngAfterViewInit() {
+    Fancybox.bind("[data-fancybox='gallery']", {
+      modal: true, // This prevents closing by clicking on the backdrop
+      closeButton: true, // Ensure close button is enabled
+      click: false, // Disables closing on background click
+    });
     jQuery(document).on('click', '.dynamic-link', (event: any) => {
       event.preventDefault(); // Prevent default anchor behavior
       this.showCommentsModal();
@@ -1444,9 +1536,9 @@ export class ComplaintComponent {
         this.notedetails = response.data[0].propertyNotes;
         const length = response.data[0].caseComeUpdateNotes.length;
         if(length){
-        this.cuReason = response.data[0].caseComeUpdateNotes[length - 1].reasonNotes;
-        if(this.cuReason)
-          jQuery('#cuDateComments').html(`<strong>Reason for Current C/U Date Change:</strong> ${this.cuReason}`)
+        this._caseComeUpDate = response.data[0].caseComeUpdateNotes;
+        console.log(this._caseComeUpDate);
+        this.initializeReasonTable();
         }
         this.initializeNoteTable();
         this.bindToggleEvents();
@@ -1497,17 +1589,22 @@ export class ComplaintComponent {
     });
   }
 
-  getByIDPropertyNotes(id: any) {
+  getByComeUpDate(id: any) {
     this._complaintServiceCall.getByModuleMethodAndParameter(this._urlConstant.CaseMasterModule, this._urlConstant.GetByID, "id=" + id).subscribe((response) => {
       this._caseHistoryList = [];
       if (response.status == "SUCCESS") {
+        this._caseDetail = response.data[0];
         this.notedetails = response.data[0].propertyNotes;
-        console.log(this.notedetails)
-        this.initializeNoteTable();
-        this.bindToggleEvents();
+        const length = response.data[0].caseComeUpdateNotes.length;
+        if(length)
+        {
+        this._caseComeUpDate = response.data[0].caseComeUpdateNotes;
+        console.log(this._caseComeUpDate);
+        this.initializeReasonTable();
+        }
       }
       else {
-        console.log("Unable to receive Case Address : " + response.errorMessage)
+        console.log("Unable to receive data : " + response.errorMessage)
       }
     });
   }
@@ -1611,6 +1708,7 @@ export class ComplaintComponent {
 
   selectAddress(_address: any) {
     //this._caseAddressViewModel = _address;
+    alert('select');
     this._viewAddressDetail = _address;
     jQuery("#SearchResultAddress").modal("hide");
 
@@ -1648,8 +1746,31 @@ export class ComplaintComponent {
   GetAddress(data: any) {
     console.log('Selected address Row data:', data);
   }
+
   selectedAddress() {
     this._caseAddressViewModel = this._viewAddressDetail;
+    this._complaintServiceCall.get(this._urlConstant.CaseMasterModule + '/', this._urlConstant.getPropertyNotesByAPN + `?apn=${this._viewAddressDetail.apn}`).subscribe((response) => {
+      if (response.status == "SUCCESS") {
+        this.notedetails = response.data;
+        this.initializeNoteTable();
+        this.bindToggleEvents();
+      }
+      else
+      {
+        Lobibox.notify('error', {
+          pauseDelayOnHover: true,
+          continueDelayOnInactiveTab: false,
+          position: 'top right',
+          icon: 'bx bx-check-circle',
+          msg: response.errorMessage
+        });
+      }
+    })
+    console.log(this._user.role.id)
+      if(this._user.role.id !== 5 && this._viewAddressDetail.apn) 
+       jQuery('#propertyNotesTab').show();
+      else
+      jQuery('#propertyNotesTab').hide();
     jQuery("#SearchResultAddress").modal("hide");
   }
 
@@ -1784,7 +1905,6 @@ export class ComplaintComponent {
       self._viewAddressDetail = self._addressListTbl.row(s).data();
       console.log('Selected Address:', self._viewAddressDetail);
       self.selectedAddress();
-      self._viewAddressDetail.apn ? jQuery('#propertyNotesTab').show() : jQuery('#propertyNotesTab').hide();
     });
     jQuery('#addressList tbody').on('click', '.view-btn', function (this: any) {
       var s = $(this).parents('tr');
@@ -2978,7 +3098,8 @@ export class ComplaintComponent {
         this._caseViolationViewModel.opendate = this.formatDateToCustomISO(this._caseViolationViewModel.opendate);
       if(this._caseViolationViewModel.closedate)
         this._caseViolationViewModel.closedate = this.formatDateToCustomISO(this._caseViolationViewModel.closedate);
-  
+
+      
       this._caseViolationViewModel.area = jQuery("#area").val();
       this._caseViolationViewModel.priority = jQuery("#priority").val();
       this._caseViolationViewModel.violationstatus = jQuery("#violationstatus").val();
@@ -3115,7 +3236,7 @@ export class ComplaintComponent {
     this._caseDetailViewModel.coreservicecode = jQuery('#coreservicecode').val()
     this._caseDetailViewModel.cdbgcasetype = jQuery('#cdbgcasetype').val()
     if(this._caseDetailViewModel.cudate)
-      this._caseDetailViewModel.cudate = this.formatDateToCustomISO(this._caseDetailViewModel.cudate);
+      this._caseDetailViewModel.cudate = this.formatDateToCustomISO(this._caseDetailViewModel.cudate)
     this._caseDetailErrorSummary = [];
     console.log(this._caseDetailViewModel);
     console.log("Case ID : " + this._caseId);
@@ -3142,43 +3263,12 @@ export class ComplaintComponent {
                 icon: 'bx bx-check-circle',
                 msg: 'Case Detail saved successfully.'
               });
-              console.log(response.data[0].cudate);
-              
-              console.log(this.pastCUDate)
-              if(this._caseDetailViewModel.cudate)
-                this._caseDetailViewModel.cudate = this.formatDate(this._caseDetailViewModel.cudate);
-              if(this.pastCUDate !== this._caseDetailViewModel.cudate && this.cuReason)
+              if(response.data[0].cudate)
               {
-              const addValue = {
-                id: -1,
-                caseId: this._caseId,
-                reasonNotes: this.cuReason, 
-              }
-              this._complaintServiceCall.saveByMethodName(this._urlConstant.CaseMasterModule + '/', this._urlConstant.upsertCUDateReason, addValue).subscribe((response) => {
-                if (response.status == "SUCCESS") {
-                  Lobibox.notify('success', {
-                    pauseDelayOnHover: true,
-                    continueDelayOnInactiveTab: false,
-                    position: 'top right',
-                    icon: 'bx bx-check-circle',
-                    msg: 'CU Reason Updated'
-                  });
-              
-                }
-                else
-                {
-                  Lobibox.notify('error', {
-                    pauseDelayOnHover: true,
-                    continueDelayOnInactiveTab: false,
-                    position: 'top right',
-                    icon: 'bx bx-check-circle',
-                    msg: response.errorMessage
-                  });
-                }
-              })
-            }
-            if(response.data[0].cudate)
               this.pastCUDate = this.formatDate(response.data[0].cudate);
+              this._caseDetailViewModel.cudate = this.pastCUDate;
+              }
+            
               console.log("Case Detail Response : " + JSON.stringify(response));
               if (status != null) {
                 this._caseDetail.casestatus = status;
@@ -3287,6 +3377,15 @@ export class ComplaintComponent {
     this._pictureDescription = pic.description;
     jQuery("#updatePictureUploadMDL").modal("show");
   }
+
+  deletePicture(pict: any)
+  {
+    console.log(pict);
+    const fileName = pict.filename
+    // const imgData = this.imgData = this._imageBaseURL + "caseId=" + this._caseId + "&actionId=" + this._selectedActionLogViewModel?.id + "&actionFileId=" + pict?.id
+    this.pictures = this.pictures.filter(pic => pic.filename !== fileName);
+  }
+  
   editAudio(aud: any) {
     this.audioData = this._imageBaseURL + "caseId=" + this._caseId + "&actionId=" + this._selectedActionLogViewModel?.id + "&actionFileId=" + aud?.id
     this._pictureDescription = aud.description;
@@ -3472,10 +3571,10 @@ export class ComplaintComponent {
     this.pictures.push(this._actionLogPictureViewModel);
     console.log("Picture List : " + JSON.stringify(this.pictures));
     jQuery("#btnMDPClose").click();
-
+    jQuery('#pictureUploadMDL').modal('hide');
   }
-  updatePictureToList() {
 
+  updatePictureToList() {
     console.log("Data Started . . .");
     //this.resetActionLogPictureViewModel();
     //  this._actionLogPictureViewModel = this._actionLogViewModel;
@@ -3886,7 +3985,7 @@ export class ComplaintComponent {
               icon: 'bx bx-check-circle',
               msg: 'Status Updated'
             });
-            this.getByIDPropertyNotes(this._caseId);
+            this.selectedAddress();
           }
           else 
           {
@@ -3897,7 +3996,7 @@ export class ComplaintComponent {
               icon: 'bx bx-check-circle',
               msg: response.errorMessage,
             });
-            this.getByIDPropertyNotes(this._caseId);
+            this.selectedAddress();
           }
         })
         
@@ -3929,7 +4028,7 @@ export class ComplaintComponent {
             icon: 'bx bx-check-circle',
             msg: 'Property Notes have been Succesfully Updated'
           });
-          this.getByIDPropertyNotes(this._caseId);
+          this.selectedAddress();
           // this.initializeNoteTable();
           // this.bindToggleEvents();
         }
@@ -3942,6 +4041,7 @@ export class ComplaintComponent {
             icon: 'bx bx-check-circle',
             msg: response.errorMessage
           });
+          this.selectedAddress();
         }
       })
      

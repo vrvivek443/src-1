@@ -37,6 +37,7 @@ import { IPublicClientApplication, PublicClientApplication, InteractionType, Bro
 import { MsalGuard, MsalInterceptor, MsalBroadcastService, MsalInterceptorConfiguration, MsalModule, MsalService, MSAL_GUARD_CONFIG, MSAL_INSTANCE, MSAL_INTERCEPTOR_CONFIG, MsalGuardConfiguration, MsalRedirectComponent } from '@azure/msal-angular';
 import { ProfileDataComponent } from './profile-data/profile-data.component';
 import { MemberlogoutComponent } from './memberlogout/memberlogout.component';
+import { environment } from 'src/environments/environment';
 
 
 const isIE = window.navigator.userAgent.indexOf('MSIE ') > -1 || window.navigator.userAgent.indexOf('Trident/') > -1;
@@ -49,8 +50,9 @@ export function MSALInstanceFactory(): IPublicClientApplication {
       // Full directory URL, in the form of https://login.microsoftonline.com/<tenant>
       authority: "https://login.microsoftonline.com/b9db0e08-c5b7-42a7-9543-0fa4e621d5c2",
       // Must be the same redirectUri as what was provided in your app registration.
-      redirectUri: "https://localhost:4200/dashboard",
-      postLogoutRedirectUri: "https://localhost:4200/memberlogout"
+      // redirectUri: "https://localhost:4200/dashboard",
+      redirectUri: environment.redirectUri,
+      postLogoutRedirectUri: environment.postLogoutRedirectUri,
     },
     cache: {
       cacheLocation: BrowserCacheLocation.LocalStorage,

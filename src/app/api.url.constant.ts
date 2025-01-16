@@ -83,6 +83,7 @@ export class APIURLConstant {
   public Edit: string = "editPropertyNotes";
   public deletePropertyNotes: string = "deletePropertyNotes"
   public upsertCUDateReason: string = "upsertCaseComeUpdateNotes";
+  public getPropertyNotesByAPN: string = "getPropertyNotesByAPN";
 
   public ViewOnlyRole: any = 6;
   public SupervisorRole: any = 3;

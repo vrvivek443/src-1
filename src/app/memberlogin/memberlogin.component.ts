@@ -120,13 +120,17 @@ export class MemberloginComponent {
         this.appservice.updateUser(this._user);
         this.router.navigateByUrl('dashboard');
       } else {
+        localStorage.setItem('User_NA', JSON.stringify(true)); // To set true
+        console.log(localStorage.getItem('NA_User'));
         alert('login failed');
+        this.logout();
       }
     })
   }
 
   logout() {
     const account = this.authService.instance.getActiveAccount();
+    localStorage.setItem("NA_User", account?.username);
     this.authService.instance.logoutRedirect({
       account: account,
       postLogoutRedirectUri: window.location.origin + '/memberlogout'
