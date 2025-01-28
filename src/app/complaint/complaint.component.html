@@ -1958,7 +1958,7 @@
                                                                         style="width:100%;">
                                                                         <thead>
                                                                             <tr>
-                                                                                <th>Check Box</th>
+                                                                                <th>#</th>
                                                                                 <th>Violation Category</th>
                                                                                 <th>Short Description</th>
                                                                                 <th>Status</th>
@@ -2164,6 +2164,9 @@
                                                                                             src="{{getImageURL(_caf)}}"
                                                                                             alt="{{_caf?.description}}">
                                                                                     </a>
+                                                                                    <p>{{_caf?.description}}</p>
+                                                                    
+                
                                                                                     <div class="row">
                                                                                         <div class="col-md-12">
                                                                                             <!-- Edit and Delete actions -->
@@ -2263,29 +2266,49 @@
                                                                         (click)="addNewVideo()">
                                                                         Add New
                                                                     </a>
-                                                                    <div class="row pt-3">
+                                                                    <!-- <div class="row pt-3">
                                                                         <div class="col-md-4"
                                                                             *ngFor="let _caf of videos">
 
-                                                                            <video controls width="500px">
-                                                                                <source src="{{getImageURL(_caf)}}"
-                                                                                    type="audio/mpeg">
-                                                                                Your browser does not support
-                                                                                the audio tag.
+                                                                            <video controls width="200px">
+                                                                                <source src="{{getImageURL(_caf)}}" type="video/mp4">
+                                                                                Your browser does not support the video tag.
                                                                             </video>
+                                                                            <p>{{_caf?.description}}</p>
                                                                             <div class="row">
                                                                                 <div>
                                                                                     <a class="cursor-pointer col-md-3"
                                                                                         (click)="editVideo(_caf)"><i
                                                                                             class="bx bxs-comment-edit float-start cursor-pointer font-18"
                                                                                             style="color:#008cff"></i></a>
-                                                                                    <a class="cursor-pointer"><i
+                                                                                    <a class="cursor-pointer" (click)="deleteVideo(_caf)"><i
                                                                                             class="bx bx-trash float-end font-18 "
                                                                                             style="color:red"></i></a>
                                                                                 </div>
                                                                             </div>
                                                                         </div>
+                                                                    </div> -->
+                                                                    
+                                                                    <div class="row pt-3">
+                                                                        <div class="col-md-4" *ngFor="let _caf of videos">
+                                                                            <div class="video-container">
+                                                                                <video controls width="300px">
+                                                                                    <source src="{{getImageURL(_caf)}}" type="video/mp4">
+                                                                                    Your browser does not support the video tag.
+                                                                                </video>
+                                                                                <p>{{_caf?.description}}</p>
+                                                                                <div class="d-flex justify-content-between" style="width: 300px;">
+                                                                                    <a class="cursor-pointer" (click)="editVideo(_caf)">
+                                                                                        <i class="bx bxs-comment-edit font-18" style="color:#008cff"></i>
+                                                                                    </a>
+                                                                                    <a class="cursor-pointer" (click)="deleteVideo(_caf)">
+                                                                                        <i class="bx bx-trash font-18" style="color:red"></i>
+                                                                                    </a>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
                                                                     </div>
+                                                                    
                                                                 </div>
                                                             </div>
 
@@ -2789,7 +2812,7 @@
     </div>
 </div>
 
-<div class="offcanvas offcanvas-end" tabindex="-1" data-bs-backdrop="static" id="showComments">
+<!-- <div class="offcanvas offcanvas-end" tabindex="-1" data-bs-backdrop="static" id="showComments">
     <div class="offcanvas-header">
         <h5 class="offcanvas-title">Comments</h5>
         <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
@@ -2801,22 +2824,58 @@
                     <col span="1" style="width: 70%;">
                     <col span="1" style="width: 30%;">
                 </colgroup>
-                <tbody *ngFor="let d of dataComments">
+                <tbody *ngFor="let d of caseViolationReasons">
                     <tr>
-                        <td rowspan="2" class="fs-5"><strong>Reason:</strong><br>{{d.comment}}</td>
-                        <td class="vertical-divider"><strong>Updated By:</strong><br>{{d.updatedBy}}</td>
+                        <td rowspan="2" class="fs-6"><strong>Reason:</strong><br>{{d.reasonNotes}}</td>
+                        <td class="vertical-divider"><strong>Updated By:</strong><br>{{d.createdBy}}</td>
                     </tr>
                     <tr>
-                        <td class="vertical-divider"><strong>Updated On:</strong><br>{{d.updatedOn}}</td>
+                        <td class="vertical-divider"><strong>Updated On:</strong><br>{{d.createdOn}}</td>
                     </tr>
                 </tbody>
             </table>
         </div>
     </div>
     
+</div> -->
+
+<div class="offcanvas offcanvas-end" tabindex="-1" data-bs-backdrop="static" id="showComments">
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title">Comments</h5>
+        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body d-flex flex-column">
+        <div class="table-responsive flex-grow-1">
+            <!-- Display message if no comments are found -->
+            <div *ngIf="displayReasons.length === 0" class="text-center d-flex justify-content-center align-items-center" style="height: 100%;">
+                <p class="fs-6 fw-normal">No Comments found for the following Violation</p>
+            </div>
+
+            <!-- Display table if there are comments -->
+            <table *ngIf="displayReasons.length > 0" class="table">
+                <colgroup>
+                    <!-- Set max-width for the Reason column -->
+                    <col span="1" style="max-width: 70%;"> 
+                    <col span="1" style="width: 30%;"> <!-- Fixed width for the Updated By / Updated On columns -->
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th>Reason</th>
+                        <th>Updated By</th>
+                        <th>Updated On</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let d of displayReasons">
+                        <td>{{d.reasonNotes}}</td>
+                        <td>{{d.createdBy}}</td>
+                        <td>{{this.formatDate(d.createdOn)}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
-
-
 
 
 
@@ -2824,7 +2883,7 @@
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Address Search Result - 11111</h5>
+                <h5 class="modal-title">Address Search Result</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -3140,7 +3199,6 @@
                 <button type="button" class="btn-m-d-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-
                 <div class="col-lg-3 col-md-6 col-sm-12">
                     <label for="input1" class="form-label">Choose Video</label>
                     <input type="file" class="form-control" id="uploadVideo" name="uploadVideo"
@@ -3163,7 +3221,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" id="btnMDVClose" class="btn custom-btn" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn custom-btn" (click)="addVideoToList()">Save</button>
+                <button type="button" class="btn custom-btn" (click)="addVideoToList(tempVideoId)">Save</button>
             </div>
         </div>
     </div>
