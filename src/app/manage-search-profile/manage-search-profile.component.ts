@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component } from '@angular/core';
+import { Component, Input, SimpleChanges } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 import { APIURLConstant } from '../api.url.constant';
@@ -23,6 +23,7 @@ export class ManageSearchProfileComponent {
   _user: any;
   _editSearchProfile: any;
   filterDataArray: any;
+  parentDateRange: string = ''; 
   public _masterDataList: any[] = [];
   public _streetDataList: any[] = [];
   public _programTypeList: any[] = [];
@@ -42,6 +43,10 @@ export class ManageSearchProfileComponent {
     private appservice: AppService,
     private _caseHistoryServiceCall: CaseHistoryService,) {
   }
+
+  // The property that will hold the selected date range
+
+  
   ngOnInit() {
     try {
       // let userString = localStorage.getItem('user');

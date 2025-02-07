@@ -23,6 +23,9 @@ export class CaseHistoryViewModel {
     casedescription: string;
     street: string;
     casedate: string;
+    createDate?: any;
+    cuDate?: any;
+    modifyDate?: any;
 }
 
 export class CaseSearchResult {
@@ -36,6 +39,7 @@ export class CaseSearchResult {
     inspector: string;
     policedistrict: string;
     casedescription: string;
+    
 }
 
 // export class SimpleSearchViewModel {
@@ -56,7 +60,7 @@ export class SimpleSearchExViewModel {
     street: any[] = [];
     createDate?: any;
     cuDate?: any;
-    modifiedDate?: string;
+    modifyDate?: any;
 }
 export class AdvancedSearchViewModel {
     //adminCiatation: string;

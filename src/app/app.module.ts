@@ -38,6 +38,7 @@ import { MsalGuard, MsalInterceptor, MsalBroadcastService, MsalInterceptorConfig
 import { ProfileDataComponent } from './profile-data/profile-data.component';
 import { MemberlogoutComponent } from './memberlogout/memberlogout.component';
 import { environment } from 'src/environments/environment';
+import { DatePickerComponent } from './shared/date-picker/date-picker.component';
 
 
 const isIE = window.navigator.userAgent.indexOf('MSIE ') > -1 || window.navigator.userAgent.indexOf('Trident/') > -1;
@@ -107,7 +108,8 @@ export function MSALGuardConfigFactory(): MsalGuardConfiguration {
     AiSearchComponent,
     ManageSearchProfileComponent,
     ProfileDataComponent,
-    MemberlogoutComponent
+    MemberlogoutComponent,
+    DatePickerComponent
   ],
   imports: [
     BrowserModule,

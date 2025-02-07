@@ -7,7 +7,9 @@ import { ActivatedRoute, Params, Router } from '@angular/router';
 import { forkJoin } from 'rxjs';
 import { SearchProfileData, UserModel, UserProfile } from '../user/user.viewmodel';
 import { AppService } from '../services/app.services';
+import { UserService } from '../services/user.service';
 import { event } from 'jquery';
+import { dateFields } from '../date-fields.mock';
 declare var jQuery: any;
 declare var Lobibox: any;
 @Component({
@@ -24,6 +26,9 @@ export class CaseHistoryComponent implements AfterViewInit {
   _selectedSourceItems: any[] = [];
   _selectedViolationTypes: any[] = [];
   _selectedCDBG: any[] = [];
+  _dateType: string;
+  _dateFields = dateFields;
+  _createDate: string;
   public _searchProfileData: SearchProfileData = new SearchProfileData();
   public _masterDataList: any[] = [];
   public _streetDataList: any[] = [];
@@ -55,15 +60,18 @@ export class CaseHistoryComponent implements AfterViewInit {
   public queryStringValue: boolean = false;
   public _user: UserModel = null;
   public _searchProfile: UserProfile = new UserProfile();
+
   Date = new Date();
   constructor(
     private _http: HttpClient,
     private _apiUrlConstant: APIURLConstant,
+    private _userServiceCall: UserService,
     private _caseHistoryServiceCall: CaseHistoryService,
     private router: Router,
     private _activatedRoute: ActivatedRoute,
     private appSerivce: AppService) {
   }
+
   ngOnInit() {
     try {
 
@@ -71,7 +79,6 @@ export class CaseHistoryComponent implements AfterViewInit {
       if (userString == null)
         this.logout();
       this._user = JSON.parse(userString);
-
     } catch (error: any) {
       console.error('An error occurred:', error.message);
       console.error('Error name:', error.name);
@@ -94,7 +101,7 @@ export class CaseHistoryComponent implements AfterViewInit {
     }
 
     jQuery(".custom-template").hide();
-    jQuery('.custom-template_a').hide();
+    // jQuery('.custom-template_a').hide();
 
     this._tblCols.push("Case No");
     this._tblCols.push("Address");
@@ -110,109 +117,119 @@ export class CaseHistoryComponent implements AfterViewInit {
       });
     });
 
-
-    jQuery('#selectrecent_s').on('change', function (event: any) {
-      console.log(event.target.value);
-      const currentDate = new Date();
-      const formatDate = (date: Date) => {
-        const year = date.getFullYear();
-        const month = String(date.getMonth() + 1).padStart(2, '0'); 
-        const day = String(date.getDate()).padStart(2, '0');
-        return `${year}-${month}-${day}`;
-      };
-      const daterangepickerElement = jQuery('#daterange').data('daterangepicker');
-      if (event.target.value === "custom") {
-        jQuery('#daterange').val(null).trigger('change')
-        jQuery('.dropdown_s').hide();
-        jQuery('.daterangepicker.ltr.show-calendar.openscenter').removeClass('hidden-date-picker');
-        jQuery(".custom-template").show();
-      }
-      else if (event.target.value === 'Week') {
-        
-        const firstDayOfWeek = new Date(currentDate.setDate(currentDate.getDate() - currentDate.getDay())); 
-        const lastDayOfWeek = new Date(currentDate.setDate(firstDayOfWeek.getDate() + 6)); 
-    
-        
-        const formatDate = (date: Date) => {
-          const year = date.getFullYear();
-          const month = String(date.getMonth() + 1).padStart(2, '0'); 
-          const day = String(date.getDate()).padStart(2, '0');
-          return `${year}-${month}-${day}`;
-        };
-    
-        const formattedStartDate = formatDate(firstDayOfWeek);
-        const formattedEndDate = formatDate(lastDayOfWeek);
-    
-        
-        daterangepickerElement.setStartDate(formattedStartDate);
-        daterangepickerElement.setEndDate(formattedEndDate);
-    
-        
-        jQuery('.dropdown_s').hide();
-        jQuery('#daterange').val(`${formattedStartDate} to ${formattedEndDate}`).trigger('change');
-        jQuery('.daterangepicker.ltr.show-calendar.openscenter').removeClass('hidden-date-picker');
-        jQuery(".custom-template").show();
-      } 
-      else if (event.target.value === 'Month') {
-        
-        const firstDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1); // First day of the month
-        const lastDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0); // Last day of the month
-    
-        const formattedStartDate = formatDate(firstDayOfMonth);
-        const formattedEndDate = formatDate(lastDayOfMonth);
-    
-        daterangepickerElement.setStartDate(formattedStartDate);
-        daterangepickerElement.setEndDate(formattedEndDate);
-        jQuery('.dropdown_s').hide();
-        jQuery('#daterange').val(`${formattedStartDate} to ${formattedEndDate}`).trigger('change');
-        jQuery('.daterangepicker.ltr.show-calendar.openscenter').removeClass('hidden-date-picker');
-        jQuery(".custom-template").show();
-      } 
-      else if (event.target.value === 'Year') {
-       
-        const firstDayOfYear = new Date(currentDate.getFullYear(), 0, 1); 
-        const lastDayOfYear = new Date(currentDate.getFullYear(), 11, 31); 
-    
-        const formattedStartDate = formatDate(firstDayOfYear);
-        const formattedEndDate = formatDate(lastDayOfYear);
-
-        daterangepickerElement.setStartDate(formattedStartDate);
-        daterangepickerElement.setEndDate(formattedEndDate);
-        jQuery('.dropdown_s').hide();
-        jQuery('#daterange').val(`${formattedStartDate} to ${formattedEndDate}`);
-        jQuery('.daterangepicker.ltr.show-calendar.openscenter').removeClass('hidden-date-picker');
-        jQuery(".custom-template").show();
-      } 
-      else {
-        jQuery('.custom-template').hide();
-
-      }
-    })
-
-    jQuery('#daterange').daterangepicker({
-      autoUpdateInput: false, // Keep empty until user selects a range
-      locale: {
-        format: 'YYYY-MM-DD',
-        cancelLabel: 'Clear',
-      },
-      opens: 'center'
-    });
-
-    // Update input when range is selected
-    jQuery('#daterange').on('apply.daterangepicker', (ev: any, picker: { startDate: { format: (arg0: string) => string; }; endDate: { format: (arg0: string) => string; }; }) => {
-      jQuery('#daterange').val(picker.startDate.format('YYYY-MM-DD') + ' to ' + picker.endDate.format('YYYY-MM-DD'));
-    });
-
-    // Clear input when canceled
-    jQuery('#daterange').on('cancel.daterangepicker', () => {
-      jQuery(this).val('');
-    });
+    this.simpleSearchDate();
     this.AdvancesearchDate();
   }
 
+  simpleSearchDate() {
+    // Function to format date as YYYY-MM-DD
+    const formatDate = (date: any) => {
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, '0'); 
+      const day = String(date.getDate()).padStart(2, '0');
+      return `${year}-${month}-${day}`;
+  };
+  
+  // Function to handle date selection logic for each field separately
+  const handleDateSelection = (dropdownId: any, inputId: any, dropdownClass: any, templateClass: any) => {
+    jQuery(`#${templateClass}`).hide();
+      jQuery(`#${dropdownId}`).on('change', (event: any) => {
+          const currentDate = new Date();
+          let startDate, endDate;
+          const daterangepickerElement = jQuery(`#${inputId}`).data('daterangepicker');
+  
+          if (event.target.value === "CUSTOM") {
+              this._dateType = 'CUSTOM'
+              jQuery(`#${inputId}`).val(null).trigger('change');
+              jQuery(`.${dropdownClass}`).hide();
+              jQuery('.daterangepicker.ltr.show-calendar.openscenter').removeClass('hidden-date-picker');
+              jQuery(`.${templateClass}`).show();
+          } 
+          else {
+              if (event.target.value === 'THISWEEK') {
+                  this._dateType = 'THISWEEK'
+                  startDate = new Date(currentDate.setDate(currentDate.getDate() - currentDate.getDay()));
+                  endDate = new Date(currentDate.setDate(startDate.getDate() + 6));
+              } 
+              else if (event.target.value === "TODAY") {
+    
+                startDate = new Date();  
+                endDate = new Date();    
+              } 
+              else if (event.target.value === "YESTERDAY") {
+                
+                startDate = new Date();
+                startDate.setDate(startDate.getDate() - 1);  
+                endDate = new Date();
+                endDate.setDate(endDate.getDate() - 1);      
+              }
+              else if (event.target.value === 'THISMONTH') {
+                  this._dateType = 'THISMONTH'
+                  startDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+                  endDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
+              } 
+              else if (event.target.value === 'THISYEAR') {
+                  this._dateType = 'THISYEAR'
+                  startDate = new Date(currentDate.getFullYear(), 0, 1);
+                  endDate = new Date(currentDate.getFullYear(), 11, 31);
+              } 
+  
+              if (startDate && endDate) {
+                  const formattedStartDate = formatDate(startDate);
+                  const formattedEndDate = formatDate(endDate);
+  
+                  daterangepickerElement.setStartDate(formattedStartDate);
+                  daterangepickerElement.setEndDate(formattedEndDate);
+  
+                  jQuery(`.${dropdownClass}`).hide();
+                  jQuery(`#${inputId}`).val(`${formattedStartDate} to ${formattedEndDate}`).trigger('change');
+                  jQuery('.daterangepicker.ltr.show-calendar.openscenter').removeClass('hidden-date-picker');
+                  jQuery(`.${templateClass}`).show();
+              }
+          }
+      });
+  
+      // Initialize Date Range Picker
+      jQuery(`#${inputId}`).daterangepicker({
+          autoUpdateInput: false,
+          locale: {
+              format: 'YYYY-MM-DD',
+              cancelLabel: 'Clear',
+          },
+          opens: 'center'
+      });
+  
+      // Update input when range is selected
+      jQuery(`#${inputId}`).on('apply.daterangepicker', (ev: any, picker: any) => {
+          jQuery(`#${inputId}`).val(picker.startDate.format('YYYY-MM-DD') + ' to ' + picker.endDate.format('YYYY-MM-DD'));
+      });
+  
+      // Clear input when canceled
+      jQuery(`#${inputId}`).on('cancel.daterangepicker', (ev: any, picker: any) => {
+        jQuery(`#${inputId}`).val('').trigger('change');
+        const today = new Date();
+        picker.setStartDate(today);
+        picker.setEndDate(today);
+    });    
+  };
+  
+  // Function to hide only the relevant dropdown & show input field
+  const changeSelection = (inputId: any, dropdownId: any, dropdownClass: any, templateClass: any) => {
+      jQuery(`${inputId}`).val('').trigger('change');
+      jQuery(`.${templateClass}`).hide();
+      jQuery(`#${dropdownId}`).val(null).trigger('change');
+      jQuery('.daterangepicker.ltr.show-calendar.openscenter').addClass('hidden-date-picker');
+      jQuery(`.${dropdownClass}`).show();
+  };
+  
+  // Apply function to all date fields separately
+  handleDateSelection('selectrecent_createDate', 'createDate_s', 'dropdown-created', 'custom-template-created');
+  handleDateSelection('selectrecent_modifyDate', 'modifyDate_s', 'dropdown-modified', 'custom-template-modified');
+  handleDateSelection('selectrecent_cuDate', 'cuDate_s', 'dropdown-cudate', 'custom-template-cudate');
+  
+  }
   
 AdvancesearchDate() {
-
   jQuery('#selectrecent').on('change', function (event: any) {
     console.log(event.target.value);
     const currentDate = new Date();
@@ -320,11 +337,12 @@ AdvancesearchDate() {
     jQuery('.dropdown_a').show();
   }
 
-  changeSelection() {
-    jQuery('.custom-template').hide();
-    jQuery('#selectrecent_s').val(null).trigger('change');
+  changeSelection(eclass: string, recentclass: string, dropdown: string, template: string) {
+    console.log(recentclass);
+    jQuery(`.${template}`).hide();
+    jQuery(`#${recentclass}`).val(null).trigger('change');
     jQuery('.daterangepicker.ltr.show-calendar.openscenter').addClass('hidden-date-picker');
-    jQuery('.dropdown_s').show();
+    jQuery(`.${dropdown}`).show();
   }
 
 
@@ -369,7 +387,6 @@ AdvancesearchDate() {
         }
       });
     }
-
 
   }
 
@@ -464,7 +481,6 @@ AdvancesearchDate() {
 
   ngAfterViewInit() {
     let self = this;
-
     jQuery('#selectInspector_s').select2({}).on('select2:open', () => {
       jQuery('#selectInspector_s').next('.select2-container').addClass('focused');
     }).on('select2:close', (event: any) => {
@@ -538,7 +554,6 @@ AdvancesearchDate() {
         this.isSimpleSearch = false;
         this.advancedSearch();
       }
-
       jQuery('#saveSearchModal').modal('show');
     } else {
       this._searchProfile.id = jQuery('#searchProfiles').val();
@@ -546,18 +561,42 @@ AdvancesearchDate() {
       this._searchProfile.profileType = 'search';
       this.SaveOrUpdateProfile();
     }
-
+    console.log(this._user.email)
+    // this.UpdateUserProfile();
   }
+
+  UpdateUserProfile()
+  {
+    this._userServiceCall.get(this._apiUrlConstant.UserDataModule, this._apiUrlConstant.Get + "?userid=" + this._user.email).subscribe((response: any) => {
+      if (response.status == "SUCCESS") {
+        // this.userStateService.setUser(this._user);
+        localStorage.setItem("user", JSON.stringify(this._user));
+        localStorage.setItem("username", this._user.email);
+        this.appSerivce.updateUser(this._user);
+      } else {
+        localStorage.setItem('User_NA', JSON.stringify(true)); // To set true
+        console.log(localStorage.getItem('NA_User'));
+        alert('login failed');
+        this.logout();
+      }
+    })
+  }
+
   SaveOrUpdateProfile() {
     this._caseHistoryServiceCall.saveByMethodName(this._apiUrlConstant.UserDataModule, "userProfile", this._searchProfile)
       .subscribe((response) => {
         if (response.status == "SUCCESS") {
           this._user = response.data[0];
+          console.log(this._user)
           this.saveLocalstore();
           this.appSerivce.setMessage(this._user.userProfiles);
+          this.appSerivce.currentList.subscribe(list => {
+            this._searchProfileData = list;
+          });
           // this.appSerivce.currentList.subscribe(list => {
           //   this._searchProfileData = list;
           // });
+          console.log('appservice')
           Lobibox.notify('success', {
             pauseDelayOnHover: true,
             continueDelayOnInactiveTab: false,
@@ -880,6 +919,21 @@ AdvancesearchDate() {
       alert('Inspector Select');
     }
   }
+
+  formatDate(dateString: string): string {
+    if(dateString){
+    const date = new Date(dateString); // Create a Date object
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // Month is 0-based
+    const day = String(date.getDate()).padStart(2, '0');
+
+    return `${year}-${month}-${day}`; 
+    }
+    else
+      return null;// Return in yyyy-MM-dd format
+  }
+
+
   initializeDatatable() {
     let self = this;
     var cols = [
@@ -918,9 +972,9 @@ AdvancesearchDate() {
       {
         data: "cudate",
         targets: 3,
-        render: function (data: any, type: any, row: any) {
+        render: (data: any, type: any, row: any) => {
           if (data != null)
-            return data;
+            return this.formatDate(data); // 'this' now refers to the class instance
           else
             return "";
         }
@@ -1158,6 +1212,7 @@ AdvancesearchDate() {
     });
 
   }
+
   setData(data: any, element: string) {
     console.log('Set Status');
     var s: [] = data.split(',');
@@ -1270,9 +1325,9 @@ AdvancesearchDate() {
       programType: [],
       status: [],
       street: [],
-      // cuDate: '',
-      // createDate: '',
-      // modifiedDate: ''
+      // cuDate: [],
+      // createDate: [],
+      // modifyDate: []
     }
   }
   resetAdvancedSearchViewModel() {
@@ -1303,9 +1358,32 @@ AdvancesearchDate() {
     try {
       this.resetSimpleSearchViewModel();
       this.filterDataArray = [];
-      // this._simpleSearchExViewModel.cuDate = jQuery('#cudate_s').val();
-      // this._simpleSearchExViewModel.createDate = jQuery('#created_s').val();
-      // this._simpleSearchExViewModel.modifiedDate = jQuery('#modified_s').val();
+      this._simpleSearchExViewModel.createDate = this._caseHistoryViewModel.createDate;
+      this._simpleSearchExViewModel.cuDate = this._caseHistoryViewModel.cuDate;
+      this._simpleSearchExViewModel.modifyDate = this._caseHistoryViewModel.modifyDate;
+      // const [custartDate, cuendDate] = jQuery('#cudate_s').val().split(" to ");
+
+      // if(jQuery('#cudate_s').val())
+      // this._simpleSearchExViewModel.cuDate = {
+      //   dateType: jQuery('#selectrecent_cudate').val(),
+      //   endDate: cuendDate,
+      //   startDate: custartDate,
+      // }
+      // const [crstartDate, crendDate] = jQuery('#created_s').val().split(" to ");
+      // if(jQuery('#created_s').val())
+      // this._simpleSearchExViewModel.createDate = {
+      //     dateType: jQuery('#selectrecent_s').val(),
+      //     endDate: crendDate,
+      //     startDate: crstartDate,
+      // }
+      // const [mstartDate, mendDate] = jQuery('#modified_s').val().split(" to ");
+      // if(jQuery('#modified_s').val())
+      // this._simpleSearchExViewModel.modifyDate = {
+      //   dateType: jQuery('#selectrecent_modified').val(),
+      //   endDate: mendDate,
+      //   startDate: mstartDate,
+      // }
+    
       //case number
       if ((this._caseHistoryViewModel.caseno != null) && (this._caseHistoryViewModel.caseno.length > 0)) {
         this._simpleSearchExViewModel.caseId = this._caseHistoryViewModel.caseno.split(',');

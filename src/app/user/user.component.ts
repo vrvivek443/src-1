@@ -241,7 +241,7 @@ export class UserComponent {
     });
   }
   displayUsers() {
-    this._allInspectors = this._userList.filter((x: UserModel) => x.role.isinspector);
+    // this._allInspectors = this._userList.filter((x: UserModel) => x.role.isinspector);
     this.userTbl.rows().remove().draw();
     this.userTbl.rows.add(this._userList).draw();
   }

@@ -14,6 +14,7 @@ import { AppService } from '../services/app.services';
 import { ComplaintService } from '../services/complaint.service';
 
 declare var jQuery: any;
+declare var Lobibox: any;
 @Component({
   selector: 'app-memberlogin',
   templateUrl: './memberlogin.component.html',
@@ -23,6 +24,7 @@ export class MemberloginComponent {
   loginDisplay = false;
   tokenExpiration: string = '';
   private readonly _destroying$ = new Subject<void>();
+  
 
   profile!: any;
   constructor(private router: Router, private _http: HttpClient,
@@ -122,10 +124,20 @@ export class MemberloginComponent {
       } else {
         localStorage.setItem('User_NA', JSON.stringify(true)); // To set true
         console.log(localStorage.getItem('NA_User'));
-        alert('login failed');
-        this.logout();
+        // alert('login failed');
+        // this.logout();
+        Lobibox.notify('error', {
+          pauseDelayOnHover: true,
+          continueDelayOnInactiveTab: false,
+          position: 'top right',
+          icon: 'bx bx-check-circle',
+          msg: response.errorMessage,
+        });
+        setTimeout(() => {
+          this.logout();
+        }, 5000);
       }
-    })
+    });
   }
 
   logout() {

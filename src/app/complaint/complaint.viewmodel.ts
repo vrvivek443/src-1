@@ -125,6 +125,16 @@ export class City {
     code: string;
 }
 
+export class CaseViolationDueDate {
+    id: number;
+    reasonNotes: string;
+    createdBy: string;
+    createdOn: string;
+    dueDate: string;
+    violationId: number;
+    caseid: number;
+}
+
 export class CaseViolationViewModel {
     id: number;
     inspectionVersion: number;
@@ -202,6 +212,7 @@ export class ActionLogFileViewModel extends ActionLogViewModel {
 export class ActionLogPictureViewModel {
     fileData: any;
     id: number;
+    tempId?:number;
     filename: string;
     description: string;
     physicalfilename: string;
@@ -227,5 +238,19 @@ export class ActionLogCitiationViewModel extends ActionLogViewModel {
     municode: string;
     ref1: string;
     ref2: string;
+    caseActionCitationDetails: caseActionCitationDetails[];
+}
 
+export class citationViolationDetails {
+    caseActionId: number;
+    caseViolationId: number;
+    caseId: number;
+}
+
+export class caseActionCitationDetails {
+    caseActionId: number;
+    caseViolationId: string;
+    caseId: number;
+    createdBy?: string;
+    createdDate?: string;
 }

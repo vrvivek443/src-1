@@ -4,7 +4,7 @@ import { MockupViewModel } from '../mockpage/mockup.viewmodel';
 import { APIURLConstant } from '../api.url.constant';
 import { ComplaintService } from '../services/complaint.service';
 import { ViolationViewModel } from '../violations/violation.viewmodel';
-import { ActionLogAppointmentViewModel, ActionLogCitiationViewModel,ComeUpDateViewModel ,ActionLogPictureViewModel, ActionLogTypeViewModel, ActionLogViewModel, CaseAddress, caseAddressViewModel, CaseDetailViewModel, casePersonViewModel, CaseViewModel, CaseViolationViewModel, City, SearchViewModel, ViolationDataViewModel } from './complaint.viewmodel';
+import { ActionLogAppointmentViewModel, ActionLogCitiationViewModel,ComeUpDateViewModel ,ActionLogPictureViewModel, ActionLogTypeViewModel, ActionLogViewModel, CaseAddress, caseAddressViewModel, CaseDetailViewModel, casePersonViewModel, CaseViewModel, CaseViolationViewModel, City, SearchViewModel, ViolationDataViewModel, CaseViolationDueDate, caseActionCitationDetails } from './complaint.viewmodel';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Observable, Subject } from 'rxjs';
@@ -47,8 +47,8 @@ export class ComplaintComponent {
   dueReason: string;
   cuReason: string;
   today = new Date();
+  _isPriority: boolean = false;
 
-  // Format the date as `YYYY-MM-DD` (required for <input type="date">)
   formattedDate: any;
   crDate = new Date();
   isSalClicked: boolean = false;
@@ -134,33 +134,13 @@ export class ComplaintComponent {
   _actionsTable: any;
   _caseComeUpDate: ComeUpDateViewModel[];
   isCase = false;
-  dataComments = [
-    {
-      comment: "The document has been reviewed and approved for further processing.",
-      updatedBy: "Amuthan",
-      updatedOn: "2024-11-28"
-    },
-    {
-      comment: "Changes have been made as per the feedback received in the last meeting.",
-      updatedBy: "Karthic",
-      updatedOn: "2024-11-30"
-    },
-    {
-      comment: "Awaiting approval from the management team.",
-      updatedBy: "Vivek",
-      updatedOn: "2024-12-01"
-    },
-    {
-      comment: "The initial draft has been completed and shared with the stakeholders.",
-      updatedBy: "Amuthan",
-      updatedOn: "2024-12-02"
-    },
-    {
-      comment: "Verified the entries and corrected minor discrepancies in the data.",
-      updatedBy: "Karthic",
-      updatedOn: "2024-12-03"
-    }
-  ];
+  selectedIds: Set<string> = new Set();
+  tempVideoId: any;
+  pictureIdRange: number = 0;
+  videoIdRange: number = 0;
+
+  caseViolationReasons: CaseViolationDueDate[] = [];
+  displayReasons: CaseViolationDueDate[] = [];
 
 
 
@@ -238,6 +218,8 @@ export class ComplaintComponent {
   dtActionTrigger: Subject<any> = new Subject<any>();
   _canChangeStatus: boolean = false;
   notedetails: PropertyNote[] = [];
+  editPictureName: string;
+  citationDetails: caseActionCitationDetails[];
 
 
   constructor(private _http: HttpClient, private _fb: FormBuilder, private _urlConstant: APIURLConstant, private _complaintServiceCall: ComplaintService, private router: Router, private _activatedRoute: ActivatedRoute, private renderer: Renderer2, private elRef: ElementRef) {
@@ -353,7 +335,7 @@ export class ComplaintComponent {
     this._personTable = jQuery('#personTable').DataTable({
       columns: [
         { data: 'personType' },
-        { data: 'firstName' },
+        { data: '' },
         { data: 'relationShip' },
         { data: 'address1' },
         { data: 'email' },
@@ -371,7 +353,7 @@ export class ComplaintComponent {
           targets: 1,
           data: 'firstName',
           render: function (data: any, type: any, row: any, meta: any) {
-            return `${row.firstname} ${row.middlename} ${row.lastname}`;
+            return `${row.firstname ? row.firstname : ''}  ${row.middlename ? row.middlename : ''} ${row.lastname ? row.lastname : ''}`;
           }
         },
         {
@@ -446,7 +428,7 @@ export class ComplaintComponent {
       this.userProfileDataList = response;
     });
     jQuery(document).ready(() => {
-      const minLen = this.dataComments.length;
+      const minLen = this.caseViolationReasons.length;
 
       $('#violationTbl tbody').on('mouseenter mouseleave', 'tr', function (event) {
         const $currentRow = $(this); // The row currently being hovered over
@@ -459,14 +441,12 @@ export class ComplaintComponent {
           if (event.type === 'mouseenter') {
             $currentRow.addClass('row-hover'); // Add hover effect to test-row
             $prevRow.addClass('row-hover');
-            $currentRow.addClass('selected'); // Add hover effect to test-row
-            $prevRow.addClass('selected'); // Add hover effect to main row
+       
           } else if (event.type === 'mouseleave') {
             $currentRow.removeClass('row-hover'); // Add hover effect to test-row
             $prevRow.removeClass('row-hover');
-            $currentRow.removeClass('selected'); // Remove hover effect from test-row
-            $prevRow.removeClass('selected'); // Remove hover effect from main row
-          }
+      
+          } 
         } else {
           // If it's a main row, get the next test-row
           const $nextRow = $currentRow.next('.test-row');
@@ -474,11 +454,10 @@ export class ComplaintComponent {
           if (event.type === 'mouseenter') {
             $currentRow.addClass('row-hover'); // Add hover effect to test-row
             $nextRow.addClass('row-hover');
-            $currentRow.addClass('selected'); // Add hover effect to main row
-            $nextRow.addClass('selected'); // Add hover effect to test-row
+           // Add hover effect to test-row
           } else if (event.type === 'mouseleave') {
-            $currentRow.removeClass('selected'); // Remove hover effect from main row
-            $nextRow.removeClass('selected'); // Remove hover effect to test-row
+            $currentRow.removeClass('row-hover'); // Remove hover effect from main row
+            $nextRow.removeClass('row-hover'); // Remove hover effect to test-row
           }
         }
       });
@@ -651,6 +630,12 @@ export class ComplaintComponent {
       const fieldName = jQuery(event.target).attr('name');
       const fieldValue = jQuery(event.target).val();
       this.focusoutMethod(fieldName, fieldValue); // Call your focusout method here
+    }).on('change', (event: any) => {
+      
+      if(event.target.value === 'P')
+        this._isPriority = true;
+      else
+      this._isPriority = false;
     });
 
   }
@@ -664,8 +649,18 @@ export class ComplaintComponent {
     const cols = [
       {
         data: " ", // No specific data field for checkboxes
-        render: function (data: any, type: any, row: any, meta: any) {
-          return `<input type="checkbox" class="row-checkbox" data-id="${row.id}" />`;
+        render: (data: any, type: any, row: any, meta: any): string => {
+          let isChecked = false
+          if(this.citationDetails){
+            console.log(this.citationDetails)
+            const rowId = row.id.toString();
+            isChecked = this.citationDetails.find((citation: any) => citation.caseViolationId === rowId) ? true : false;
+            if(isChecked && !this.selectedIds.has(row.id)){
+              this.selectedIds.add(row.id);
+            }
+          } // Use an arrow function here
+          
+          return `<input type="checkbox" class="row-checkbox" data-id="${row.id}" ${isChecked ? 'checked' : ''} />`;
         },
         orderable: false,
         className: 'dt-center', // Align checkbox to the center
@@ -711,6 +706,18 @@ export class ComplaintComponent {
         });
 
       },
+    });
+
+    jQuery('#tblinputdata tbody').on('change', '.row-checkbox', (event: any) => {
+      const rowId = jQuery(event.currentTarget).data('id');
+      if (jQuery(event.currentTarget).prop('checked')) {
+        this.selectedIds.add(rowId);
+      } else {
+        this.selectedIds.delete(rowId);
+        console.log(this.selectedIds)
+      }
+  
+      console.log('Selected row IDs:', Array.from(this.selectedIds));
     });
   }
 
@@ -893,8 +900,16 @@ export class ComplaintComponent {
   }
 
 
-  showCommentsModal() {
+  showCommentsModal(row?: any) {
+
     const offcanvasElement = jQuery('#showComments');
+    if(row){
+      jQuery(offcanvasElement).on('show.bs.offcanvas', function () {
+        jQuery(row).addClass('selected');
+      });
+    }
+    
+
     if (offcanvasElement) {
       const bootstrapModal = bootstrap.Offcanvas.getInstance(offcanvasElement) || new bootstrap.Offcanvas(offcanvasElement);
       // Show the offcanvas
@@ -931,8 +946,7 @@ export class ComplaintComponent {
   }
 
   changeCheck() {
-    console.log(this._caseViolationViewModel.duedate)
-    if (!this._caseViolationViewModel.duedate) {
+      if (!this._caseViolationViewModel.duedate) {
       if(this.pastDate){
       alert('Cannot remove the Due Date!')}
       this._caseViolationViewModel.duedate = this.pastDate
@@ -968,8 +982,7 @@ export class ComplaintComponent {
     {
       this.cuReason = jQuery('#cuDateReason').val().trim();
       if (this.cuReason) {
-        if(this._caseDetailViewModel.cudate)
-          this._caseDetailViewModel.cudate = this.formatDateToCustomISO(this._caseDetailViewModel.cudate);    
+        this._caseDetailViewModel.cudate = this.formatDateToCustomISO(this._caseDetailViewModel.cudate);    
         // this.pastCUDate = this._caseDetailViewModel.cudate;
         const addValue = {
           id: -1,
@@ -994,7 +1007,7 @@ export class ComplaintComponent {
               this._caseDetailViewModel.cudate = this.pastCUDate;
             }
             // this.getCaseByID(this._caseId)
-            this.getByComeUpDate(this._caseId);
+            this.getByUpdate(this._caseId);
             
           }
           else
@@ -1006,9 +1019,10 @@ export class ComplaintComponent {
               icon: 'bx bx-check-circle',
               msg: response.errorMessage
             });
-            this.getByComeUpDate(this._caseId);
+            this.getByUpdate(this._caseId);
           }
         })
+        jQuery('#cuDateReason').val('').trigger('change');
         jQuery('#cuDateModal').modal("hide");
       }
       else
@@ -1018,7 +1032,44 @@ export class ComplaintComponent {
     else if (title === 'dueDate') {
       this.dueReason = jQuery('#dueDateReason').val().trim();
       if (this.dueReason) {
-        this.pastDate = this._caseViolationViewModel.duedate
+        this._caseViolationViewModel.duedate = this.formatDateToCustomISO(this._caseViolationViewModel.duedate);
+        // this.pastDate = this._caseViolationViewModel.duedate
+        const dueComments = {
+          id: -1,
+          caseId: this._caseId,
+          violationId: this._caseViolationViewModel.id,
+          reasonNotes: this.dueReason, 
+          dueDate: this._caseViolationViewModel.duedate
+        }
+        this._complaintServiceCall.saveByMethodName(this._urlConstant.CaseMasterModule + '/', this._urlConstant.upsertCaseViolationDueDate, dueComments).subscribe((response) => {
+          if (response.status == "SUCCESS") {
+            Lobibox.notify('success', {
+              pauseDelayOnHover: true,
+              continueDelayOnInactiveTab: false,
+              position: 'top right',
+              icon: 'bx bx-check-circle',
+              msg: 'Due Date Reason Updated'
+            });
+            console.log(this.pastDate);
+            if(response.data[0].dueDate)
+            {
+                this.pastDate = this.formatDate(response.data[0].dueDate);
+                this._caseViolationViewModel.duedate = this.pastDate;
+            }
+          }
+          else
+          {
+            Lobibox.notify('error', {
+              pauseDelayOnHover: true,
+              continueDelayOnInactiveTab: false,
+              position: 'top right',
+              icon: 'bx bx-check-circle',
+              msg: response.errorMessage
+            });
+            
+          }
+        })
+        jQuery('#dueDateReason').val('').trigger('change');
         jQuery('#dueDateComments').modal("hide");
       }
       else
@@ -1051,21 +1102,51 @@ export class ComplaintComponent {
         ],
         rowCallback: (row: any, data: any, index: any) => {
           const actionsColumnIndex = 5; // Assuming Action column is the 6th column (0-based index)
-
-          if (this.dataComments.length > 0) {
-            jQuery(row).on('click', (event: any) => {
-              const clickedColumnIndex = jQuery(event.target).closest('td').index();
-              if (clickedColumnIndex !== actionsColumnIndex) {
-                this.showCommentsModal();
-              }
-            });
-
-            const offcanvasElement = document.getElementById('showComments');
-            jQuery(offcanvasElement).on('hide.bs.offcanvas', function () {
-              jQuery(row).removeClass('selected');
-            });
-          }
+          const $row = jQuery(row);
+        
+          $row.on('click', (event: any) => {
+            // Remove 'selected' class from all rows before adding it to the desired ones
+            jQuery('#violationTbl tbody tr').removeClass('selected');
+        
+            let modalDataId: any;
+        
+            if ($row.hasClass('test-row')) {
+              // If the clicked row has 'test-row' class
+              const $prevRow = $row.prev('tr'); // Get the previous row
+              $row.addClass('selected'); // Add 'selected' to the current row
+              $prevRow.addClass('selected'); // Add 'selected' to the previous row
+              modalDataId = $prevRow.data('id'); // Use `data.id` from the previous row
+            } else {
+              // If the clicked row does NOT have 'test-row' class
+              const $nextRow = $row.next('.test-row'); // Get the next row with 'test-row'
+              $row.addClass('selected'); // Add 'selected' to the current row
+              $nextRow.addClass('selected'); // Add 'selected' to the next row
+              modalDataId = data.id; 
+              console.log(modalDataId);// Use `data.id` from the current row
+            }
+        
+            if (this.caseViolationReasons) {
+              console.log(modalDataId);
+              this.displayReasons = this.caseViolationReasons.filter(
+                (v) => v.violationId === modalDataId
+              );
+              console.log(this.caseViolationReasons)
+            }
+            const clickedColumnIndex = jQuery(event.target).closest('td').index();
+            
+            if (clickedColumnIndex !== actionsColumnIndex) {
+              this.showCommentsModal(); // Pass the modalDataId to the modal
+            }
+          });
+        
+          // Handle modal close
+          const offcanvasElement = document.getElementById('showComments');
+          jQuery(offcanvasElement).on('hide.bs.offcanvas', function () {
+            // Remove 'selected' class from all rows when the modal closes
+            jQuery('#violationTbl tbody tr').removeClass('selected');
+          });
         }
+        
       });
 
       // Add short description rows dynamically after every draw
@@ -1533,7 +1614,8 @@ export class ComplaintComponent {
         this._caseTitle = "Edit Complaint";
         // console.log("Case Detail : " + JSON.stringify(response));
         this._caseDetail = response.data[0];
-        this.notedetails = response.data[0].propertyNotes;
+        this.caseViolationReasons = this._caseDetail.caseViolationDueDateNotes;
+        // this.notedetails = response.data[0].propertyNotes;
         const length = response.data[0].caseComeUpdateNotes.length;
         if(length){
         this._caseComeUpDate = response.data[0].caseComeUpdateNotes;
@@ -1547,7 +1629,7 @@ export class ComplaintComponent {
         // console.log("Total Count : " + this._caseDetail?.caseActions.length);
         if (JSON.stringify(this._caseDetail).includes("caseaddress")) {
           this._viewAddressDetail = response.data[0].caseaddress;
-
+          this.selectedAddress();
         }
 
         jQuery(".tab-page").removeAttr("disabled");
@@ -1565,6 +1647,7 @@ export class ComplaintComponent {
         
         this._personTable.clear().rows.add(this._personDataList).draw();
         this._personTable.draw();
+        this.initializeStaticTable();
         this.InitializeViolationTable();
         this.InitializeActionTable();
         this.resetCaseDetailViewModel();
@@ -1589,13 +1672,13 @@ export class ComplaintComponent {
     });
   }
 
-  getByComeUpDate(id: any) {
+  getByUpdate(id: any) {
     this._complaintServiceCall.getByModuleMethodAndParameter(this._urlConstant.CaseMasterModule, this._urlConstant.GetByID, "id=" + id).subscribe((response) => {
       this._caseHistoryList = [];
       if (response.status == "SUCCESS") {
         this._caseDetail = response.data[0];
-        this.notedetails = response.data[0].propertyNotes;
         const length = response.data[0].caseComeUpdateNotes.length;
+        this.caseViolationReasons = this._caseDetail.caseViolationDueDateNotes;
         if(length)
         {
         this._caseComeUpDate = response.data[0].caseComeUpdateNotes;
@@ -1708,7 +1791,6 @@ export class ComplaintComponent {
 
   selectAddress(_address: any) {
     //this._caseAddressViewModel = _address;
-    alert('select');
     this._viewAddressDetail = _address;
     jQuery("#SearchResultAddress").modal("hide");
 
@@ -2290,7 +2372,8 @@ export class ComplaintComponent {
       ref1: "",
       ref2: "",
       routeToInspectorId: 0,
-      status: true
+      status: true,
+      caseActionCitationDetails: null,
     };
     jQuery("#inspectionViolation").hide();
     jQuery("#followUpAction").hide();
@@ -3092,14 +3175,9 @@ export class ComplaintComponent {
 
   saveViolation() {
     try {
-      if(this._caseViolationViewModel.duedate)
-        this._caseViolationViewModel.duedate = this.formatDateToCustomISO(this._caseViolationViewModel.duedate);
-      if(this._caseViolationViewModel.opendate)
-        this._caseViolationViewModel.opendate = this.formatDateToCustomISO(this._caseViolationViewModel.opendate);
-      if(this._caseViolationViewModel.closedate)
-        this._caseViolationViewModel.closedate = this.formatDateToCustomISO(this._caseViolationViewModel.closedate);
-
-      
+      this._caseViolationViewModel.duedate = this.formatDateToCustomISO(this._caseViolationViewModel.duedate);
+      this._caseViolationViewModel.opendate = this.formatDateToCustomISO(this._caseViolationViewModel.opendate);
+      this._caseViolationViewModel.closedate = this.formatDateToCustomISO(this._caseViolationViewModel.closedate);
       this._caseViolationViewModel.area = jQuery("#area").val();
       this._caseViolationViewModel.priority = jQuery("#priority").val();
       this._caseViolationViewModel.violationstatus = jQuery("#violationstatus").val();
@@ -3125,13 +3203,9 @@ export class ComplaintComponent {
               this._violationTable.clear().rows.add(this._caseDetail.caseViolation).draw();
               this.addShortDescriptionRows(); // Add short descriptions for new rows
             }
-            if(this._caseViolationViewModel.duedate)
               this._caseViolationViewModel.duedate = this.formatDate(this._caseViolationViewModel.duedate);
-            if(this._caseViolationViewModel.opendate)
               this._caseViolationViewModel.opendate = this.formatDate(this._caseViolationViewModel.opendate);
-            if(this._caseViolationViewModel.closedate)
               this._caseViolationViewModel.opendate = this.formatDate(this._caseViolationViewModel.opendate);
-            else
               this.InitializeViolationTable();
             Lobibox.notify('success', {
               pauseDelayOnHover: true,
@@ -3149,6 +3223,7 @@ export class ComplaintComponent {
             // jQuery("#violationGrid").show();
             // jQuery("#frmViolation").hide();
             // jQuery("#navigationViolation").show();
+            this.getByUpdate(this._caseId)
             this._enableSave = true;
             this.resetViolationViewModel();
             this._isEdit = false;
@@ -3214,16 +3289,23 @@ export class ComplaintComponent {
   }
 
   formatDate(dateString: string): string {
+    if(dateString){
     const date = new Date(dateString); // Create a Date object
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, '0'); // Month is 0-based
     const day = String(date.getDate()).padStart(2, '0');
 
-    return `${year}-${month}-${day}`; // Return in yyyy-MM-dd format
+    return `${year}-${month}-${day}`; 
+    }
+    else
+      return null;// Return in yyyy-MM-dd format
   }
 
   formatDateToCustomISO(dateString: string): string {
+    if(dateString)
     return new Date(dateString).toISOString().split('T')[0] + 'T00:00:00';
+    else 
+    return null
   }
 
   saveCaseDetail(status: string) {
@@ -3235,8 +3317,7 @@ export class ComplaintComponent {
     this._caseDetailViewModel.prioritycode = jQuery('#prioritycode').val();
     this._caseDetailViewModel.coreservicecode = jQuery('#coreservicecode').val()
     this._caseDetailViewModel.cdbgcasetype = jQuery('#cdbgcasetype').val()
-    if(this._caseDetailViewModel.cudate)
-      this._caseDetailViewModel.cudate = this.formatDateToCustomISO(this._caseDetailViewModel.cudate)
+    this._caseDetailViewModel.cudate = this.formatDateToCustomISO(this._caseDetailViewModel.cudate)
     this._caseDetailErrorSummary = [];
     console.log(this._caseDetailViewModel);
     console.log("Case ID : " + this._caseId);
@@ -3270,6 +3351,54 @@ export class ComplaintComponent {
               }
             
               console.log("Case Detail Response : " + JSON.stringify(response));
+              if (this._isPriority) {
+                const id = parseInt(this._caseDetailViewModel.inspector1id, 10);
+                const entity = {
+                  id: -1,
+                  actionType: 'O',
+                  actionCode: 10,
+                  actionVersion: (this.getVersion("Action") != -1) ? this._actionVersion : 0,
+                  createdOn: this.formattedDate,
+                  createdBy: '',
+                  modifiedBy: '',
+                  modifiedOn: '',
+                  readDate: '',
+                  actionDate: '',
+                  status: false,
+                  isRead: false,
+                  routeToInspectorId: this._caseDetailViewModel.inspector1id,
+                  comments: 'Priority Task is Assigned',
+                  caseMaster: {
+                    id: this._caseId
+                  },
+                  caseActionFiles: [] as any[],
+                }
+                this._complaintServiceCall.saveByMethodName(this._urlConstant.CaseMasterModule, this._urlConstant.SaveAction, entity).subscribe((response) => {
+                  if(response.status == "SUCCESS")
+                  {
+                    Lobibox.notify('success', {
+                      pauseDelayOnHover: true,
+                      continueDelayOnInactiveTab: false,
+                      position: 'top right',
+                      icon: 'bx bx-check-circle',
+                      msg: `Priority Task assigned to ${this.getInspectorName(id)}`
+                    });
+                  }
+                  else
+                  {
+                    Lobibox.notify('error', {
+                      pauseDelayOnHover: true,
+                      continueDelayOnInactiveTab: false,
+                      position: 'top right',
+                      icon: 'bx bx-check-circle',
+                      msg: response.errorMessage
+                    });
+                  }
+                });
+                
+                
+                
+              }
               if (status != null) {
                 this._caseDetail.casestatus = status;
                 this._caseDetailViewModel.casestatus = status;
@@ -3364,6 +3493,7 @@ export class ComplaintComponent {
       return true;
     }
   }
+
   getImageURL(obj: any) {
     if (obj.id == -1) {
       return obj.fileData;
@@ -3371,37 +3501,51 @@ export class ComplaintComponent {
       return this._imageBaseURL + "caseId=" + this._caseId + "&actionId=" + this._selectedActionLogViewModel?.id + "&actionFileId=" + obj?.id;
     }
   }
+
   editPicture(pic: any) {
-    this.editedPictureId = pic.id;
-    this.imgData = this._imageBaseURL + "caseId=" + this._caseId + "&actionId=" + this._selectedActionLogViewModel?.id + "&actionFileId=" + pic?.id
+    this.editedPictureId = pic.id === -1 ? pic.tempId : pic.id;
+    this.editPictureName = pic.filename;
+    this.imgData = pic.fileData
+    console.log(this.imgData)
     this._pictureDescription = pic.description;
     jQuery("#updatePictureUploadMDL").modal("show");
   }
 
   deletePicture(pict: any)
   {
-    console.log(pict);
-    const fileName = pict.filename
-    // const imgData = this.imgData = this._imageBaseURL + "caseId=" + this._caseId + "&actionId=" + this._selectedActionLogViewModel?.id + "&actionFileId=" + pict?.id
-    this.pictures = this.pictures.filter(pic => pic.filename !== fileName);
+    const tempId = pict.tempId
+    this.pictures = this.pictures.filter(pic => pic.tempId !== tempId);
   }
-  
+
+  deleteVideo(vid: any)
+  {
+    const tempId = vid.tempId
+    this.videos = this.videos.filter(pic => pic.tempId !== tempId)
+  }
+
   editAudio(aud: any) {
     this.audioData = this._imageBaseURL + "caseId=" + this._caseId + "&actionId=" + this._selectedActionLogViewModel?.id + "&actionFileId=" + aud?.id
     this._pictureDescription = aud.description;
     jQuery("#audioUploadMDL").modal("show");
   }
+
   editVideo(vid: any) {
-    this.videoData = this._imageBaseURL + "caseId=" + this._caseId + "&actionId=" + this._selectedActionLogViewModel?.id + "&actionFileId=" + vid?.id
+    // this.videoData = this._imageBaseURL + "caseId=" + this._caseId + "&actionId=" + this._selectedActionLogViewModel?.id + "&actionFileId=" + vid?.id
+    this.videoData = vid.fileData;
+    this.tempVideoId = vid.id === -1 ? vid.tempId : vid.id;
     this._pictureDescription = vid.description;
     jQuery("#videoUploadMDL").modal("show");
   }
+
   editActionfromTable(i: any) {
     let action = this._caseDetail.caseActions.find((v: any) => v.id == i);
+    this.citationDetails = action.caseActionCitationDetails;
+    this.initializeStaticTable();
     if (action != undefined) {
       this.editAction(action);
     }
   }
+
   editAction(action: any) {
     this._selectedActionLogViewModel = action;
     console.log("Selectec Action : " + JSON.stringify(action));
@@ -3467,6 +3611,7 @@ export class ComplaintComponent {
           // jQuery("#action-add-edit").show();
           jQuery("#taskDetails").hide();
           jQuery("#appointmentInformations").hide();
+          this.initializeStaticTable();
         }
         break;
       case "T":
@@ -3507,6 +3652,7 @@ export class ComplaintComponent {
           this._actionLogViewModel = this._selectedActionLogViewModel;
           this.InitializeActionLog();
           this.pictures = this._selectedActionLogViewModel.caseActionFiles.filter((itm: any) => ((!itm.filename.endsWith(".mp3") && (!itm.filename.endsWith(".mp4")))));
+          console.log(this.pictures);
           this.audios = this._selectedActionLogViewModel.caseActionFiles.filter((itm: any) => (itm.filename.endsWith(".mp3")));
           this.videos = this._selectedActionLogViewModel.caseActionFiles.filter((itm: any) => (itm.filename.endsWith(".mp4")));
           console.log("Picture : " + JSON.stringify(this._actionLogPictureViewModel));
@@ -3556,14 +3702,15 @@ export class ComplaintComponent {
 
 
   addPictureToList() {
-
     console.log("Data Started . . .");
     this.resetActionLogPictureViewModel();
+    // this.pictures.length ? Math.max(...this.pictures.map(pic => pic.id)) : 0
     //  this._actionLogPictureViewModel = this._actionLogViewModel;
     // console.log(this.imgData);
     //console.log((this.imgData.startsWith("data")) ? this.imgData.split(",")[1] : "");
     this._actionLogPictureViewModel.fileData = this.imgData; //(this.imgData.startsWith("data")) ? this.imgData.split(",")[1] : "";
     this._actionLogPictureViewModel.filename = this._pictureFileName;
+    this._actionLogPictureViewModel.tempId = ++this.pictureIdRange;
     console.log("Data Started . . .1");
     this._actionLogPictureViewModel.description = this._pictureDescription;
     this._actionLogPictureViewModel.id = -1;
@@ -3588,15 +3735,16 @@ export class ComplaintComponent {
     // this._actionLogPictureViewModel.id = -1;
     // console.log("Data " + JSON.stringify(this._actionLogPictureViewModel));
     // this.pictures.push(this._actionLogPictureViewModel);
-    let editPicture = this.pictures.filter(e => e.id == this.editedPictureId)[0];
+    console.log(this._pictureFileName)
+    let editPicture = this.pictures.filter(e => e.tempId == this.editedPictureId)[0];
     editPicture.fileData = this.imgData;
     editPicture.filename = this._pictureFileName;
     editPicture.description = this._pictureDescription;
-
-    this.pictures.find(c => c.id == this.editedPictureId).fileData = this.imgData;
-    this.pictures.find(c => c.id == this.editedPictureId).filename = this._pictureFileName;
-    this.pictures.find(c => c.id == this.editedPictureId).physicalfilename = null;
-    this.pictures.find(c => c.id == this.editedPictureId).description = this._pictureDescription;
+    console.log(this.pictures.find(c => c.tempId == this.editedPictureId))
+    this.pictures.find(c => c.tempId == this.editedPictureId).fileData = this.imgData;
+    this.pictures.find(c => c.tempId == this.editedPictureId).filename = this._pictureFileName;
+    this.pictures.find(c => c.tempId == this.editedPictureId).physicalfilename = null;
+    this.pictures.find(c => c.tempId == this.editedPictureId).description = this._pictureDescription;
     let pics: any[] = this.pictures;
     this.pictures = [];
     this.pictures = pics;
@@ -3607,7 +3755,6 @@ export class ComplaintComponent {
   }
 
   addAudioToList() {
-
     console.log("Data Started . . .");
     this.resetActionLogPictureViewModel();
     //  this._actionLogPictureViewModel = this._actionLogViewModel;
@@ -3623,24 +3770,46 @@ export class ComplaintComponent {
     this.audios.push(this._actionLogPictureViewModel);
     console.log("Picture List : " + JSON.stringify(this.audios));
     jQuery("#btnMDAClose").click();
-
   }
 
-  addVideoToList() {
-
+  addVideoToList(tempId: any) {
+    if(!tempId){
     console.log("Data Started . . .");
     this.resetActionLogPictureViewModel();
     console.log("Video Data : " + this.videoData);
     this._actionLogPictureViewModel.fileData = this.videoData;
     this._actionLogPictureViewModel.filename = this._pictureFileName;
+    this._actionLogPictureViewModel.tempId = ++this.videoIdRange;
     console.log("Data Started . . .1");
     this._actionLogPictureViewModel.description = this._pictureDescription;
     this._actionLogPictureViewModel.id = -1;
     console.log("Data " + JSON.stringify(this._actionLogPictureViewModel));
     this.videos.push(this._actionLogPictureViewModel);
-    console.log("Video List : " + JSON.stringify(this.audios));
+    console.log("Video List : " + JSON.stringify(this.videos));
+   
+    }
+    else
+    {
+    console.log(tempId)
+    console.log(this.videoData)
+    let editVideo = this.videos.filter(e => e.tempId == tempId)[0];
+    console.log(this.videos.find(c => c.tempId == tempId))
+    editVideo.fileData = this.videoData;
+    editVideo.filename = this._pictureFileName;
+    editVideo.description = this._pictureDescription;
+    this.videos.find(c => c.tempId == tempId).fileData = this.videoData;
+    this.videos.find(c => c.tempId == tempId).filename = this._pictureFileName;
+    this.videos.find(c => c.tempId == tempId).physicalfilename = null;
+    this.videos.find(c => c.tempId == tempId).description = this._pictureDescription;
+    let pics: any[] = this.videos;
+    
+    this.videos = [];
+    this.videos = pics;
+    console.log(this.videos);
+    console.log('Edited Video data:', this.videos.filter(e => e.tempId == tempId));
+    //console.log("Picture List : " + JSON.stringify(this.pictures));
+    }
     jQuery("#btnMDVClose").click();
-
   }
 
 
@@ -3692,6 +3861,7 @@ export class ComplaintComponent {
               if (e.fileData != null) {
                 e.fileData = (e.fileData.startsWith("data")) ? e.fileData.split(",")[1] : ""
               }
+              delete e.tempId;
               this._actionLogViewModel.caseActionFiles.push(e);
             });
             this.audios.forEach(e => {
@@ -3741,6 +3911,15 @@ export class ComplaintComponent {
             this._citationViewModel.modifiedBy = this._actionLogViewModel.modifiedBy;
             this._citationViewModel.modifiedOn = this._actionLogViewModel.modifiedOn;
             this._citationViewModel.status = this._actionLogViewModel.status;
+            if(this.selectedIds)
+            {
+              const caseActionCitationDetails = {
+                caseId: this._caseId,  // Static caseId
+                caseActionId: this._actionLogViewModel.id,      // Static caseActionId, assuming this remains -1 initially
+                caseViolationId: Array.from(this.selectedIds).map(String).join(',') // Join selectedIds as a comma-separated string
+              };
+              this._citationViewModel.caseActionCitationDetails = this.selectedIds.size > 0 ? [caseActionCitationDetails] : [];
+            }
             console.log("Action Log Citiation : " + JSON.stringify(this._citationViewModel));
             this.SaveActionByCategory(this._citationViewModel);
           }
@@ -4369,11 +4548,8 @@ export class ComplaintComponent {
     this.pastDate = this._caseViolationViewModel.duedate;
     this.pastDate = this.formatDate(this.pastDate);
     }
-    if(this._caseViolationViewModel.opendate)
     this._caseViolationViewModel.opendate = this.formatDate(this._caseViolationViewModel.opendate);
-    if(this._caseViolationViewModel.closedate)
     this._caseViolationViewModel.opendate = this.formatDate(this._caseViolationViewModel.opendate);
-    this.InitializeViolation();
     this._caseViolationViewModel.inspectionVersion = (this.getVersion("Violation") != -1) ? this._violationVersion : 0;
     console.log("Violation Save : " + JSON.stringify(this._caseViolationViewModel));
     // jQuery("#violationGrid").hide();

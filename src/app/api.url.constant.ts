@@ -1,13 +1,14 @@
 import { Component } from "@angular/core";
 import { PageEvents, UserModel } from "./user/user.viewmodel";
+import { environment } from 'src/environments/environment';
 
 declare var Lobibox: any;
 
 export class APIURLConstant {
 
 
-  public APIBaseURL: string = "http://localhost:8001/api/";
-  public APIRootURL: string = "http://localhost:8001/";
+  public APIBaseURL: string = environment.APIBaseURL;
+  public APIRootURL: string = environment.APIRootURL;
   // http://localhost:8001/api/casemaster/streamFileForActionFile?caseId=2&actionId=21&actionFileId=6
 
   // Modules
@@ -84,6 +85,11 @@ export class APIURLConstant {
   public deletePropertyNotes: string = "deletePropertyNotes"
   public upsertCUDateReason: string = "upsertCaseComeUpdateNotes";
   public getPropertyNotesByAPN: string = "getPropertyNotesByAPN";
+  public upsertCaseViolationDueDate: string = "upsertCaseViolationDueDate";
+
+  public GenerateReport: string = "generateReport";
+  public DotxReport: string = "dotxReport";
+
 
   public ViewOnlyRole: any = 6;
   public SupervisorRole: any = 3;
@@ -108,6 +114,7 @@ export class APIURLConstant {
     if (_user == null)
       return;
     _user.pages.forEach(item => {
+      console.log(item);
       if (!this.isNull(item.pageTagId)) {
         jQuery('#' + item.pageTagId).removeClass('rolePageHide');
       }

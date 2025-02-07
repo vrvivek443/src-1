@@ -1,0 +1,13 @@
+<div class="input-group">
+    <input type="text" class="form-control" id="Date_s_{{uniqueId}}" placeholder="Select date range" readonly>
+    <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+        📅
+    </button>
+    <ul class="dropdown-menu">
+        <li><a class="dropdown-item" (click)="setDateRange('TODAY')">Today</a></li>
+        <li><a class="dropdown-item" (click)="setDateRange('YESTERDAY')">Yesterday</a></li>
+        <li><a class="dropdown-item" (click)="setDateRange('THISWEEK')">This Week</a></li>
+        <li><a class="dropdown-item" (click)="setDateRange('THISMONTH')">This Month</a></li>
+        <li><a class="dropdown-item" (click)="setDateRange('CUSTOM')">Custom</a></li>
+    </ul>
+</div>

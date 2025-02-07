@@ -67,34 +67,46 @@
                       {{_st?.streetname}} {{_st?.streettype}}</option>
                   </select>
                 </div>
-                <div class="col-3 dropdown_s">
-                  <label for="selectrecent_s" class="form-label">Recent</label>
-                  <select id="selectrecent_s" name="street" data-placeholder="Choose" class="form-control">
-                    <option value="">Choose</option>
-                    <option value="Week">This Week</option>
-                    <option value="Month">This Month</option>
-                    <option value="Year">This Year</option>
-                    <option value="custom" id="custom-date">Custom</option>
-                  </select>
-                </div>
-                <div class="col-3 custom-template">
-                  <label for="daterange" class="form-label d-flex">Date Range
-                    <a class="align-end" (click)="changeSelection()">Others</a>
-                  </label>
-                  <input type="text" class="form-control" id="daterange" placeholder="Select date range">
-                </div>
                 <div class="col-3">
-                  <label for="created_s" class="form-label">Created</label>
-                  <input type="date" id="created_s" class="form-control" name="createdDate">
+                  <label for="created_s" class="form-label d-flex">Created</label>
+                  <app-date-picker [(selectedDateRange)]="_caseHistoryViewModel.createDate" [uniqueId]="'created'"></app-date-picker>
                 </div>
+                
                 <div class="col-3">
-                  <label for="modified_s" class="form-label">Modified</label>
-                  <input type="date" id="modified_s" class="form-control" name="modifiedDate">
+                  <label for="modified_s" class="form-label d-flex">Modified</label>
+                  <app-date-picker [(selectedDateRange)]="_caseHistoryViewModel.modifyDate" [uniqueId]="'modified'"></app-date-picker>
                 </div>
+                
                 <div class="col-3">
-                  <label for="cudate_s" class="form-label">C/U Date</label>
-                  <input type="date" id="cudate_s" class="form-control" name="cuDate">
+                  <label for="cudate_s" class="form-label d-flex">C/U Date</label>
+                  <app-date-picker [(selectedDateRange)]="_caseHistoryViewModel.cuDate" [uniqueId]="'cuDate'"></app-date-picker>
                 </div>
+                
+
+
+              <!-- <div class="col-3" *ngFor="let field of _dateFields">
+                <label [for]="field.inputId" class="form-label d-flex">
+                    {{ field.label }}
+                    <a class="align-end" (click)="changeSelection(field.inputId, field.selectId, field.dropdownClass, field.templateClass)">
+                        Others
+                    </a>
+                </label>
+            
+                <div [class]="field.dropdownClass">
+                    <select [id]="field.selectId" [name]="field.name" class="form-control">
+                        <option value="">Choose</option>
+                        <option value="Week">This Week</option>
+                        <option value="Month">This Month</option>
+                        <option value="Year">This Year</option>
+                        <option value="custom">Custom</option>
+                    </select>
+                </div>
+            
+                <div [class]="field.templateClass">
+                    <input type="text" class="form-control" [id]="field.inputId" placeholder="Select date range">
+                </div>
+            </div> -->
+            
 
               </div>
             </form>
@@ -203,7 +215,7 @@
                     </select>
                   </div>
 
-                  <div class="col-3 dropdown_a">
+                  <!-- <div class="col-3 dropdown_a">
                     <label for="selectrecent" class="form-label">Recent</label>
                     <select id="selectrecent" name="street" data-placeholder="Choose" class="form-control">
                       <option value="">Choose</option>
@@ -212,13 +224,13 @@
                       <option value="Year">This Year</option>
                       <option value="custom" id="custom-date_a">Custom</option>
                     </select>
-                  </div>
-                  <div class="col-3 custom-template_a">
+                  </div> -->
+                  <!-- <div class="col-3 custom-template_a">
                     <label for="daterange" class="form-label d-flex">Date Range
                       <a class="align-end" (click)="changeAdvanceSelection()">Others</a>
                     </label>
                     <input type="text" class="form-control" id="daterange_a" placeholder="Select date range">
-                  </div>
+                  </div> -->
 
                   <!-- <div class="col-3">
                     <label for="housingpermit">Housing Permit</label>
@@ -300,7 +312,7 @@
                       <th scope="col">Case No</th>
                       <th scope="col">Address</th>
                       <th scope="col">Program</th>
-                      <th scope="col">C//U Date</th>
+                      <th scope="col">C/U Date</th>
                       <th scope="col">Status</th>
                       <th scope="col">Open Date</th>
                       <th scope="col">Close Date</th>
