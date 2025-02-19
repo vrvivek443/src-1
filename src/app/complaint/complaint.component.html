@@ -623,7 +623,7 @@
                                 <p class="mb-4">Reporter and Responsible Person Information</p>
                             </div>
                             <div class="col-md-6">
-                                <form class="float-lg-end">
+                                <!-- <form class="float-lg-end">
                                     <div class="row row-cols-lg-4 row-cols-xl-auto g-2">
                                         <div class="col">
                                             <div class="position-relative">
@@ -635,7 +635,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                </form>
+                                </form> -->
                             </div>
                         </div>
 
@@ -688,7 +688,9 @@
                                             </div>
 
                                             <hr />
-                                            <table id="personTable" width="100%" class="table">
+                                            <div class="table-container">
+                                                <div class="table-responsive">
+                                            <table id="personTable" width="100%" class="tablePerson">
                                                 <thead>
                                                     <tr>
                                                         <th style="min-width:10rem">Type </th>
@@ -703,6 +705,8 @@
 
                                                 </tbody>
                                             </table>
+                                                </div>
+                                            </div>
                                             <!-- Person List Ends Here -->
                                         </div>
                                         <div class="tab-pane fade" id="person-add-edit" role="tabpanel">
@@ -2751,6 +2755,7 @@
                                     <button class="btn custom-btn px-4" (click)="previousTab(5)"><i
                                             class="bx bx-left-arrow-alt me-2"></i>Previous</button>
                                     <button class="btn btn-success px-4" onclick="stepper1.next()">Submit</button>
+                                    <!-- <button class="btn btn-success px-4" (click)="stepper1.next()">Submit</button> -->
                                 </div>
                             </div>
                         </div><!---end row-->

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, ChangeDetectorRef, AfterViewInit } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ChangeDetectorRef, AfterViewInit, SimpleChanges } from '@angular/core';
 
 declare var jQuery: any;
 
@@ -9,7 +9,7 @@ declare var jQuery: any;
 })
 export class DatePickerComponent implements AfterViewInit {
 
-  @Input() selectedDateRange: string = '';
+  @Input() selectedDateRange: any = {};
   @Output() selectedDateRangeChange = new EventEmitter<any>();
   @Input() uniqueId: string = '';  
 
@@ -17,6 +17,15 @@ export class DatePickerComponent implements AfterViewInit {
   dropdownItems: any[] = [];
 
   constructor() { }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['selectedDateRange'] && this.selectedDateRange) {
+      if (this.selectedDateRange.dateType) {
+        this.selectedRange = this.selectedDateRange.dateType; // Set dropdown selection
+        this.updateButtonText();
+      }
+    }
+  }
 
   ngAfterViewInit(): void {
     this.updateButtonText();
@@ -44,17 +53,22 @@ export class DatePickerComponent implements AfterViewInit {
       jQuery(`#Date_s_${this.uniqueId}`).val(this.selectedDateRange).trigger('change');
     });
 
-    jQuery(`#Date_s_${this.uniqueId}`).on('cancel.daterangepicker', () => {
+    jQuery(`#Date_s_${this.uniqueId}`).on('cancel.daterangepicker', (event: any, picker: any) => {
       const dateObject = {
-        dateType: 'CUSTOM',
+        dateType: 'NONE',
         startDate: '',
         endDate: '',
       };
-
+    
       this.selectedDateRangeChange.emit(dateObject);
       this.selectedDateRange = '';
+      
       jQuery(`#Date_s_${this.uniqueId}`).val('').trigger('change');
+    
+      picker.setStartDate(new Date()); 
+      picker.setEndDate(new Date());
     });
+    
   }
 
   setDateRange(range: string): void {

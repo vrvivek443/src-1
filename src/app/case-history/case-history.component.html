@@ -69,7 +69,7 @@
                 </div>
                 <div class="col-3">
                   <label for="created_s" class="form-label d-flex">Created</label>
-                  <app-date-picker [(selectedDateRange)]="_caseHistoryViewModel.createDate" [uniqueId]="'created'"></app-date-picker>
+                  <app-date-picker [(selectedDateRange)]="_caseHistoryViewModel.createDate" [uniqueId]="'selectCreateDate'"></app-date-picker>
                 </div>
                 
                 <div class="col-3">
@@ -79,7 +79,7 @@
                 
                 <div class="col-3">
                   <label for="cudate_s" class="form-label d-flex">C/U Date</label>
-                  <app-date-picker [(selectedDateRange)]="_caseHistoryViewModel.cuDate" [uniqueId]="'cuDate'"></app-date-picker>
+                  <app-date-picker [(selectedDateRange)]="_caseHistoryViewModel.cuDate" [uniqueId]="'selectCUDate'"></app-date-picker>
                 </div>
                 
 
@@ -190,6 +190,21 @@
                   <input id="casedescription" name="casedescription" type="text" class="form-control"
                     placeholder="Case Description" [(ngModel)]="_caseHistoryViewModel.casedescription" />
                 </div>
+                <div class="col-3">
+                  <label for="created_s" class="form-label d-flex">Created</label>
+                  <app-date-picker [(selectedDateRange)]="_caseHistoryViewModel.createDate" [uniqueId]="'created_advanced'"></app-date-picker>
+                </div>
+                
+                <div class="col-3">
+                  <label for="modified_s" class="form-label d-flex">Modified</label>
+                  <app-date-picker [(selectedDateRange)]="_caseHistoryViewModel.modifyDate" [uniqueId]="'modified_advanced'"></app-date-picker>
+                </div>
+                
+                <div class="col-3">
+                  <label for="cudate_s" class="form-label d-flex">C/U Date</label>
+                  <app-date-picker [(selectedDateRange)]="_caseHistoryViewModel.cuDate" [uniqueId]="'cuDate__advanced'"></app-date-picker>
+                </div>
+                
 
               </div>
               <br />

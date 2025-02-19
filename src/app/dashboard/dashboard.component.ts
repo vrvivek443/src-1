@@ -42,4 +42,13 @@ export class DashboardComponent {
       }
     });
   }
+
+//   getSearchURL(text: string, url: string) {
+//     switch (text) {
+//         case 'Priority Cases':
+//             return url + '&casepriority=P';
+//         default:
+//             return url; // Provide a fallback URL or handle it appropriately
+//     }
+// }
 }

@@ -11,5 +11,6 @@ export class DashboardWidget{
     displaycount:any;
     displaytext:string;
     classname:string;
+    url: string;
     
 }

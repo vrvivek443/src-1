@@ -67,8 +67,9 @@ export class AdvancedSearchViewModel {
     apn: any[] = [];
     caseId: any[] = [];
     //cdbg: any[];
-    createDate: string;
-    cuDate: string;
+    createDate?: any;
+    cuDate?: any;
+    modifyDate?: any;
     description: string;
     houseNumber: any[] = [];
     housingPermits: any[] = [];

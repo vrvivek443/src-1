@@ -44,6 +44,13 @@ export class AppComponent {
   }
 
 
+  openNewComplaint() {
+    this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+      this.router.navigate(['/complaint']);
+    });
+  }
+  
+
   SetNoOfNotices() {
     this._noofNotices = this._notices.length + '';
     this._count = this._notices.filter(x => x.isRead == false).length;

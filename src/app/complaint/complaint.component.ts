@@ -1751,11 +1751,11 @@ export class ComplaintComponent {
 
     let searchParameter = [];
     let callSearchAPI: boolean = false;
-    if (this._searchViewModel.apartmentNumber.length > 0) {
+    if (this._searchViewModel.apartmentNumber?.length > 0) {
       searchParameter.push("apartmentNumber=" + this._searchViewModel.apartmentNumber);
       callSearchAPI = true;
     }
-    if (this._searchViewModel.apnNumber.length > 0) {
+    if (this._searchViewModel.apnNumber?.length > 0) {
       searchParameter.push("apnNumber=" + this._searchViewModel.apnNumber);
       callSearchAPI = true;
       console.log(this._searchViewModel.apnNumber)
@@ -1764,14 +1764,14 @@ export class ComplaintComponent {
           searchParameter.push("streetName=" + this._searchViewModel.streetName);
         } */
 
-    if (streetTypeCode.length > 0) {
+    if (streetTypeCode?.length > 0) {
       let stData: any = this._streetMasterDataList.find(x => x.id == streetTypeCode);
 
       searchParameter.push("streetType=" + stData.streetTypeCode);
       searchParameter.push("streetName=" + stData.streetname);
       callSearchAPI = true;
     }
-    if (this._searchViewModel.streetNumber.length > 0) {
+    if (this._searchViewModel.streetNumber?.length > 0) {
       searchParameter.push("streetNumber=" + this._searchViewModel.streetNumber);
       callSearchAPI = true;
     }
@@ -3173,6 +3173,15 @@ export class ComplaintComponent {
     }
   }
 
+  isJSON(str: any) {
+    try {
+      JSON.parse(str);
+      return true; // It's a valid JSON
+    } catch (e) {
+      return false; // It's not a valid JSON
+    }
+  }
+
   saveViolation() {
     try {
       this._caseViolationViewModel.duedate = this.formatDateToCustomISO(this._caseViolationViewModel.duedate);
@@ -3232,6 +3241,8 @@ export class ComplaintComponent {
             //  this.dtTrigger.next(null);
           } else {
             //this._violationErrorSummary = JSON.parse(response.errorMessage);
+            // console.log(response.errorMessage);
+            if(this.isJSON(response.errorMessage)) {
             let errors = JSON.parse(response.errorMessage.toString().replaceAll("\\u0027", "\"").replaceAll("[\"", "[").replaceAll("\"]", "]").replaceAll("\"{", "{").replaceAll("}\"", "}"));
             this._violationErrorSummary = []
             errors.forEach((v: any) => {
@@ -3249,12 +3260,13 @@ export class ComplaintComponent {
                 this._violationErrorSummary.push(v.error);
               }
             });
+          }
             Lobibox.notify('error', {
               pauseDelayOnHover: true,
               continueDelayOnInactiveTab: false,
               position: 'top right',
               icon: 'bx bx-check-circle',
-              msg: 'Unable to save Violation. Please contact IT Helpdesk.'
+              msg: this.isJSON(response.errorMessage) ? 'Unable to save Violation. Please contact IT Helpdesk.' : response.errorMessage,
             });
           }
         },
@@ -3308,6 +3320,30 @@ export class ComplaintComponent {
     return null
   }
 
+  InitializeEntity() {
+    return {
+      id: -1,
+      actionType: 'O',
+      actionCode: 10,
+      actionVersion: (this.getVersion("Action") != -1) ? this._actionVersion : 0,
+      createdOn: this.formattedDate,
+      createdBy: '',
+      modifiedBy: '',
+      modifiedOn: '',
+      readDate: '',
+      actionDate: '',
+      status: false,
+      isRead: false,
+      routeToInspectorId: this._caseDetailViewModel.inspector1id,
+      comments: 'Priority Task is Assigned',
+      caseMaster: {
+        id: this._caseId
+      },
+      caseActionFiles: [] as any[],
+    };
+  }
+  
+
   saveCaseDetail(status: string) {
     this._caseDetailViewModel.programcode = jQuery('#programcode').val();
     this._caseDetailViewModel.sourcecode = jQuery('#sourcecode').val();
@@ -3351,54 +3387,9 @@ export class ComplaintComponent {
               }
             
               console.log("Case Detail Response : " + JSON.stringify(response));
-              if (this._isPriority) {
-                const id = parseInt(this._caseDetailViewModel.inspector1id, 10);
-                const entity = {
-                  id: -1,
-                  actionType: 'O',
-                  actionCode: 10,
-                  actionVersion: (this.getVersion("Action") != -1) ? this._actionVersion : 0,
-                  createdOn: this.formattedDate,
-                  createdBy: '',
-                  modifiedBy: '',
-                  modifiedOn: '',
-                  readDate: '',
-                  actionDate: '',
-                  status: false,
-                  isRead: false,
-                  routeToInspectorId: this._caseDetailViewModel.inspector1id,
-                  comments: 'Priority Task is Assigned',
-                  caseMaster: {
-                    id: this._caseId
-                  },
-                  caseActionFiles: [] as any[],
-                }
-                this._complaintServiceCall.saveByMethodName(this._urlConstant.CaseMasterModule, this._urlConstant.SaveAction, entity).subscribe((response) => {
-                  if(response.status == "SUCCESS")
-                  {
-                    Lobibox.notify('success', {
-                      pauseDelayOnHover: true,
-                      continueDelayOnInactiveTab: false,
-                      position: 'top right',
-                      icon: 'bx bx-check-circle',
-                      msg: `Priority Task assigned to ${this.getInspectorName(id)}`
-                    });
-                  }
-                  else
-                  {
-                    Lobibox.notify('error', {
-                      pauseDelayOnHover: true,
-                      continueDelayOnInactiveTab: false,
-                      position: 'top right',
-                      icon: 'bx bx-check-circle',
-                      msg: response.errorMessage
-                    });
-                  }
-                });
-                
-                
-                
-              }
+              const id = parseInt(this._caseDetailViewModel.inspector1id, 10);
+              if(this._isPriority)
+              this.SaveActionByCategory(this.InitializeEntity(), this._isPriority, id);
               if (status != null) {
                 this._caseDetail.casestatus = status;
                 this._caseDetailViewModel.casestatus = status;
@@ -3695,7 +3686,7 @@ export class ComplaintComponent {
         }
         break;
     }
-    jQuery("#navigationAction").hide();
+    // jQuery("#navigationAction").hide();
     jQuery('.nav-tabs a[href="#actionAddOrEdit"]').tab('show');
     jQuery('.nav-tabs a[href="#action-add-edit"]').tab('show');
   }
@@ -4048,18 +4039,18 @@ export class ComplaintComponent {
 
 
 
-  SaveActionByCategory(entity: any) {
+  SaveActionByCategory(entity: any, priorityCase?: boolean, id?: number) {
     console.log("Entity Action : " + JSON.stringify(entity));
     this._complaintServiceCall.saveByMethodName(this._urlConstant.CaseMasterModule, this._urlConstant.SaveAction, entity).subscribe((response) => {
       if (response.status == "SUCCESS") {
-        // this.loadCaseDetail(this._caseId);
         Lobibox.notify('success', {
           pauseDelayOnHover: true,
           continueDelayOnInactiveTab: false,
           position: 'top right',
           icon: 'bx bx-check-circle',
-          msg: 'Action saved successfully.'
+          msg: priorityCase ? `Priority Task assigned to ${this.getInspectorName(id)}` :'Action saved successfully.'
         });
+        
         console.log("Action Saved Response : " + JSON.stringify(response));
         jQuery("#addOrEditAction").hide();
         //jQuery("#action-list").show();
@@ -4102,7 +4093,7 @@ export class ComplaintComponent {
           continueDelayOnInactiveTab: false,
           position: 'top right',
           icon: 'bx bx-check-circle',
-          msg: 'Unable to action log.<br/>' + errM
+          msg: priorityCase ? errM : 'Unable to action log.<br/>' + errM
         });
       }
     },

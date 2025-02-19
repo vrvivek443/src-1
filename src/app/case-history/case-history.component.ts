@@ -73,7 +73,6 @@ export class CaseHistoryComponent implements AfterViewInit {
 
   ngOnInit() {
     try {
-
       let userString = localStorage.getItem('user');
       if (userString == null)
         this.logout();
@@ -174,10 +173,17 @@ export class CaseHistoryComponent implements AfterViewInit {
       this.updateFilterDataArray("Case No", this._caseHistoryViewModel.caseno);
     }
 
+    
     let inspector = params['inspector'];
     if (inspector !== undefined) {
       this.queryStringValue = true;
-      this._caseHistoryViewModel.inspector = inspector;
+      if(inspector === 'me') {
+        this._caseHistoryViewModel.inspector = this._user.id;
+      } 
+      else{
+        this._caseHistoryViewModel.inspector = inspector;
+      }
+        this.setData(this._caseHistoryViewModel.inspector, 'selectInspector');
     }
 
     let status = params['status'];
@@ -225,6 +231,7 @@ export class CaseHistoryComponent implements AfterViewInit {
     if (apn !== undefined) {
       this.queryStringValue = true;
       this._caseHistoryViewModel.apn = apn;
+      this.setData(this._caseHistoryViewModel.apn, 'selectAPN');
     }
 
     let number = params['number'];
@@ -245,8 +252,125 @@ export class CaseHistoryComponent implements AfterViewInit {
       this.queryStringValue = true;
       this._caseHistoryViewModel.housingpermit = housingpermit;
     }
+
+  let overdue = params['overdue'];
+  if (overdue !== undefined) {
+    if (overdue === 'THISWEEK' || overdue === 'THISMONTH') {
+      this.queryStringValue = true;
+      const today = new Date();
+      
+      let startDate: Date;
+      let endDate = new Date(today);
+  
+      if (overdue === 'THISWEEK') {
+        const dayOfWeek = today.getDay(); // 0 (Sunday) to 6 (Saturday)
+    
+        startDate = new Date(today);
+        endDate = new Date(today);
+    
+        if (dayOfWeek === 1) { // If today is Monday
+            // Start from last week's Monday
+            startDate.setDate(today.getDate() - 7); // Previous week's Monday
+            endDate.setDate(today.getDate() - 1); // Previous week's Sunday
+        } else {
+            // Start from this week's Monday
+            startDate.setDate(today.getDate() - (dayOfWeek === 0 ? 6 : dayOfWeek - 1)); // Current week's Monday
+            endDate.setDate(today.getDate() - 1); // Yesterday
+        }
+    }    
+      else if (overdue === 'THISMONTH') {
+        startDate = new Date(today.getFullYear(), today.getMonth(), 1); // First day of the month
+      }
+  
+      // Set endDate as yesterday
+      endDate.setDate(today.getDate() - 1);
+  
+      // Format dates as YYYY-MM-DD without timezone issues
+      const formatDate = (date: Date) => 
+        `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+  
+      // Assign to cuDate
+      this._caseHistoryViewModel.cuDate = {
+        dateType: 'CUSTOM',
+        startDate: formatDate(startDate),
+        endDate: formatDate(endDate),
+      };
+    }
+  }
+  
+  
+  
+
+
+    let createDate = params['createdate'];
+    let date = decodeURIComponent(createDate)
+    if (createDate !== undefined) {
+      this.queryStringValue = true;
+      this._caseHistoryViewModel.createDate = JSON.parse(createDate);
+    }
+
+    
+    let closeDate = params['closedate'];
+    if (closeDate !== undefined) {
+      if (closeDate === 'THISWEEK' || closeDate === 'THISMONTH' || closeDate === 'TODAY') {
+        this.queryStringValue = true;
+        const today = new Date();
+        
+        let startDate: Date;
+        let endDate: Date;
+    
+        if (closeDate === 'THISWEEK') {
+          const dayOfWeek = today.getDay(); // 0 (Sunday) to 6 (Saturday)
+          
+          startDate = new Date(today);
+          startDate.setDate(today.getDate() - (dayOfWeek === 0 ? 6 : dayOfWeek - 1)); // Start of the week (Monday)
+      
+          endDate = new Date(today);
+      
+          // If today is Monday, set endDate to Monday (same as startDate)
+          if (dayOfWeek === 1) { // Monday
+              endDate = new Date(startDate);
+          } else {
+              endDate.setDate(today.getDate() - 1); // Otherwise, set to yesterday
+          }
+      }
+      else if (closeDate === 'THISMONTH') {
+        startDate = new Date(today); // Set startDate as today's date
+    
+        // Set endDate to the last day of the current month
+        endDate = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+      }    
+        else if (closeDate === 'TODAY') {
+          startDate = new Date(today);
+          endDate = new Date(today);
+        }
+    
+        // Format dates as YYYY-MM-DD
+        const formatDate = (date: Date) => 
+          `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+    
+        // Assign to cuDate
+        this._caseHistoryViewModel.cuDate = {
+          dateType: closeDate,
+          startDate: formatDate(startDate),
+          endDate: formatDate(endDate),
+        };
+      }
+    }
+    
+
+
+
+    let modifyDate = params['modifydate'];
+    if (modifyDate !== undefined) {
+      this.queryStringValue = true;
+      this._caseHistoryViewModel.modifyDate = JSON.parse(modifyDate);
+    }
+
+
     if (this.queryStringValue === true) {
       this.isSimpleSearch = false;
+      console.log(this._caseHistoryViewModel.inspector);
       this.search();
     }
     //console.log('Search Param settings:', this._caseHistoryViewModel);
@@ -648,6 +772,7 @@ export class CaseHistoryComponent implements AfterViewInit {
       }
     }
 
+    
     jQuery('#caseHistorySearchPanel').collapse('hide');
     jQuery('#caseHistorySearchResult').collapse('show');
     this.fetchSearchResult();
@@ -988,8 +1113,17 @@ export class CaseHistoryComponent implements AfterViewInit {
 
   setData(data: any, element: string) {
     console.log('Set Status');
-    var s: [] = data.split(',');
+    let s: string[] = [];
+    
+    if (typeof data === 'string') {
+        s = data.split(',');
+    } else if (typeof data === 'number') {
+        // If it's a number, convert it to a string and make it an array with one element
+        s = [data.toString()];
+    }
+    console.log(s);
     element = '#' + element;
+    console.log(element);
     //jQuery('#selectStatus').val(s).trigger('change');
     jQuery(element).val(s).trigger('change');
   }
@@ -1085,7 +1219,7 @@ export class CaseHistoryComponent implements AfterViewInit {
       cdbg: "",
       casedescription: "",
       street: "",
-      casedate: ""
+      casedate: "",
     }
 
   }
@@ -1131,32 +1265,13 @@ export class CaseHistoryComponent implements AfterViewInit {
     try {
       this.resetSimpleSearchViewModel();
       this.filterDataArray = [];
-      this._simpleSearchExViewModel.createDate = this._caseHistoryViewModel.createDate;
-      this._simpleSearchExViewModel.cuDate = this._caseHistoryViewModel.cuDate;
-      this._simpleSearchExViewModel.modifyDate = this._caseHistoryViewModel.modifyDate;
-      // const [custartDate, cuendDate] = jQuery('#cudate_s').val().split(" to ");
+      if(this._caseHistoryViewModel.cuDate?.dateType !== 'NONE')
+      this._simpleSearchExViewModel.cuDate = this._caseHistoryViewModel.cuDate
+      if(this._caseHistoryViewModel.createDate?.dateType !== 'NONE')
+      this._simpleSearchExViewModel.createDate = this._caseHistoryViewModel.createDate
+      if(this._caseHistoryViewModel.modifyDate?.dateType !== 'NONE')
+      this._simpleSearchExViewModel.modifyDate = this._caseHistoryViewModel.modifyDate
 
-      // if(jQuery('#cudate_s').val())
-      // this._simpleSearchExViewModel.cuDate = {
-      //   dateType: jQuery('#selectrecent_cudate').val(),
-      //   endDate: cuendDate,
-      //   startDate: custartDate,
-      // }
-      // const [crstartDate, crendDate] = jQuery('#created_s').val().split(" to ");
-      // if(jQuery('#created_s').val())
-      // this._simpleSearchExViewModel.createDate = {
-      //     dateType: jQuery('#selectrecent_s').val(),
-      //     endDate: crendDate,
-      //     startDate: crstartDate,
-      // }
-      // const [mstartDate, mendDate] = jQuery('#modified_s').val().split(" to ");
-      // if(jQuery('#modified_s').val())
-      // this._simpleSearchExViewModel.modifyDate = {
-      //   dateType: jQuery('#selectrecent_modified').val(),
-      //   endDate: mendDate,
-      //   startDate: mstartDate,
-      // }
-    
       //case number
       if ((this._caseHistoryViewModel.caseno != null) && (this._caseHistoryViewModel.caseno.length > 0)) {
         this._simpleSearchExViewModel.caseId = this._caseHistoryViewModel.caseno.split(',');
@@ -1242,10 +1357,18 @@ export class CaseHistoryComponent implements AfterViewInit {
 
   }
   assignAdvancedSearchModel() {
+    console.log(this._caseHistoryViewModel.inspector);
     this.resetAdvancedSearchViewModel();
     this.filterDataArray = [];
 
     //case number
+    if(this._caseHistoryViewModel.createDate?.dateType !== 'NONE')
+    this._advancedSearchViewModel.createDate = this._caseHistoryViewModel.createDate;
+    if(this._caseHistoryViewModel.cuDate?.dateType !== 'NONE')
+    this._advancedSearchViewModel.cuDate = this._caseHistoryViewModel.cuDate;
+    if(this._caseHistoryViewModel.modifyDate?.dateType !== 'NONE')
+    this._advancedSearchViewModel.modifyDate = this._caseHistoryViewModel.modifyDate;
+    
     if ((this._caseHistoryViewModel.caseno != null) && (this._caseHistoryViewModel.caseno.length > 0)) {
       this._advancedSearchViewModel.caseId = this._caseHistoryViewModel.caseno.split(',');
       this.filterDataArray.push({ key: "Case No", value: this._caseHistoryViewModel.caseno });
@@ -1279,6 +1402,7 @@ export class CaseHistoryComponent implements AfterViewInit {
     //Inspector
     this._selectedInspectorItems = [];
     let selectedInspectors = jQuery('#selectInspector option:selected').toArray().map((i: { text: any; }) => i.text);
+    console.log(selectedInspectors)
     if (selectedInspectors.length > 0) {
       console.log("selectedInspectors:", selectedInspectors.length);
       this.filterDataArray.push({ key: "Inspector", value: selectedInspectors.join(', ') });
@@ -1368,6 +1492,7 @@ export class CaseHistoryComponent implements AfterViewInit {
 
     console.log('Advanced search model:', this._advancedSearchViewModel);
   }
+  
   updateFilterDataArray(key: any, value: any) {
     this.filterDataArray.push({ key: key, value: value });
   }
@@ -1531,6 +1656,7 @@ export class CaseHistoryComponent implements AfterViewInit {
     }).on('select2:close', (event: any) => {
       jQuery('#selectSupervisor').next('.select2-container').removeClass('focused');
     });
+
     console.log('Simple Search Boolean:', this.isSimpleSearch);
   }
   simpleSearch() {

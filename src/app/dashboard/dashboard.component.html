@@ -7,7 +7,11 @@
                     <div class="d-flex align-items-center">
                         <div class="me-auto">
                             <p class="mb-0 text-dark">{{_cv.displaytext}}</p>
-                            <h4 class="my-1 text-dark">{{_cv.displaycount}}</h4>
+                            <h4 className="my-1 text-dark">
+                                <a href={{_cv.url}}>{{_cv.displaycount}}</a>
+                              </h4>
+                              
+                              
                             <p class="mb-0 font-13 text-dark">+8.4% from last week</p>
                         </div>
                         <div id="chart4"><canvas width="100" height="25"

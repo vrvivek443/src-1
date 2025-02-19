@@ -130,3 +130,55 @@
     opacity: 0.7;
 }
 
+/* Ensure the table does not shrink and stays properly aligned */
+.tablePerson-container {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.tablePerson-responsive {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.tablePerson {
+    width: 100%;
+    border-collapse: collapse; /* Ensure no spacing issues */
+    table-layout: fixed; /* Ensures the columns maintain proper width */
+}
+
+/* Adjust column widths for smaller screens */
+@media (max-width: 768px) {
+    .tablePerson thead {
+        display: none;
+    }
+
+    .tablePerson tbody, .table tr, .table td {
+        display: block;
+        width: 100%;
+    }
+
+    .tablePerson tr {
+        margin-bottom: 15px;
+        border: 1px solid #ddd;
+        padding: 10px;
+    }
+
+    .tablePerson td {
+        text-align: left;
+        position: relative;
+        padding-left: 50%;
+        word-wrap: break-word; /* Prevents text overflow */
+    }
+
+    .tablePerson td::before {
+        content: attr(data-label);
+        position: absolute;
+        left: 10px;
+        font-weight: bold;
+    }
+}
+
+

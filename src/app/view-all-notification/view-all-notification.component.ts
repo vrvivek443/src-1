@@ -9,6 +9,7 @@ import { notificationSearchModel } from './view-all-notification.viewmodel';
 import { UserModel } from '../user/user.viewmodel';
 import { Output, EventEmitter } from '@angular/core';
 import { AppService } from '../services/app.services';
+import { ComplaintService } from '../services/complaint.service';
 declare var jQuery: any;
 @Component({
   selector: 'app-view-all-notification',
@@ -24,6 +25,7 @@ export class ViewAllNotificationComponent {
   public _status: any[] = [];
   public _tmpcreatedBy: string[] = [];
   public _tmpStatus: string;
+  public _noofNotices: any = 0;
 
   // @Output() noticesCount = new EventEmitter<any>();
   ngOnInit() {
@@ -47,13 +49,14 @@ export class ViewAllNotificationComponent {
       console.log('User Data:', this._user);
     });
   }
-  constructor(private router: Router, private _http: HttpClient, private _fb: FormBuilder, private _urlConstant: APIURLConstant, private _viewAllNotificationServiceCall: ViewAllNotificationService, private appservice: AppService) {
+  constructor(private router: Router, private _http: HttpClient, private _fb: FormBuilder, private _urlConstant: APIURLConstant, private _viewAllNotificationServiceCall: ViewAllNotificationService, private appservice: AppService, private _complaintServiceCall: ComplaintService) {
   }
   loadNoticeData() {
     this._viewAllNotificationServiceCall.get(this._urlConstant.UserDataModule, this._urlConstant.GetNotices).subscribe((response) => {
       this._notices = [];
       if (response.status == "SUCCESS") {
         this._notices = response.notices;
+        console.log(this._notices)
         this.tblViewAllNotification.rows().remove().draw();
         this.tblViewAllNotification.rows.add(this._notices).draw();
       } else {
@@ -118,10 +121,8 @@ export class ViewAllNotificationComponent {
         console.log(response);
         this._notices = response.notices;
         //this.noticesCount.emit((this._notices.filter(x => x.isRead == false).length + 1).toString());
-        this.appservice.setNoticeCount((this._notices.filter(x => x.isRead == false).length + 1).toString());
-        this.appservice.currentNoticeCount.subscribe(list => {
-          this._notices = list;
-        });
+        this.appservice.setNoticeCount((this._notices.filter(x => x.isRead == false).length).toString());
+        // console.log(this._notices.filter(x => x.isRead == false).length + 1)
         this.tblViewAllNotification.rows().remove().draw();
         this.tblViewAllNotification.rows.add(this._notices).draw();
         // var data = response.data;
@@ -138,6 +139,14 @@ export class ViewAllNotificationComponent {
       }
     });
   }
+
+  // check()
+  // {
+  //   this.appservice.currentNoticeCount.subscribe((newCount) => {
+  //     console.log("Updated notice count received:", newCount);
+  //   });
+  // }
+
   resetMockViewModel() {
     this._notificationSearchModel = {
       createdBy: [],
@@ -161,7 +170,15 @@ export class ViewAllNotificationComponent {
           }
         }
       },
-      { data: 'actionId' },
+      {
+        data: 'actionId',
+        render: function (data: any, type: any, row: any) {
+          if (data != null)
+            return data;
+          else
+            return "";
+        }
+      },
       {
         data: "message",
         render: function (data: any, type: any, row: any) {

@@ -32,10 +32,16 @@
           <div class="menu-title">Case Management</div>
         </a>
         <ul style="list-style-type: none;">
-          <li id="newComplaintLink" class="rolePageHide"> <a [routerLink]="['/complaint']"><i
+          <!-- <li id="newComplaintLink" class="rolePageHide"> <a [routerLink]="['/complaint']"><i
                 class='bx bx-radio-circle '></i>New
               Complaint</a>
+          </li> -->
+          <li id="newComplaintLink" class="rolePageHide">
+            <a href="javascript:void(0);" (click)="openNewComplaint()">
+              <i class='bx bx-radio-circle'></i> New Complaint
+            </a>
           </li>
+          
 
           <li id="searchComplaintLink"> <a [routerLink]="['/casehistory']"><i class='bx bx-radio-circle '></i>Case Search</a>
           </li>
