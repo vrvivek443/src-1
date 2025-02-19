@@ -3814,6 +3814,7 @@ export class ComplaintComponent {
     if (this._actionLogViewModel.id == 0) {
       this._actionLogViewModel.id = -1;
     }
+    this._actionLogViewModel.actionDate = this.formattedDate;
     this._actionLogViewModel.caseMaster = { "id": this._caseId };
     this._actionLogViewModel.actionVersion = (this.getVersion("Action") != -1) ? this._actionVersion : 0;
     this.resetActionLogFileViewModel();

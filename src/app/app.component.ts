@@ -11,6 +11,7 @@ import { Router } from '@angular/router';
 import { AppService } from './services/app.services';
 import { CaseHistoryService } from './services/casehistory.service';
 import { MsalService } from '@azure/msal-angular';
+import { ViewAllNotificationService } from './services/viewallnotification.service';
 
 declare var jQuery: any;
 
@@ -39,7 +40,8 @@ export class AppComponent {
     private _complaintServiceCall: ComplaintService,
     private appservice: AppService,
     private authService: MsalService,
-    private _caseHistoryServiceCall: CaseHistoryService,) {
+    private _caseHistoryServiceCall: CaseHistoryService,
+    private _viewAllNotificationServiceCall: ViewAllNotificationService) {
 
   }
 
@@ -47,6 +49,12 @@ export class AppComponent {
   openNewComplaint() {
     this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
       this.router.navigate(['/complaint']);
+    });
+  }
+
+  openNotification() {
+    this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+      this.router.navigate(['/viewallnotification']);
     });
   }
   
@@ -164,6 +172,7 @@ export class AppComponent {
       return "";
     return "2 sec";
   }
+
   loadMessageForUser() {
     this._complaintServiceCall.get(this._urlConstant.UserDataModule, this._urlConstant.GetNotices).subscribe((response) => {
       this._notices = [];
@@ -179,4 +188,29 @@ export class AppComponent {
     });
   }
 
+  MakeItRead(caseid: any, actionid: any) {
+    //casemaster/messageRead?id=1--CaseId--&actionId=--actionID--
+    let moduleName = this._urlConstant.MessageRead + '?id=' + caseid + '&actionId=' + actionid;
+    this._viewAllNotificationServiceCall.get(this._urlConstant.CaseMasterModule, moduleName).subscribe((response) => {
+      if (response.status == "SUCCESS") {
+        console.log(response);
+        this._notices = response.notices;
+        //this.noticesCount.emit((this._notices.filter(x => x.isRead == false).length + 1).toString());
+        this.appservice.setNoticeCount((this._notices.filter(x => x.isRead == false).length).toString());
+        this.router.navigateByUrl(`/complaint?caseId=${caseid}`)
+        // console.log(this._notices.filter(x => x.isRead == false).length + 1)
+        // var data = response.data;
+        // this._notices = data;
+
+        // if (this.tblViewAllNotification === undefined) {
+        //   this.initializeDatatable();
+        // }
+
+        // this.tblViewAllNotification.rows().remove().draw();
+        // this.tblViewAllNotification.rows.add(this._notices).draw();
+      } else if (response.status == "ERROR") {
+        alert('Error:' + response.errorMessage);
+      }
+    });
+  }
 }

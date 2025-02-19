@@ -107,12 +107,12 @@
 
         <div class="top-menu ms-auto">
           <ul class="navbar-nav align-items-center gap-1">
-            <li class="nav-item dropdown dropdown-large">
+            <!-- <li class="nav-item dropdown dropdown-large">
               <a class="nav-link dropdown-toggle dropdown-toggle-nocaret position-relative" href="#"
                 data-bs-toggle="dropdown"><span class="alert-count">{{_newNoticeCount}}</span>
                 <i class='bx bx-bell'></i>
               </a>
-              <!-- _notices.length-->
+             
               <div class="dropdown-menu dropdown-menu-end">
                 <a href="javascript:;">
                   <div class="msg-header">
@@ -140,8 +140,40 @@
                 </div>
 
               </div>
+            </li> -->
+            <li class="nav-item dropdown dropdown-large">
+              <a class="nav-link dropdown-toggle dropdown-toggle-nocaret position-relative" href="#"
+                data-bs-toggle="dropdown"><span class="alert-count">{{_newNoticeCount}}</span>
+                <i class='bx bx-bell'></i>
+              </a>
+              <!-- _notices.length-->
+              <div class="dropdown-menu dropdown-menu-end">
+                <a href="javascript:;">
+                  <div class="msg-header">
+                    <p class="msg-header-title">Notifications</p>
+                    <p class="msg-header-badge">{{_newNoticeCount}} New</p>
+                  </div>
+                </a>
+                <div class="header-notifications-list" style="overflow: auto;">
+                  <!-- Display only the latest 10 notifications -->
+                  <a class="dropdown-item" href="javascript:;" *ngFor="let _asr of _notices.slice(0, 10)">
+                    <div class="d-flex align-items-center">
+                      <div class="flex-grow-1" (click)="MakeItRead(_asr?.id, _asr?.actionId)">
+                        <h6 class="msg-name">{{_asr?.fullName}}<span
+                            class="msg-time float-end">{{getTimespan(_asr?.actionDate)}}</span></h6>
+                        <p class="msg-info" [class.bold-text]="_asr?.isRead==false">{{_asr?.message}}</p>
+                      </div>
+                    </div>
+                  </a>
+                </div>
+            
+                <div class="text-center msg-footer">
+                  <a (click)="openNotification()">View All Notifications </a>
+                </div>
+            
+              </div>
             </li>
-
+            
           </ul>
         </div>
         <div class="user-box dropdown px-3">
