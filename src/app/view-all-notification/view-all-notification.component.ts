@@ -127,7 +127,7 @@ export class ViewAllNotificationComponent {
         this.tblViewAllNotification.rows.add(this._notices).draw();
         // var data = response.data;
         // this._notices = data;
-
+        
         // if (this.tblViewAllNotification === undefined) {
         //   this.initializeDatatable();
         // }
@@ -231,6 +231,7 @@ export class ViewAllNotificationComponent {
       scrollX: true,
       fixedColumns: true,
       width: 100,
+      order: [],
       columnDefs: [
         { width: 70, targets: [0] },
         { className: "dt-left", targets: "_all" }

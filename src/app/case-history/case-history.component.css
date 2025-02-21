@@ -22,7 +22,7 @@
 }
 
 ::ng-deep
-.daterangepicker.ltr.show-calendar.openscenter.hidden-date-picker {
+.daterangepicker.ltr.show-calendar.openscenter.hidden-date-picker{
   display: none !important;
 }
 
@@ -33,5 +33,15 @@
     outline: none !important; /* Removes any default focus styles */
     background-color: #fff; 
     border: none !important;
+}
+
+::ng-deep
+.select2-results.hide-dropdown {
+    display: none !important;
+}
+
+::ng-deep
+.hidden-calendar {
+    display: none !important;
 }
 

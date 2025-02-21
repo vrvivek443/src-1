@@ -69,6 +69,7 @@ export class CaseHistoryComponent implements AfterViewInit {
     private router: Router,
     private _activatedRoute: ActivatedRoute,
     private appSerivce: AppService) {
+      this.initializeCollapseListeners()
   }
 
   ngOnInit() {
@@ -184,6 +185,18 @@ export class CaseHistoryComponent implements AfterViewInit {
         this._caseHistoryViewModel.inspector = inspector;
       }
         this.setData(this._caseHistoryViewModel.inspector, 'selectInspector');
+    }
+
+    let supervisor = params['supervisor'];
+    if (supervisor !== undefined) {
+      this.queryStringValue = true;
+      if(supervisor === 'me') {
+        this._caseHistoryViewModel.supervisor = this._user.id;
+      } 
+      else{
+        this._caseHistoryViewModel.supervisor = supervisor;
+      }
+        this.setData(this._caseHistoryViewModel.supervisor, 'selectSupervisor');
     }
 
     let status = params['status'];
@@ -370,7 +383,6 @@ export class CaseHistoryComponent implements AfterViewInit {
 
     if (this.queryStringValue === true) {
       this.isSimpleSearch = false;
-      console.log(this._caseHistoryViewModel.inspector);
       this.search();
     }
     //console.log('Search Param settings:', this._caseHistoryViewModel);
@@ -378,6 +390,10 @@ export class CaseHistoryComponent implements AfterViewInit {
 
   ngAfterViewInit() {
     let self = this;
+    jQuery('#caseHistorySearchPanel').on('show.bs.collapse', () => {
+      jQuery('.daterangepicker.ltr.show-calendar.openscenter').removeClass('hidden-date-picker');
+      jQuery('.select2-results').removeClass('hide-dropdown');
+    });
     jQuery('#selectInspector_s').select2({}).on('select2:open', () => {
       jQuery('#selectInspector_s').next('.select2-container').addClass('focused');
     }).on('select2:close', (event: any) => {
@@ -632,6 +648,24 @@ export class CaseHistoryComponent implements AfterViewInit {
     this.fetchSearchResult();
     jQuery('#caseHistorySearchPanel').collapse('hide');
     jQuery('#caseHistorySearchResult').collapse('show');
+  }
+
+  initializeCollapseListeners() {
+    jQuery('#caseHistorySearchPanel').on('hide.bs.collapse', () => {
+      this.toggleDateRangeClass(true);
+    });
+
+    jQuery('#caseHistorySearchPanel').on('show.bs.collapse', () => {
+      this.toggleDateRangeClass(false);
+    });
+  }
+
+  toggleDateRangeClass(hide: boolean): void {
+    if (hide) {
+      jQuery('.daterangepicker.ltr.show-calendar.openscenter').addClass('hidden-calendar');
+    } else {
+      jQuery('.daterangepicker.ltr.show-calendar.openscenter').removeClass('hidden-calendar');
+    }
   }
 
   setAdvancedSearchData(d: any): void {
@@ -1497,6 +1531,8 @@ export class CaseHistoryComponent implements AfterViewInit {
     this.filterDataArray.push({ key: key, value: value });
   }
   search() {
+    jQuery('.select2-results').addClass('hide-dropdown');
+    jQuery('.daterangepicker.ltr.show-calendar.openscenter').addClass('hidden-date-picker');
     console.log('Search Model');
     if (this.isSimpleSearch) {
       this.assignSimpleSearchModel();

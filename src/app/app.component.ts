@@ -177,7 +177,9 @@ export class AppComponent {
     this._complaintServiceCall.get(this._urlConstant.UserDataModule, this._urlConstant.GetNotices).subscribe((response) => {
       this._notices = [];
       if (response.status == "SUCCESS") {
-        this._notices = response.notices;
+        // this._notices = response.notices;
+        this._notices = response.notices.filter((data: any) => data.isRead === false)
+       
         let falseRecords = this._notices.filter(x => x.isRead == false).length;
         console.log('False Records:', falseRecords);
         // this.appservice.setMessage(falseRecords.toString());
@@ -195,9 +197,12 @@ export class AppComponent {
       if (response.status == "SUCCESS") {
         console.log(response);
         this._notices = response.notices;
+        
         //this.noticesCount.emit((this._notices.filter(x => x.isRead == false).length + 1).toString());
         this.appservice.setNoticeCount((this._notices.filter(x => x.isRead == false).length).toString());
-        this.router.navigateByUrl(`/complaint?caseId=${caseid}`)
+        this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+          this.router.navigateByUrl(`/complaint?caseId=${caseid}`);
+        });
         // console.log(this._notices.filter(x => x.isRead == false).length + 1)
         // var data = response.data;
         // this._notices = data;
