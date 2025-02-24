@@ -84,7 +84,7 @@
                         *ngIf=" this._caseDetail != null || this._caseDetail?.id!= -1 || this._caseDetail?.id!= 0 || this._caseDetail?.id != undefined"
                         class="font-size: xx-large;">
                         <b>Case No:</b>{{_caseDetail?.id}}</span>&nbsp;
-                    {{_canChangeStatus}}
+        
                     <b style="margin-right: 5px">Case Status:</b>
                     <button *ngIf="this._canChangeStatus" class="btn custom-btn"
                         (click)="this.changeStatus()">{{getStatusDesc(_caseDetail?.casestatus)}}</button>
