@@ -3212,9 +3212,9 @@ export class ComplaintComponent {
               this._violationTable.clear().rows.add(this._caseDetail.caseViolation).draw();
               this.addShortDescriptionRows(); // Add short descriptions for new rows
             }
-              this._caseViolationViewModel.duedate = this.formatDate(this._caseViolationViewModel.duedate);
-              this._caseViolationViewModel.opendate = this.formatDate(this._caseViolationViewModel.opendate);
-              this._caseViolationViewModel.opendate = this.formatDate(this._caseViolationViewModel.opendate);
+              // this._caseViolationViewModel.duedate = this.formatDate(this._caseViolationViewModel.duedate);
+              // this._caseViolationViewModel.opendate = this.formatDate(this._caseViolationViewModel.opendate);
+              // this._caseViolationViewModel.closedate = this.formatDate(this._caseViolationViewModel.closedate);
               this.InitializeViolationTable();
             Lobibox.notify('success', {
               pauseDelayOnHover: true,
@@ -3395,9 +3395,11 @@ export class ComplaintComponent {
                 this._caseDetailViewModel.casestatus = status;
                 jQuery('#caseStatusModel').modal('hide');
               }
+              console.log(response.data[0].hasCasedetail)
               this.canChangeStatus();
-             
               this._enableSave = true;
+              if(response.data[0].hasCasedetail)
+                this._canChangeStatus = true;
             } else {
               this._caseDetailErrorSummary = JSON.parse(response.errorMessage.toString()
                 .replaceAll("\\u0027", "\"")
@@ -4503,7 +4505,8 @@ export class ComplaintComponent {
 
     this._caseViolationViewModel = violation;
     this._caseViolationViewModel.duedate = this.formatDateToCustomISO(this._caseViolationViewModel.duedate);
-    this._caseViolationViewModel.opendate = this.formatDateToCustomISO(this._caseViolationViewModel.opendate)
+    this._caseViolationViewModel.opendate = this.formatDateToCustomISO(this._caseViolationViewModel.opendate);
+    this._caseViolationViewModel.closedate = this.formatDateToCustomISO(this._caseViolationViewModel.closedate);
     this._caseViolationViewModel.inspectionVersion = (this.getVersion("Violation") != -1) ? this._violationVersion : 0;
     console.log("Violation Save : " + JSON.stringify(this._caseViolationViewModel));
     // jQuery("#violationGrid").hide();
@@ -4541,7 +4544,7 @@ export class ComplaintComponent {
     this.pastDate = this.formatDate(this.pastDate);
     }
     this._caseViolationViewModel.opendate = this.formatDate(this._caseViolationViewModel.opendate);
-    this._caseViolationViewModel.opendate = this.formatDate(this._caseViolationViewModel.opendate);
+    this._caseViolationViewModel.closedate = this.formatDate(this._caseViolationViewModel.closedate);
     this._caseViolationViewModel.inspectionVersion = (this.getVersion("Violation") != -1) ? this._violationVersion : 0;
     console.log("Violation Save : " + JSON.stringify(this._caseViolationViewModel));
     // jQuery("#violationGrid").hide();

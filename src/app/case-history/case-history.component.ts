@@ -1722,7 +1722,7 @@ export class CaseHistoryComponent implements AfterViewInit {
       jQuery('#selectInspector_s').next('.select2-container').addClass('focused');
     }).on('select2:close', (event: any) => {
       jQuery('#selectInspector_s').next('.select2-container').removeClass('focused');
-    });;
+    });
     jQuery('#selectSupervisor_s').select2({}).on('select2:open', () => {
       jQuery('#selectSupervisor_s').next('.select2-container').addClass('focused');
     }).on('select2:close', (event: any) => {

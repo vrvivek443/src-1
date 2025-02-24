@@ -7,12 +7,11 @@ import { ViolationViewModel } from './violations/violation.viewmodel';
 import { NoticeView } from './app.complaintmodel'
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { PageEvents, UserModel } from './user/user.viewmodel';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { AppService } from './services/app.services';
 import { CaseHistoryService } from './services/casehistory.service';
 import { MsalService } from '@azure/msal-angular';
 import { ViewAllNotificationService } from './services/viewallnotification.service';
-
 declare var jQuery: any;
 
 @Component({
@@ -34,6 +33,7 @@ export class AppComponent {
   _userProfile: any;
 
   constructor(private router: Router,
+    private route: ActivatedRoute,
     private _http: HttpClient,
     private _fb: FormBuilder,
     private _urlConstant: APIURLConstant,
@@ -70,9 +70,19 @@ export class AppComponent {
   
   ngOnInit() {
     try {
-      jQuery("#searchProfiles").select2({}).on('change', () => {
-        this.loadSearch();
-      });
+      // jQuery("#searchProfiles").select2({allowClear: true}).on('change', () => {
+      //   this.loadSearch();
+      // });
+
+      jQuery('#searchProfiles')
+        .select2({ allowClear: true })
+        .on('change', () => {
+          this.loadSearch();
+        })
+        .on('select2:clearing', () => {
+          // Force reload to /casehistory when the clear button is clicked
+          window.location.href = '/casehistory'; // Force reload to /casehistory
+        });
   
       // Subscribe to the service to check if user data is available
       this.appservice.user$.subscribe((userData: any) => {

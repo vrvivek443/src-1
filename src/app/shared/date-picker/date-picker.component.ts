@@ -55,7 +55,7 @@ export class DatePickerComponent implements AfterViewInit {
 
     jQuery(`#Date_s_${this.uniqueId}`).on('cancel.daterangepicker', (event: any, picker: any) => {
       const dateObject = {
-        dateType: 'NONE',
+        dateType: 'Custom',
         startDate: '',
         endDate: '',
       };
@@ -117,11 +117,12 @@ export class DatePickerComponent implements AfterViewInit {
         break;
       case 'CUSTOM':
         jQuery(`#Date_s_${this.uniqueId}`).val('').trigger('change');
-        return;
+        break;
       default:
         return;
     }
 
+    console.log(dateObject);
     this.selectedDateRangeChange.emit(dateObject);
 
     // Manually update the input field for display

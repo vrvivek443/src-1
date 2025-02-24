@@ -84,6 +84,7 @@
                         *ngIf=" this._caseDetail != null || this._caseDetail?.id!= -1 || this._caseDetail?.id!= 0 || this._caseDetail?.id != undefined"
                         class="font-size: xx-large;">
                         <b>Case No:</b>{{_caseDetail?.id}}</span>&nbsp;
+                    {{_canChangeStatus}}
                     <b style="margin-right: 5px">Case Status:</b>
                     <button *ngIf="this._canChangeStatus" class="btn custom-btn"
                         (click)="this.changeStatus()">{{getStatusDesc(_caseDetail?.casestatus)}}</button>
@@ -861,14 +862,14 @@
                                                         <div class="col-lg-3  col-sm-12">
                                                             <label for="input1" class="form-label">City</label>
                                                             <input type="text" class="form-control" id="city"
-                                                                [readonly]="!this.canEdit()" name="city"
+                                                                readOnly name="city"
                                                                 [(ngModel)]="_casePersonViewModel.city"
                                                                 placeholder="Not Found">
                                                         </div>
                                                         <div class="col-lg-3  col-sm-12">
                                                             <label for="input1" class="form-label">State</label>
                                                             <input type="text" class="form-control" id="state"
-                                                                [readonly]="!this.canEdit()" name="state"
+                                                                readOnly name="state"
                                                                 [(ngModel)]="_casePersonViewModel.state"
                                                                 placeholder="Not Found">
                                                         </div>
@@ -1752,9 +1753,9 @@
                                                                             <label for="input1"
                                                                                 class="form-label">Category</label>
                                                                             <select id="actionType" name="actionType"
+                                                                                disabled
                                                                                 [(ngModel)]="_actionLogViewModel.actionType"
                                                                                 class="form-select"
-                                                                                [disabled]="!this.canEdit()"
                                                                                 (change)="categoryOnChange($event)"
                                                                                 data-placeholder="Category">
                                                                                 <option
